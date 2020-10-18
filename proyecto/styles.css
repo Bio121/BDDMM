@@ -7,9 +7,122 @@ and open the template in the editor.
     Created on : 15 oct. 2020, 21:13:22
     Author     : ira3ck
 */
-
-body{
-    background: #6b3b77;
+.contGlobal{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+.mainContent{
+    position: relative;
+    display: inline-block;
+    width: 85%;
+    height: 100%;
+    margin: auto;
+    padding: 3%;
+    padding-left: 10%;
+    padding-right: 15%;
+    background: #fbf2ff;
+}
+.flotador{
+    position: absolute;
+    top: 0%;
+    left: 84.5%;
+    z-index: 5;
+}
+.card>img{
+    filter: blur(1px);
+    -webkit-filter: blur(1px);
+}
+.barra{
+    position: fixed;
+    display: inline-block;
+    background: #5d4087;
+    width: 15%;
+    height: 100%;
+    margin-left:auto; margin-right:0;
+    float: right;
+    box-shadow: 3px 10px 18px #332f35;
+}
+.category{
+    position: relative;
+    margin: 1vw;
+    text-align: center;
+    background: #1be4d0;
+    padding-top: 3%;
+    padding-bottom: 3%;
+    border-radius: 10px;
     color: azure;
+}
+.category:hover{
+    background: #9cffa9;
+    color: black;
+}
+.category:active{
+    background: #6b9971;
+    color: black;
+}
+.nota{
+    border: solid #aaaaaa 1px;
+    border-left: none;
+    border-right: none;
+    padding: 2%;
+    margin-bottom: 1em;
+    margin-top:0.5em;
+}
+.nota:hover{
+    background: #f0e1f7;
+}
+.notaIMG{
+    max-width: 100%;
+    min-width: 200px;
+    height: auto;
+}
+.flash{
+    position: relative;
+    padding: 3px;
+    bottom: 0%;
+    left: 0%;
+    width: 10em;
+    height: 2em;
+    background: #d40b42;
+    color: azure;
+}
+.autor{
+    text-align: right;
+    color: #aaaaaa;
+}
+.mostRead{
+    width: 75%;
+    height:50%;
+}
+.separador{
+    width: 100%;
+    height: 2em;
+    background: #50278a;
+    color: azure;
+    text-align: center;
+}
+footer{
+    background: #6f6570;
+    padding-top: 1.5vw;
+    padding-bottom: 1.5vw;
+}
+
+@media screen and (max-width: 601px) {
+    .category {
+        position: relative;
+        writing-mode: vertical-rl;
+        padding: 10px;
+        margin-left: 20px;
+        float: right;
+    }
+    .mostRead{
+        width: 100%;
+        height:50%;
+    }
+    .barra>.separador{
+        font-size: 10px;
+    }
 }
 

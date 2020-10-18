@@ -33,9 +33,6 @@ and open the template in the editor.
                     cómo va todo?
                 </div>
             </div>
-            <div class="row">
-                <button type="button" class="btn btn-primary">Primary</button>
-            </div>
         </div>
         <?php
         // put your code here

@@ -4,4 +4,15 @@
  * and open the template in the editor.
  */
 
+            function alertaRoja(){
+                alert("¡ALERTA ROJA!");
+            }
+            function Redirect(site) {
+               window.location.href = site;
+            }
+            function noticia(site){
+                site=0;
+                window.location.href = "noticia.php";
+            }
+
 
