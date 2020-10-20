@@ -389,23 +389,26 @@ and open the template in the editor.
 
             <div class="barra overflow-auto">
                 <div class="separador">CATEGORÍAS</div>
-                <div class="category" style="background: #3300cc">
+                <div class="category user-select-none" style="background: #3300cc">
                     Texto por aquí
                 </div>
-                <div class="category" style="background: #333300">
+                <div class="category user-select-none" style="background: #333300">
                     Texto por allá
                 </div>
-                <div class="category" style="background: #ff9999">
+                <div class="category user-select-none" style="background: #ff9999">
                     Texto en todas partes
                 </div>
-                <div class="category" style="background: #6666ff" onclick="alertaRoja()">
+                <div class="category user-select-none" style="background: #6666ff" onclick="alertaRoja()">
                     Alerta Roja
                 </div>
-                <div class="category" style="background: #ff6633" onclick="Redirect('formato.php')">
+                <div class="category user-select-none" style="background: #ff6633" onclick="Redirect('formato.php')">
                     Al Formato
                 </div>
-                <div class="category" style="background: #ff6633" onclick="Redirect('home.php')">
+                <div class="category user-select-none" style="background: #ff6633" onclick="Redirect('home.php')">
                     Al Perfil
+                </div>
+                <div class="category user-select-none" style="background: #ff6633" onclick="Redirect('homeEditor.php')">
+                    Al Perfil del editor
                 </div>
             </div>
         </div>

@@ -114,8 +114,7 @@ function validacionConfig() {
 
     apellidoPaConfig = document.getElementById("apellidoPaConfig").value;
     if (apellidoPaConfig == null || apellidoPaConfig.length == 0 || apellidoPaConfig == " " ||/^\s+$/.test(apellidoPaConfig)) {
-            alert("E");
-            return false;
+            
     }
     else {
         if (!(/^[A-Z]+$/i.test(apellidoPaConfig))) {
@@ -154,3 +153,34 @@ function BajaUsuariro(){
 
     }
 }
+function ventanaNueva(documento){	
+	window.open(documento,'nuevaVentana','width=500, height=600');
+}
+
+function CrearSeccion() {
+    nombreSeccion = document.getElementById("nombreSeccion").value;
+    if (nombreSeccion == null || nombreSeccion.length == 0 || nombreSeccion == " " || /^\s+$/.test(nombreSeccion)) {
+        alert("escriba una nombre para la seccion");
+        return false;
+    }
+
+    posicionSeccion = document.getElementById("posicionSeccion").value;
+    if (posicionSeccion == null || posicionSeccion.length == 0 || posicionSeccion == " " || isNaN(posicionSeccion) || /^\s+$/.test(posicionSeccion)) {
+        alert("escriba una posicion valida para la seccion");
+        return false;
+    }
+
+    alert("seccion creada exitosamente");
+    window.close();
+}
+    
+function BajaSeccion() {
+    var ask = window.confirm("Seguro que quiere dar de baja esta seccion?");
+    if (ask) {
+        window.alert("La seccion a sido dada de baja.");
+
+        window.close();
+
+    }
+}
+

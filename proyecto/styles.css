@@ -27,7 +27,7 @@ and open the template in the editor.
 .flotador{
     position: absolute;
     top: 0vw;
-    left: 84.5vw;
+    left: 70.5vw;
     z-index: 5;
 }
 .card>img{
@@ -248,5 +248,9 @@ body {
 .btnBaja, .btnBaja:hover, .btnBaja:active, .btnBaja:visited{
     margin-top: 5px;
     background-color: #d40b42 !important;
+}
+
+.seccion{
+    margin-left: 40px !important;
 }
 
