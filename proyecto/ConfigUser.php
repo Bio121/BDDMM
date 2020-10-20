@@ -101,7 +101,6 @@ and open the template in the editor.
         </nav>
 
         <?php
-        phpinfo();
         // put your code here
         ?>
     </body>

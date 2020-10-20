@@ -16,7 +16,81 @@ and open the template in the editor.
         <title>Formato</title>
     </head>
     <body>
+        <!--
+            <a class="navbar-brand" href="index.php">Novedades del Bot</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse navbar-right" id="navbarNavAltMarkup">
+                     
+                <div class="dropdown ml-auto iniciarSesionDrop">
+                    <button class="btn btn-secondary dropdown-toggle pull-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        iniciar sesion
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <form class="px-4 py-3" action="ConfigUser.php" onsubmit="return validacionInicioSesion()">
+                            <div class="form-group">
+                                <label for="emailIniciarSecion">Email</label>
+                                <input type="email" class="form-control" id="emailIniciarSesion" placeholder="email@example.com">
+                            </div>
 
+                            <div class="form-group">
+                                <label for="usuarioIniciarSesion">Usuario</label>
+                                <input type="text" class="form-control" id="usuarioIniciarSesion" placeholder="Usuario">
+                            </div>
+                            <div class="form-group">
+                                <label for="contraseñaIniciarSesion">Contraseña</label>
+                                <input type="password" class="form-control" id="contraseñaIniciarSesion" placeholder="Contraseña">
+                            </div>                           
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="dropdownCheck">
+                                <label class="form-check-label" for="dropdownCheck">
+                                    Recuerdame
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary" >iniciar sesion</button>
+                        </form>
+
+                    </div>
+
+
+                </div>
+                
+                <div class="dropdown RegistrarseDrop">
+                    <button class="btn btn-secondary dropdown-toggle pull-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        registrarse
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <form class="px-4 py-3">
+                            <div class="form-group">
+                                <label for="emailRegistrarse">Email</label>
+                                <input type="email" class="form-control" id="emailRegistrarse" placeholder="email@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="usuarioRegistrarse">Usuario</label>
+                                <input type="text" class="form-control" id="usuarioRegistrarse" placeholder="Usuario">
+                            </div>
+                            <div class="form-group">
+                                <label for="telefonoRegistrarse">Telefono</label>
+                                <input type="number" class="form-control" id="telefonoRegistrarse" placeholder="telefono">
+                            </div>
+                            <div class="form-group">
+                                <label for="contraseñaRegistrarse">Contraseña</label>
+                                <input type="password" class="form-control" id="contraseñaRegistrarse" placeholder="Contraseña">
+                            </div>
+                            <div class="form-group">
+                                <label for="contraseñaConfirmarRegistrarse">Confirmar Contraseña</label>
+                                <input type="password" class="form-control" id="contraseñaConfirmarRegistrarse" placeholder="Confirmar Contraseña">
+                            </div>
+                            <button type="submit" class="btn btn-primary" onclick="validacionRegistrarse()">Registrarse</button>
+                        </form>
+
+                    </div>
+                </div>
+                                
+            </div>
+        </nav>
+        -->
         <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top fixed-top-2">
                 <form class="form-inline ml-auto">
                     <div class="md-form my-0">
