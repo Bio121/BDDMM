@@ -190,3 +190,25 @@ function BajaSeccion() {
     }
 }
 
+function publicarNoticia() {
+    var ask = window.confirm("Seguro que quiere publicar esta noticia?");
+    if (ask) {
+        window.alert("La noticia se a publicado.");
+
+        window.location.href = "HomeEditor.php";
+
+    }
+}
+
+function RegresarNoticia() {
+    var ask = window.confirm("Seguro que quiere regresar esta noticia?");
+    if (ask) {
+        window.alert("La noticia se a regresado a su autor.");
+
+        window.location.href = "HomeEditor.php";
+
+    }
+}
+
+
+
