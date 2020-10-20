@@ -316,3 +316,84 @@ body {
     margin-left: 40px !important;
 }
 
+.noticiaIMG-ch{
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+}
+.noticiaIMG-md{
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+}
+.noticiaIMG-gd{
+    display: block;
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+}
+.autor{
+    background: #e1cce5;
+    width: 100%;
+    max-width: 540px;
+    height: 100%;
+    max-height: 8em;
+}
+.autor img{
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    padding: 1vw;
+}
+.meGusta{
+    font-size: 25px;
+}
+.meGusta:hover{
+    color: #ff6666;
+}
+.comentario{
+    position: relative;
+}
+.comentario img{
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 2.5em;
+}
+.comentext{
+    display: inline-block;
+    background: azure;
+    min-height: 6em;
+    max-width: 1050px;
+    padding: 0.75em;
+    border-radius: 10px;
+    margin-left: 0.75em;
+    margin-right: 0.75em;
+    margin-top: 0.7em;
+}
+
+.imgReviewPrevieEditor{
+    width: 150px !important;
+    height: 150px !important;
+ 
+}
+
+.tituloPrewieEditor{
+    text-align: center;
+
+}
+.comentarioDelEditor{
+    width: 250px !important;
+    height: 150px !important;
+}
+.btnRegreasarEditor, .btnRegreasarEditor:hover, .btnRegreasarEditor:active, .btnRegreasarEditor:visited{
+    margin-top: 5px;
+    margin-bottom: 100px !important;
+    background-color: #d40b42 !important;
+}
+

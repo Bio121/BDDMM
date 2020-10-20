@@ -16,10 +16,7 @@ and open the template in the editor.
         <title>Novedades del Bot</title>
     </head>
     <body>
-<<<<<<< Updated upstream
-        
-=======
->>>>>>> Stashed changes
+
         <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top fixed-top-2">
             <form class="form-inline ml-auto">
                 <div class="md-form my-0">
@@ -391,11 +388,11 @@ and open the template in the editor.
 
 
             <div class="barra overflow-auto">
-<<<<<<< Updated upstream
+
                 <div class="separador">CATEGORÍAS</div>
-=======
+
                 <div class="separador user-select-none">CATEGORÍAS</div>
->>>>>>> Stashed changes
+
                 <div class="category user-select-none" style="background: #3300cc">
                     Texto por aquí
                 </div>

@@ -80,7 +80,7 @@ and open the template in the editor.
 
                     <div class="notaLista">
 
-                        <div class="card listaCard" onclick="Redirect('preview.php')">
+                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
                                     <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
@@ -98,7 +98,7 @@ and open the template in the editor.
                             </div>
                         </div>
 
-                        <div class="card listaCard" onclick="Redirect('preview.php')">
+                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
                                     <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
@@ -116,7 +116,7 @@ and open the template in the editor.
                             </div>
                         </div>
 
-                        <div class="card listaCard" onclick="Redirect('preview.php')">
+                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
                                     <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
@@ -134,7 +134,7 @@ and open the template in the editor.
                             </div>
                         </div>
 
-                        <div class="card listaCard" onclick="Redirect('preview.php')">
+                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
                                     <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
@@ -152,7 +152,7 @@ and open the template in the editor.
                             </div>
                         </div>
 
-                        <div class="card listaCard" onclick="Redirect('preview.php')">
+                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
                                     <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
@@ -170,7 +170,7 @@ and open the template in the editor.
                             </div>
                         </div>
 
-                        <div class="card listaCard" onclick="Redirect('preview.php')">
+                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
                                     <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
@@ -188,7 +188,7 @@ and open the template in the editor.
                             </div>
                         </div>
 
-                        <div class="card listaCard" onclick="Redirect('preview.php')">
+                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
                                     <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
@@ -206,7 +206,7 @@ and open the template in the editor.
                             </div>
                         </div>
 
-                        <div class="card listaCard" onclick="Redirect('preview.php')">
+                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
                                     <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
@@ -224,7 +224,7 @@ and open the template in the editor.
                             </div>
                         </div>
 
-                        <div class="card listaCard" onclick="Redirect('preview.php')">
+                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
                                     <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
@@ -242,7 +242,7 @@ and open the template in the editor.
                             </div>
                         </div>
 
-                        <div class="card listaCard" onclick="Redirect('preview.php')">
+                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
                             <div class="row no-gutters">
                                 <div class="col-md-4">
                                     <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
