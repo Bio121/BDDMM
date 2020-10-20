@@ -50,8 +50,11 @@ and open the template in the editor.
         <div class="contGlobal">
             <div class="mainContent">
 
-                <h1>¡Bienvenido de nuevo ira3ck!</h1>
-                <p class="mb-5">Listos para reportar :D</p>
+                <div class="jumbotron" style="background: #e1cce5">
+                    <h1>¡Bienvenido de nuevo ira3ck!</h1>
+                    <p class="mb-5">Listos para reportar :D</p>
+                </div>
+
 
                 <button type="button" class="btn btn-success btn-lg p-2 px-5 my-5">
                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-plus-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -261,19 +264,19 @@ and open the template in the editor.
 
                 </div>
 
-                 <div class="btn-group " role="group" aria-label="Anterior Siguiente" style="float: right;">
-                        <button type="button" class="btn btn-secondary" style="background: #ccccff; border-color: #9999ff;">
-                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-left-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3.86 8.753l5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
-                            </svg>
-                        </button>
-                        <button type="button" class="btn btn-secondary" style="background: #ccccff; border-color: #9999ff;">
-                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-right-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12.14 8.753l-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
-                            </svg>
-                        </button>
-                    </div>
-                
+                <div class="btn-group " role="group" aria-label="Anterior Siguiente" style="float: right;">
+                    <button type="button" class="btn btn-secondary" style="background: #ccccff; border-color: #9999ff;">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-left-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3.86 8.753l5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn btn-secondary" style="background: #ccccff; border-color: #9999ff;">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-right-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.14 8.753l-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                        </svg>
+                    </button>
+                </div>
+
             </div>
 
 

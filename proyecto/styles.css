@@ -103,6 +103,8 @@ and open the template in the editor.
     width: 100%;
     height: 2em;
     background: #50278a;
+    padding-top: 3px;
+    padding-bottom: 3px;
     color: azure;
     text-align: center;
 }
