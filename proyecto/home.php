@@ -71,7 +71,6 @@ and open the template in the editor.
                         <p class="dropdown-item">Más antiguos</p>
                         <p class="dropdown-item">Pendientes de aprobación (recientes)</p>
                         <p class="dropdown-item">Pendientes de aprobación (antiguos)</p>
-
                     </div>
                 </div>
 

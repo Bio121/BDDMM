@@ -139,6 +139,66 @@ and open the template in the editor.
 .listaCard:hover{
     background: #e9e9e9
 }
+.noticiaIMG-ch{
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+}
+.noticiaIMG-md{
+    display: block;
+    width: 100%;
+    max-width: 600px;
+    height: auto;
+}
+.noticiaIMG-gd{
+    display: block;
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+}
+.autor{
+    background: #e1cce5;
+    width: 100%;
+    max-width: 540px;
+    height: 100%;
+    max-height: 8em;
+}
+.autor img{
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    padding: 1vw;
+}
+.meGusta{
+    font-size: 25px;
+}
+.meGusta:hover{
+    color: #ff6666;
+}
+.comentario{
+    position: relative;
+}
+.comentario img{
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 2.5em;
+}
+.comentext{
+    display: inline-block;
+    background: azure;
+    min-height: 6em;
+    max-width: 1050px;
+    padding: 0.75em;
+    border-radius: 10px;
+    margin-left: 0.75em;
+    margin-right: 0.75em;
+    margin-top: 0.7em;
+}
 footer{
     background: #6f6570;
     padding-top: 1.5vw;
@@ -210,7 +270,7 @@ body {
 }
 
 .usuarioNav{
-   margin-right: 20px;
+    margin-right: 20px;
 }
 
 .imagenUserNavbar{

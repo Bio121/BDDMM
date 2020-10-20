@@ -54,13 +54,13 @@ and open the template in the editor.
                 <p class="mb-5">Listos para checar algunas noticias :D</p>
 
                 <button type="button" class="btn btn-success btn-lg p-2 px-5 my-5" onclick="ventanaNueva('creacionSeccion.php')">
-                    Crea una nueva seccion
+                    Crea una nueva sección
                 </button>
-                <button type="button" class="btn btn-success btn-lg p-2 px-5 my-5" onclick="ventanaNueva('escogerSeccion.php')">
-                    modifica una seccion
+                <button type="button" class="btn btn-warning btn-lg p-2 px-5 my-5" onclick="ventanaNueva('escogerSeccion.php')">
+                    Modifica una sección
                 </button>
-                <button type="button" class="btn btn-success btn-lg p-2 px-5 my-5" onclick="ventanaNueva('eliminarSeccion.php')">
-                    elimina una seccion
+                <button type="button" class="btn btn-danger btn-lg p-2 px-5 my-5" onclick="ventanaNueva('eliminarSeccion.php')">
+                    Elimina una sección
                 </button>
 
                 <div class="dropright">

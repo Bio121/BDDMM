@@ -425,6 +425,7 @@ and open the template in the editor.
 
 
                 <div class="separador"></div>
+                <!--SECCIÓN DE COMENTARIOS-->
                 <div class="row mt-3">
                     <div class="col">
                         Hey, déjanos un comentario.
