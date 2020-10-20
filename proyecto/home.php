@@ -16,20 +16,36 @@ and open the template in the editor.
         <title>Home</title>
     </head>
     <body>
-        <nav class="navbar sticky-top navbar-expand-lg navbar-dark" style="background-color: #351a5e;">
-            <a class="navbar-brand" href="index.php">Novedades del Bot</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-                    <a class="nav-link" href="#">Features</a>
-                    <a class="nav-link" href="#">Pricing</a>
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+
+        <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top fixed-top-2">
+            <form class="form-inline ml-auto">
+                <div class="md-form my-0">
+                    <input class="form-control" type="text" placeholder="Search" aria-label="Search">
                 </div>
-            </div>
+                <button href="#!" class="btn btn-primary btn-outline-white btn-md my-0 ml-sm-2" type="submit">Buscar</button>
+            </form>
         </nav>
+
+        <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top">
+            <a class="navbar-brand" href="index.php">Novedades del Bot</a>
+
+            <div class="div-inline ml-auto  usuarioNav" > 
+                <img src="https://pbs.twimg.com/media/EjTY9nDWAAAYDdu?format=jpg&name=900x900" class="imgNavBar float-left imagenUserNavbar" alt="img de navbar">
+                <a class="nav-link dropdown-toggle usuarioNomNav" href="#" id="navbarDropdown nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    ira3ck 
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="home.php">perfil</a>
+                    <a class="dropdown-item" href="ConfigUser.php">configuracion de perfil</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="index.php">cerrar sesion</a>
+                </div>
+
+            </div>
+
+
+        </nav>
+
 
         <div class="contGlobal">
             <div class="mainContent">
@@ -52,11 +68,7 @@ and open the template in the editor.
                         <p class="dropdown-item">Más antiguos</p>
                         <p class="dropdown-item">Pendientes de aprobación (recientes)</p>
                         <p class="dropdown-item">Pendientes de aprobación (antiguos)</p>
-                        <!--
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        -->
+
                     </div>
                 </div>
 
