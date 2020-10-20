@@ -13,7 +13,7 @@ and open the template in the editor.
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
         <script src= "scripts.js";></script>
         <meta charset="UTF-8">
-        <title>Formato</title>
+        <title>Novedades del Bot</title>
     </head>
     <body>
         <!--
@@ -92,12 +92,12 @@ and open the template in the editor.
         </nav>
         -->
         <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top fixed-top-2">
-                <form class="form-inline ml-auto">
-                    <div class="md-form my-0">
-                        <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-                    </div>
-                    <button href="#!" class="btn btn-primary btn-outline-white btn-md my-0 ml-sm-2" type="submit">Buscar</button>
-                </form>
+            <form class="form-inline ml-auto">
+                <div class="md-form my-0">
+                    <input class="form-control" type="text" placeholder="Search" aria-label="Search">
+                </div>
+                <button href="#!" class="btn btn-primary btn-outline-white btn-md my-0 ml-sm-2" type="submit">Buscar</button>
+            </form>
         </nav>
 
         <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top">
@@ -106,7 +106,7 @@ and open the template in the editor.
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse navbar-right" id="navbarNavAltMarkup">
-                     
+
                 <div class="dropdown ml-auto iniciarSesionDrop">
                     <button class="btn btn-secondary dropdown-toggle pull-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         iniciar sesion
@@ -139,7 +139,7 @@ and open the template in the editor.
 
 
                 </div>
-                
+
                 <div class="dropdown RegistrarseDrop">
                     <button class="btn btn-secondary dropdown-toggle pull-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         registrarse
@@ -171,7 +171,7 @@ and open the template in the editor.
 
                     </div>
                 </div>
-                                
+
             </div>
         </nav>
 
@@ -461,7 +461,7 @@ and open the template in the editor.
             </div>
 
 
-            <div class="barra">
+            <div class="barra overflow-auto">
                 <div class="separador">CATEGORÍAS</div>
                 <div class="category" style="background: #3300cc">
                     Texto por aquí
@@ -477,6 +477,9 @@ and open the template in the editor.
                 </div>
                 <div class="category" style="background: #ff6633" onclick="Redirect('formato.php')">
                     Al Formato
+                </div>
+                <div class="category" style="background: #ff6633" onclick="Redirect('home.php')">
+                    Al Perfil
                 </div>
             </div>
         </div>
