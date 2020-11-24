@@ -95,6 +95,11 @@ and open the template in the editor.
         </script>
     </head>
     <body>
+        
+        <?php
+            include "category.php";
+        ?>
+        
         <!--NAVBAR (INICIO)-->
         <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top fixed-top-2">
             <form class="form-inline ml-auto">
@@ -193,14 +198,10 @@ and open the template in the editor.
                                     CATEGORÍA
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <p class="dropdown-item">Categoría 1</p>
-                                    <p class="dropdown-item">Categoría 2</p>
-                                    <p class="dropdown-item">Categoría 3</p>
-                                    <p class="dropdown-item">Categoría 4</p>
-                                    <p class="dropdown-item">Categoría 5</p>
-                                    <p class="dropdown-item">Categoría 6</p>
-                                    <p class="dropdown-item">Categoría 7</p>
-                                    <p class="dropdown-item">Categoría 8</p>
+                                    <?php
+                                        $barra = new category();
+                                        $barra->dropdown();
+                                    ?>
                                 </div>
                             </div>
                         </div>

@@ -17,6 +17,10 @@ and open the template in the editor.
     </head>
     <body>
 
+        <?php
+        include "category.php";
+        ?>
+
         <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top fixed-top-2">
             <form class="form-inline ml-auto">
                 <div class="md-form my-0">
@@ -310,133 +314,42 @@ and open the template in the editor.
                     </div>
                 </div>
 
-                <div class="nota" onclick="noticia(01)">
-                    <div class="row no-gutters">
-                        <div class="col-12">
-                            <h2>Individuo pierde en un Buscaminas</h2>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-lg-5">
-                            <img src="https://pbs.twimg.com/media/EgvGhYbXYAA2Ean?format=png&name=small" class="notaIMG"/>
-                        </div>
-                        <div class="col-lg-7 p-2">
-                            <div class="row no-gutters" style="height: 90%;">
-                                <p>
-                                    Donec aliquam, mauris mollis pharetra consequat, lectus dui pulvinar turpis, ut imperdiet elit erat vel elit.
-                                    Praesent at libero facilisis, efficitur sem ac, porttitor arcu.
-                                    Duis porta libero augue, a lobortis libero tempus a.
-                                    Aenean purus enim, pulvinar dictum pharetra sit amet, malesuada vel arcu.
-                                    Curabitur molestie urna nisl, vitae sollicitudin odio tempor a. In hac habitasse platea dictumst.
-                                    Etiam quis turpis vel urna ultricies pretium. Donec non euismod nulla.
-                                    Pellentesque imperdiet leo velit, eu vulputate orci sodales ac.
-                                    In pharetra facilisis odio, eu aliquam sem laoreet eu.
-                                    Praesent massa turpis, convallis ac dapibus id, euismod ut massa.
-                                    Sed elementum et eros ut porta. Fusce consectetur aliquam sapien ac semper.
-                                </p>
-                            </div>
-                            <div class="row no-gutters">
-                                <div class="col">
-                                    <p class="autor">
-                                        Hecho Por Daniel - 18 / 10 / 2020
-                                    </p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nota" onclick="noticia(01)">
-                    <div class="row no-gutters">
-                        <div class="col-12">
-                            <h2>Individuo pierde en un Buscaminas</h2>
-                        </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col-lg-5">
-                            <img src="https://pbs.twimg.com/media/EgvGhYbXYAA2Ean?format=png&name=small" class="notaIMG"/>
-                        </div>
-                        <div class="col-lg-7 p-2">
-                            <div class="row no-gutters" style="height: 90%;">
-                                <p>
-                                    Donec aliquam, mauris mollis pharetra consequat, lectus dui pulvinar turpis, ut imperdiet elit erat vel elit.
-                                    Praesent at libero facilisis, efficitur sem ac, porttitor arcu.
-                                    Duis porta libero augue, a lobortis libero tempus a.
-                                    Aenean purus enim, pulvinar dictum pharetra sit amet, malesuada vel arcu.
-                                    Curabitur molestie urna nisl, vitae sollicitudin odio tempor a. In hac habitasse platea dictumst.
-                                    Etiam quis turpis vel urna ultricies pretium. Donec non euismod nulla.
-                                    Pellentesque imperdiet leo velit, eu vulputate orci sodales ac.
-                                    In pharetra facilisis odio, eu aliquam sem laoreet eu.
-                                    Praesent massa turpis, convallis ac dapibus id, euismod ut massa.
-                                    Sed elementum et eros ut porta. Fusce consectetur aliquam sapien ac semper.
-                                </p>
-                            </div>
-                            <div class="row no-gutters">
-                                <div class="col">
-                                    <p class="autor">
-                                        Hecho Por Daniel - 18 / 10 / 2020
-                                    </p>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
+                <?php
+                $noticias = new noticias();
+                $noticias->enHome(3);
+                ?>
 
             </div>
 
 
             <div class="barra overflow-auto">
 
-                <div class="separador">CATEGORÍAS</div>
-
                 <div class="separador user-select-none">CATEGORÍAS</div>
-
-                <div class="category user-select-none" style="background: #3300cc">
-                    Texto por aquí
-                </div>
-                <div class="category user-select-none" style="background: #333300">
-                    Texto por allá
-                </div>
-                <div class="category user-select-none" style="background: #ff9999">
-                    Texto en todas partes
-                </div>
-                <div class="category user-select-none" style="background: #6666ff" onclick="alertaRoja()">
-                    Alerta Roja
-                </div>
-                <div class="category user-select-none" style="background: #ff6633" onclick="Redirect('formato.php')">
-                    Al Formato
-                </div>
-                <div class="category user-select-none" style="background: #ff6633" onclick="Redirect('home.php')">
-                    Al Perfil
-                </div>
-                <div class="category user-select-none" style="background: #ff6633" onclick="Redirect('homeEditor.php')">
-                    Al Perfil del editor
-                </div>
+                <?php
+                $barra = new category();
+                $barra->llenaLaBarra();
+                ?>
             </div>
+
+            <footer>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            qué onda
+                        </div>
+                        <div class="col">
+                            qué tal
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            cómo va todo?
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
         </div>
 
-        <footer>
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        qué onda
-                    </div>
-                    <div class="col">
-                        qué tal
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        cómo va todo?
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <?php
-        // put your code here
-        //phpinfo();
-        ?>
     </body>
 </html>
