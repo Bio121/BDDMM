@@ -56,7 +56,7 @@ class noticias {
 // output data of each row
             while ($row = $result->fetch_assoc()) {
 
-                echo "<div class='nota' onclick='noticia(01)'><div class='row no-gutters'>
+                echo "<div class='nota py-5' onclick='noticia(01)'><div class='row no-gutters'>
                       <div class='col-12'><h2>" . $row["Título"] . "</h2></div></div>
                       <div class='row no-gutters'><div class='col-lg-5'>
                       <img src='https://pbs.twimg.com/media/EgvGhYbXYAA2Ean?format=png&name=small' class='notaIMG'/>
@@ -73,24 +73,24 @@ class noticias {
 }
 
 class navbar {
-    
+
     private $inSes;
     private $regis;
 
     function navbar() {
         $this->inSes = "<div class = 'dropdown ml-auto iniciarSesionDrop'><button class = 'btn btn-secondary dropdown-toggle pull-right' type = 'button' id = 'dropdownMenuButton' data-toggle = 'dropdown' aria-haspopup = 'true' aria-expanded = 'false'>
-                  Iniciar Sesión</button><div class = 'dropdown-menu dropdown-menu-right'><form class = 'px-4 py-3' action = '" . "index.php" . "' onsubmit = 'return validacionInicioSesion()' method = 'post'>
-                  <div class = 'form-group'><label for = 'emailIniciarSecion'>Email</label><input type = 'email' class = 'form-control' id = 'emailIniciarSesion' placeholder = 'correo@ejemplo.com'>
+                  Iniciar Sesión</button><div class = 'dropdown-menu dropdown-menu-right'><form class = 'px-4 py-3' action = 'index.php' onsubmit = 'return validacionInicioSesion()' method = 'post'>
+                  <div class = 'form-group'><label for = 'emailIniciarSecion'>Email</label><input type = 'email' class = 'form-control' id = 'emailIniciarSesion' placeholder = 'correo@ejemplo.com' name = 'Correo'>
                   </div><div class = 'form-group'><label for = 'usuarioIniciarSesion'>Usuario</label><input type = 'text' class = 'form-control' id = 'usuarioIniciarSesion' placeholder = 'Usuario' name = 'Usuario'>
                   </div><div class = 'form-group'><label for = 'contraseñaIniciarSesion'>Contraseña</label><input type = 'password' class = 'form-control' id = 'contraseñaIniciarSesion' placeholder = 'Contraseña' name = 'Contraseña'>
                   </div><div class = 'form-check'><input type = 'checkbox' class = 'form-check-input' id = 'dropdownCheck'><label class = 'form-check-label' for = 'dropdownCheck'>Recuérdame</label>
                   </div><button type = 'submit' class = 'btn btn-primary' >Iniciar Sesión</button></form></div></div>";
-       
+
         $this->regis = "<div class = 'dropdown RegistrarseDrop'><button class = 'btn btn-secondary dropdown-toggle pull-right' type = 'button' id = 'dropdownMenuButton' data-toggle = 'dropdown' aria-haspopup = 'true' aria-expanded = 'false'>
                   Registrarse</button><div class = 'dropdown-menu dropdown-menu-right'><form class = 'px-4 py-3' onsubmit = 'return validacionRegistrarse()'>
-                  <div class = 'form-group'><label for = 'emailRegistrarse'>Email</label><input type = 'email' class = 'form-control' id = 'emailRegistrarse' placeholder = 'email@example.com'>
+                  <div class = 'form-group'><label for = 'emailRegistrarse'>Email</label><input type = 'email' class = 'form-control' id = 'emailRegistrarse' placeholder = 'correo@ejemplo.com'>
                   </div><div class = 'form-group'><label for = 'usuarioRegistrarse'>Usuario</label><input type = 'text' class = 'form-control' id = 'usuarioRegistrarse' placeholder = 'Usuario'>
-                  </div><div class = 'form-group'><label for = 'telefonoRegistrarse'>Telefono</label><input type = 'number' class = 'form-control' id = 'telefonoRegistrarse' placeholder = 'telefono'>
+                  </div><div class = 'form-group'><label for = 'telefonoRegistrarse'>Telefono</label><input type = 'number' class = 'form-control' id = 'telefonoRegistrarse' placeholder = 'Teléfono'>
                   </div><div class = 'form-group'><label for = 'contraseñaRegistrarse'>Contraseña</label><input type = 'password' class = 'form-control' id = 'contraseñaRegistrarse' placeholder = 'Contraseña'>
                   </div><div class = 'form-group'><label for = 'contraseñaConfirmarRegistrarse'>Confirmar Contraseña</label><input type = 'password' class = 'form-control' id = 'contraseñaConfirmarRegistrarse' placeholder = 'Confirmar Contraseña'>
                   </div><button type = 'submit' class = 'btn btn-primary' >Registrarse</button></form></div></div>";
@@ -120,8 +120,8 @@ class navbar {
                 </nav>";
         echo $code;
     }
-    
-    function yesSession($nombre){
+
+    function yesSession($nombre) {
         $code = "<nav class='nav navbar navbar-expand-lg navbar-dark fixed-top'>
                     <a class='navbar-brand' href='index.php'>Novedades del Bot</a>    
                     <div class='div-inline ml-auto  usuarioNav' > 
@@ -130,14 +130,24 @@ class navbar {
                             " . $nombre . " 
                         </a>
                         <div class='dropdown-menu dropdown-menu-right' aria-labelledby='navbarDropdown'>
-                            <a class='dropdown-item' href='home.php'>perfil</a>
-                            <a class='dropdown-item' href='ConfigUser.php'>configuracion de perfil</a>
+                            <a class='dropdown-item' href='home.php'>Perfil</a>
+                            <a class='dropdown-item' href='ConfigUser.php'>Configuracion de Perfil</a>
                             <div class='dropdown-divider'></div>
-                            <a class='dropdown-item' href='index.php'>cerrar sesion</a>
+                            <a class='dropdown-item' href='index.php' onclick='salirDeAquí()'>Cerrar Sesión</a>
                         </div>  
                     </div> 
                 </nav>";
         echo $code;
+    }
+
+}
+
+class inicioSesión {
+
+    function verdad($usuario, $correo, $contraseña) {
+        $conn = new mySQLphpClass();
+        $result = $conn->initSes($usuario, $correo, $contraseña);
+        return $result;
     }
 
 }

@@ -210,5 +210,14 @@ function RegresarNoticia() {
     }
 }
 
-
+function salirDeAquí() {
+  var request = new XMLHttpRequest();
+  request.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      alert(this.responseText);
+    }
+  };
+  request.open("GET", "cerrarSesión.php", true);
+  request.send();
+}
 

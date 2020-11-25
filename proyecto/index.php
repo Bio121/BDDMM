@@ -27,25 +27,42 @@ and open the template in the editor.
 
         $nav = new navbar();
         $nav->simple();
-        
+        $mal = 0;
+
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $_SESSION["Usuario"] = $_POST['Usuario'];
-            $nav->yesSession($_SESSION["Usuario"]);
-        }
-
-        if (isset($_SESSION["usuario"])) {
-            $nav->yesSession($_SESSION["Usuario"]);
-            echo '<p>Sí Session</p>';
+            $ses = new inicioSesión();
+            $usuario = $_POST["Usuario"];
+            $correo = $_POST["Correo"];
+            $contraseña = $_POST["Contraseña"];
+            $result = $ses->verdad($usuario, $correo, $contraseña);
+            if (!empty($result)) {
+                $_SESSION["usuario"] = $result[0];
+                $_SESSION["correo"] = $result[1];
+                $nav->yesSession($_SESSION["usuario"]);
+            } else {
+                $mal = 1;
+                $_SESSION["usuario"] = null;
+                $nav->notSession();
+            }
         } else {
-            $_SESSION["usuario"] = null;
-            $nav->notSession();
-            echo '<p>No Session</p>';
+            if (isset($_SESSION["usuario"])) {
+                $nav->yesSession($_SESSION["usuario"]);
+            } else {
+                $_SESSION["usuario"] = null;
+                $nav->notSession();
+            }
         }
-
         ?>
 
         <div class="contGlobal">
+
             <div class="mainContent">
+
+                <?php
+                if ($mal == 1) {
+                    echo "<div class='alert alert-danger' role='alert'>Inicio de Sesión Incorrecto</div>";
+                }
+                ?>
 
                 <div class="flotador">
                     <div class="card bg-dark text-black m-3" style="width: 13rem;">

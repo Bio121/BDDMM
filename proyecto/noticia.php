@@ -1,3 +1,8 @@
+
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -79,91 +84,37 @@ and open the template in the editor.
     </head>
     <body>
 
-        <!--NAVBAR (INICIO)-->
-        <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top fixed-top-2">
-            <form class="form-inline ml-auto">
-                <div class="md-form my-0">
-                    <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-                </div>
-                <button href="#!" class="btn btn-primary btn-outline-white btn-md my-0 ml-sm-2" type="submit">Buscar</button>
-            </form>
-        </nav>
+        <?php
+        include "classes.php";
 
-        <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top">
-            <a class="navbar-brand" href="index.php">Novedades del Bot</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse navbar-right" id="navbarNavAltMarkup">
+        $nav = new navbar();
+        $nav->simple();
+        $mal = 0;
 
-                <div class="dropdown ml-auto iniciarSesionDrop">
-                    <button class="btn btn-secondary dropdown-toggle pull-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        iniciar sesion
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <form class="px-4 py-3" action="ConfigUser.php" onsubmit="return validacionInicioSesion()">
-                            <div class="form-group">
-                                <label for="emailIniciarSecion">Email</label>
-                                <input type="email" class="form-control" id="emailIniciarSesion" placeholder="email@example.com">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="usuarioIniciarSesion">Usuario</label>
-                                <input type="text" class="form-control" id="usuarioIniciarSesion" placeholder="Usuario">
-                            </div>
-                            <div class="form-group">
-                                <label for="contraseñaIniciarSesion">Contraseña</label>
-                                <input type="password" class="form-control" id="contraseñaIniciarSesion" placeholder="Contraseña">
-                            </div>                           
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                                <label class="form-check-label" for="dropdownCheck">
-                                    Recuerdame
-                                </label>
-                            </div>
-                            <button type="submit" class="btn btn-primary" >iniciar sesion</button>
-                        </form>
-
-                    </div>
-
-
-                </div>
-
-                <div class="dropdown RegistrarseDrop">
-                    <button class="btn btn-secondary dropdown-toggle pull-right" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        registrarse
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <form class="px-4 py-3">
-                            <div class="form-group">
-                                <label for="emailRegistrarse">Email</label>
-                                <input type="email" class="form-control" id="emailRegistrarse" placeholder="email@example.com">
-                            </div>
-                            <div class="form-group">
-                                <label for="usuarioRegistrarse">Usuario</label>
-                                <input type="text" class="form-control" id="usuarioRegistrarse" placeholder="Usuario">
-                            </div>
-                            <div class="form-group">
-                                <label for="telefonoRegistrarse">Telefono</label>
-                                <input type="number" class="form-control" id="telefonoRegistrarse" placeholder="telefono">
-                            </div>
-                            <div class="form-group">
-                                <label for="contraseñaRegistrarse">Contraseña</label>
-                                <input type="password" class="form-control" id="contraseñaRegistrarse" placeholder="Contraseña">
-                            </div>
-                            <div class="form-group">
-                                <label for="contraseñaConfirmarRegistrarse">Confirmar Contraseña</label>
-                                <input type="password" class="form-control" id="contraseñaConfirmarRegistrarse" placeholder="Confirmar Contraseña">
-                            </div>
-                            <button type="submit" class="btn btn-primary" onclick="validacionRegistrarse()">Registrarse</button>
-                        </form>
-
-                    </div>
-                </div>
-
-            </div>
-        </nav>
-        <!--NAVBAR (FIN)-->
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $ses = new inicioSesión();
+            $usuario = $_POST["Usuario"];
+            $correo = $_POST["Correo"];
+            $contraseña = $_POST["Contraseña"];
+            $result = $ses->verdad($usuario, $correo, $contraseña);
+            if (!empty($result)) {
+                $_SESSION["usuario"] = $result[0];
+                $_SESSION["correo"] = $result[1];
+                $nav->yesSession($_SESSION["usuario"]);
+            } else {
+                $mal = 1;
+                $_SESSION["usuario"] = null;
+                $nav->notSession();
+            }
+        } else {
+            if (isset($_SESSION["usuario"])) {
+                $nav->yesSession($_SESSION["usuario"]);
+            } else {
+                $_SESSION["usuario"] = null;
+                $nav->notSession();
+            }
+        }
+        ?>
 
         <!--CONTENIDO (INICIO)-->
         <div class="contGlobal">
@@ -450,7 +401,7 @@ and open the template in the editor.
                             <small class="text-muted"><br>Hace 5 minutos</small>
                         </div>
                     </div>
-                    
+
                     <div class="comentario">
                         <img src="https://pbs.twimg.com/media/EiNYONQXkAEvm5d?format=png&name=360x360"/>
                         <div class="comentext">
@@ -469,24 +420,10 @@ and open the template in the editor.
             <!--BARRA (INICIO)-->
             <div class="barra overflow-auto">
                 <div class="separador user-select-none">CATEGORÍAS</div>
-                <div class="category user-select-none" style="background: #3300cc">
-                    Texto por aquí
-                </div>
-                <div class="category user-select-none" style="background: #333300">
-                    Texto por allá
-                </div>
-                <div class="category user-select-none" style="background: #ff9999">
-                    Texto en todas partes
-                </div>
-                <div class="category user-select-none" style="background: #6666ff" onclick="alertaRoja()">
-                    Alerta Roja
-                </div>
-                <div class="category user-select-none" style="background: #ff6633" onclick="Redirect('formato.php')">
-                    Al Formato
-                </div>
-                <div class="category user-select-none" style="background: #ff6633" onclick="Redirect('home.php')">
-                    Al Perfil
-                </div>
+                <?php
+                $barra = new category();
+                $barra->llenaLaBarra();
+                ?>
             </div>
             <!--BARRA (FIN)-->
         </div>
