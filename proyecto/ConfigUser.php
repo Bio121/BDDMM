@@ -1,3 +1,11 @@
+
+<?php
+if (session_id() == '') {
+    session_start();
+}
+?>
+
+
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -16,34 +24,25 @@ and open the template in the editor.
         <title>configuracion de usuario </title>
     </head>
     <body>
-        <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top fixed-top-2">
-            <form class="form-inline ml-auto">
-                <div class="md-form my-0">
-                    <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-                </div>
-                <button href="#!" class="btn btn-primary btn-outline-white btn-md my-0 ml-sm-2" type="submit">Buscar</button>
-            </form>
-        </nav>
 
-        <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top">
-            <a class="navbar-brand" href="index.php">Novedades del Bot</a>
-                
-            <div class="div-inline ml-auto  usuarioNav" > 
-                <img src="https://pbs.twimg.com/media/EjTY9nDWAAAYDdu?format=jpg&name=900x900" class="imgNavBar float-left imagenUserNavbar" alt="img de navbar">
-                <a class="nav-link dropdown-toggle usuarioNomNav" href="#" id="navbarDropdown nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    juan 
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="home.php">perfil</a>
-                    <a class="dropdown-item" href="ConfigUser.php">configuracion de perfil</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="index.php">cerrar sesion</a>
-                </div>
-                
-            </div>
+        <?php
+        include "classes.php";
 
-           
-        </nav>
+        $nav = new navbar();
+        $nav->simple();
+
+        if (isset($_SESSION["usuario"]) && isset($_SESSION["clave"])) {
+            echo $_SESSION["usuario"];
+            echo "<br>";
+            echo $_SESSION["clave"];
+            $nav->yesSession($_SESSION["usuario"]);
+        } else {
+            $_SESSION["usuario"] = null;
+            $_SESSION["clave"] = null;
+            $nav->notSession();
+        }
+        session_unset();
+        ?>
 
         <div class="contGlobal">
             <div class="mainContent">
@@ -63,51 +62,51 @@ and open the template in the editor.
                         <div class="col-8" >
                             <form action="ConfigUser.php" onsubmit="return validacionConfig()">
 
-                                        <label for="UsuarioConfig">Usuario</label>
-                                        <input type="text" class="form-control campoConfig" id="UsuarioConfig" name="UsuarioConfig" placeholder=" ">
-                                        
-                                        <label for="mailCofig">Correo electrónico</label>
-                                        <input type="text" class="form-control campoConfig" id="mailCofig" name="mailCofig" placeholder=" ">
+                                <label for="UsuarioConfig">Usuario</label>
+                                <input type="text" class="form-control campoConfig" id="UsuarioConfig" name="UsuarioConfig" placeholder=" ">
 
-                                        <label for="contraConfig">Contraseña</label>
-                                        <input type="password" class="form-control campoConfig" id="contraConfig" name="contraConfig" placeholder=" ">
+                                <label for="mailCofig">Correo electrónico</label>
+                                <input type="text" class="form-control campoConfig" id="mailCofig" name="mailCofig" placeholder=" ">
 
-                                        <label for="confirmarContraConfig">Confirmar contraseña</label>
-                                        <input type="password" class="form-control campoConfig" id="confirmarContraConfig" name="confirmarContraConfig" placeholder=" ">
-                
-                                        <div class="separadorConfig"></div>
-                                        
-                                        <label for="nombreConfig">Nombre</label>
-                                        <input type="text" class="form-control campoConfig" id="nombreConfig" name="nombreConfig" placeholder=" ">
+                                <label for="contraConfig">Contraseña</label>
+                                <input type="password" class="form-control campoConfig" id="contraConfig" name="contraConfig" placeholder=" ">
 
-                                        <label for="apellidoPaConfig">Apellido paterno</label>
-                                        <input type="text" class="form-control campoConfig" id="apellidoPaConfig" name="apellidoPaConfig" placeholder=" ">
+                                <label for="confirmarContraConfig">Confirmar contraseña</label>
+                                <input type="password" class="form-control campoConfig" id="confirmarContraConfig" name="confirmarContraConfig" placeholder=" ">
 
-                                        <label for="apellidoMaConfig">Apellido materno</label>
-                                        <input type="text" class="form-control campoConfig" id="apellidoMaConfig" name="apellidoMaConfig" placeholder=" ">
+                                <div class="separadorConfig"></div>
 
-                                        <label for="TelefonoConfig">Telefono</label>
-                                        <input type="number" class="form-control campoConfig" id="TelefonoConfig" name="TelefonoConfig" placeholder=" ">
+                                <label for="nombreConfig">Nombre</label>
+                                <input type="text" class="form-control campoConfig" id="nombreConfig" name="nombreConfig" placeholder=" ">
 
-                                        <label  for="nacimiento">Fecha de nacimiento</label>
-                                        <input type="date" id="nacimiento" class="campoConfig" name="nacimiento" value="2020-01-01" min="1900-01-01" max="2020-12-31">
+                                <label for="apellidoPaConfig">Apellido paterno</label>
+                                <input type="text" class="form-control campoConfig" id="apellidoPaConfig" name="apellidoPaConfig" placeholder=" ">
 
-                                        <p id="seccion">Genero:</p>
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" id="maculino" name="generoConfig" class="custom-control-input">
-                                            <label class="custom-control-label" for="maculino">Maculino</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" id="femenino" name="generoConfig" class="custom-control-input">
-                                            <label class="custom-control-label" for="femenino">Femenino</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" id="noBinario" name="generoConfig" class="custom-control-input">
-                                            <label class="custom-control-label" for="noBinario">no binario</label>
-                                        </div>
+                                <label for="apellidoMaConfig">Apellido materno</label>
+                                <input type="text" class="form-control campoConfig" id="apellidoMaConfig" name="apellidoMaConfig" placeholder=" ">
+
+                                <label for="TelefonoConfig">Telefono</label>
+                                <input type="number" class="form-control campoConfig" id="TelefonoConfig" name="TelefonoConfig" placeholder=" ">
+
+                                <label  for="nacimiento">Fecha de nacimiento</label>
+                                <input type="date" id="nacimiento" class="campoConfig" name="nacimiento" value="2020-01-01" min="1900-01-01" max="2020-12-31">
+
+                                <p id="seccion">Genero:</p>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="maculino" name="generoConfig" class="custom-control-input">
+                                    <label class="custom-control-label" for="maculino">Maculino</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="femenino" name="generoConfig" class="custom-control-input">
+                                    <label class="custom-control-label" for="femenino">Femenino</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input type="radio" id="noBinario" name="generoConfig" class="custom-control-input">
+                                    <label class="custom-control-label" for="noBinario">no binario</label>
+                                </div>
 
                                 <button class="btn btn-primary btnConfig" type="submit">Cambiar Datos</button>
-                                
+
                             </form>
                             <button class="btn btn-primary btnBaja" type="submit" onclick="BajaUsuariro()">Darse de baja </button>
                         </div>
