@@ -79,19 +79,18 @@ class navbar {
 
     function navbar() {
         $this->inSes = "<div class = 'dropdown ml-auto iniciarSesionDrop'><button class = 'btn btn-secondary dropdown-toggle pull-right' type = 'button' id = 'dropdownMenuButton' data-toggle = 'dropdown' aria-haspopup = 'true' aria-expanded = 'false'>
-                  Iniciar Sesión</button><div class = 'dropdown-menu dropdown-menu-right'><form class = 'px-4 py-3' action = 'index.php' onsubmit = 'return validacionInicioSesion()' method = 'post'>
+                  Iniciar Sesión</button><div class = 'dropdown-menu dropdown-menu-right'><form class = 'px-4 py-3' action = 'index.php' onsubmit = 'return validacionInicioSesion()' method = 'post' enctype='multipart/form-data'>
                   <div class = 'form-group'><label for = 'emailIniciarSecion'>Email</label><input type = 'email' class = 'form-control' id = 'emailIniciarSesion' placeholder = 'correo@ejemplo.com' name = 'Correo'>
                   </div><div class = 'form-group'><label for = 'usuarioIniciarSesion'>Usuario</label><input type = 'text' class = 'form-control' id = 'usuarioIniciarSesion' placeholder = 'Usuario' name = 'Usuario'>
                   </div><div class = 'form-group'><label for = 'contraseñaIniciarSesion'>Contraseña</label><input type = 'password' class = 'form-control' id = 'contraseñaIniciarSesion' placeholder = 'Contraseña' name = 'Contraseña'>
-                  </div><div class = 'form-check'><input type = 'checkbox' class = 'form-check-input' id = 'dropdownCheck'><label class = 'form-check-label' for = 'dropdownCheck'>Recuérdame</label>
                   </div><button type = 'submit' class = 'btn btn-primary' >Iniciar Sesión</button></form></div></div>";
 
         $this->regis = "<div class = 'dropdown RegistrarseDrop'><button class = 'btn btn-secondary dropdown-toggle pull-right' type = 'button' id = 'dropdownMenuButton' data-toggle = 'dropdown' aria-haspopup = 'true' aria-expanded = 'false'>
-                  Registrarse</button><div class = 'dropdown-menu dropdown-menu-right'><form class = 'px-4 py-3' onsubmit = 'return validacionRegistrarse()'>
-                  <div class = 'form-group'><label for = 'emailRegistrarse'>Email</label><input type = 'email' class = 'form-control' id = 'emailRegistrarse' placeholder = 'correo@ejemplo.com'>
-                  </div><div class = 'form-group'><label for = 'usuarioRegistrarse'>Usuario</label><input type = 'text' class = 'form-control' id = 'usuarioRegistrarse' placeholder = 'Usuario'>
-                  </div><div class = 'form-group'><label for = 'telefonoRegistrarse'>Telefono</label><input type = 'number' class = 'form-control' id = 'telefonoRegistrarse' placeholder = 'Teléfono'>
-                  </div><div class = 'form-group'><label for = 'contraseñaRegistrarse'>Contraseña</label><input type = 'password' class = 'form-control' id = 'contraseñaRegistrarse' placeholder = 'Contraseña'>
+                  Registrarse</button><div class = 'dropdown-menu dropdown-menu-right'><form class = 'px-4 py-3' action = 'index.php' onsubmit = 'return validacionRegistrarse()' method = 'post' enctype='multipart/form-data'>
+                  <div class = 'form-group'><label for = 'emailRegistrarse'>Email</label><input type = 'email' class = 'form-control' id = 'emailRegistrarse' placeholder = 'correo@ejemplo.com' name = 'Correo'>
+                  </div><div class = 'form-group'><label for = 'usuarioRegistrarse'>Usuario</label><input type = 'text' class = 'form-control' id = 'usuarioRegistrarse' placeholder = 'Usuario' name = 'Usuario'>
+                  </div><div class = 'form-group'><label for = 'telefonoRegistrarse'>Teléfono</label><input type = 'text' class = 'form-control' id = 'telefonoRegistrarse' placeholder = 'Teléfono' name = 'Phone'>
+                  </div><div class = 'form-group'><label for = 'contraseñaRegistrarse'>Contraseña</label><input type = 'password' class = 'form-control' id = 'contraseñaRegistrarse' placeholder = 'Contraseña' name = 'Contraseña'>
                   </div><div class = 'form-group'><label for = 'contraseñaConfirmarRegistrarse'>Confirmar Contraseña</label><input type = 'password' class = 'form-control' id = 'contraseñaConfirmarRegistrarse' placeholder = 'Confirmar Contraseña'>
                   </div><button type = 'submit' class = 'btn btn-primary' >Registrarse</button></form></div></div>";
     }
@@ -130,10 +129,12 @@ class navbar {
                             " . $nombre . " 
                         </a>
                         <div class='dropdown-menu dropdown-menu-right' aria-labelledby='navbarDropdown'>
-                            <a class='dropdown-item' href='home.php'>Perfil</a>
-                            <a class='dropdown-item' href='ConfigUser.php'>Configuracion de Perfil</a>
-                            <div class='dropdown-divider'></div>
-                            <a class='dropdown-item' href='index.php' onclick='salirDeAquí()'>Cerrar Sesión</a>
+                            <form action = 'index.php' method = 'post'>
+                                <a class='dropdown-item' href='home.php'>Perfil</a>
+                                <a class='dropdown-item' href='ConfigUser.php'>Configuracion de Perfil</a>
+                                <div class='dropdown-divider'></div>
+                                <input type='submit'  href='index.php' class='button mx-3 px-5' name='salir' value='Salir' style='background=azure; border=none;'/>
+                            </form>
                         </div>  
                     </div> 
                 </nav>";
@@ -142,14 +143,18 @@ class navbar {
 
 }
 
-class inicioSesión {
+class inicioRegistro {
 
-    function verdad($usuario, $correo, $contraseña) {
+    function inicio($usuario, $correo, $contraseña) {
         $conn = new mySQLphpClass();
         $result = $conn->initSes($usuario, $correo, $contraseña);
         return $result;
     }
 
+    function registro($telefono, $correo, $usuario, $contraseña) {
+        $conn = new mySQLphpClass();
+        $result = $conn->usuarios(null, null, null, $telefono, $correo, $usuario, $contraseña, null, null, null, 'Registrado', null, 'I');
+        return $result;
+    }
+
 }
-
-

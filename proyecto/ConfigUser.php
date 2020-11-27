@@ -30,24 +30,115 @@ and open the template in the editor.
 
         $nav = new navbar();
         $nav->simple();
+        $RBmale = '';
+        $RBfemale = '';
+        $RBnb = 'checked="checked"';
+        $mal = false;
+        $Error1 = '';
+        $Error2 = '';
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        if (isset($_SESSION["usuario"]) && isset($_SESSION["clave"])) {
-            echo $_SESSION["usuario"];
-            echo "<br>";
-            echo $_SESSION["clave"];
-            $nav->yesSession($_SESSION["usuario"]);
+            if (isset($_POST["ConfirmarCKB"]) || isset($_POST["bajaText"])) {
+                $adios = true;
+                if (!isset($_POST['ConfirmarCKB'])) {
+                    $Error1 = 'La cuenta no puede darse de baja sin marcar la casilla correspondiente<br>';
+                    $mal = true;
+                    $adios = false;
+                }
+                if ($_POST['bajaText'] != 'Dar de Baja mi cuenta') {
+                    $Error2 = 'La frase de seguridad debe corresponder para dar de baja la cuenta';
+                    $mal = true;
+                    $adios = false;
+                }
+                $nav->yesSession($_SESSION["usuario"]);
+                if ($adios) {
+                    $newUser = $_SESSION["usuario"];
+                    $nombre = 'queImporta';
+                    $paterno = 'queImporta';
+                    $materno = 'queImporta';
+                    $telefono = 'queImporta';
+                    $correo = $_SESSION["correo"];
+                    $usuario = $_SESSION["usuario"];
+                    $contraseña = $_SESSION["contraseishon"];
+                    $confimacion = 'queImporta';
+                    $genero = 'queImporta';
+                    $nacimiento = null;
+                    $imagen = '';
+                    $con = new mySQLphpClass();
+                    $con->usuarios($nombre, $paterno, $materno, $telefono, $correo, $usuario, $contraseña, $imagen, $genero, $nacimiento, $_SESSION["privilegio"], $newUser, 'D');
+                    session_unset();
+                    session_destroy();
+                    header('Location: index.php');
+                }
+            } else {
+                $nav->yesSession($_SESSION["usuario"]);
+                $newUser = $_SESSION["usuario"];
+                $nombre = $_POST["nombreConfig"];
+                $paterno = $_POST["apellidoPaConfig"];
+                $materno = $_POST["apellidoMaConfig"];
+                $telefono = $_POST["TelefonoConfig"];
+                $correo = $_POST["mailCofig"];
+                $usuario = $_SESSION["usuario"];
+                if ($newUser != $_POST["UsuarioConfig"])
+                    $newUser = $_POST["UsuarioConfig"];
+                $contraseña = $_POST["contraConfig"];
+                $confimacion = $_POST["confirmarContraConfig"];
+                $genero = $_POST["generoConfig"];
+                $nacimiento = $_POST["nacimiento"];
+                $imagen = '';
+                if (empty($nacimiento)) {
+                    $nacimiento = null;
+                }
+                $update = new mySQLphpClass();
+                $ses = new inicioRegistro();
+                $update->usuarios($nombre, $paterno, $materno, $telefono, $correo, $usuario, $contraseña, $imagen, $genero, $nacimiento, $_SESSION["privilegio"], $newUser, 'U');
+                $result = $ses->inicio($newUser, $correo, $contraseña);
+                if (!empty($result)) {
+                    $_SESSION["nombre"] = $result[0];
+                    $_SESSION["paterno"] = $result[1];
+                    $_SESSION["materno"] = $result[2];
+                    $_SESSION["telefono"] = $result[3];
+                    $_SESSION["correo"] = $result[4];
+                    $_SESSION["usuario"] = $result[5];
+                    $_SESSION["contraseishon"] = $result[6];
+                    $_SESSION["imagen"] = $result[7];
+                    $_SESSION["genero"] = $result[8];
+                    $_SESSION["nacimiento"] = $result[9];
+                    $_SESSION["privilegio"] = $result[10];
+                    $nav->yesSession($_SESSION["usuario"]);
+                }
+            }
         } else {
-            $_SESSION["usuario"] = null;
-            $_SESSION["clave"] = null;
-            $nav->notSession();
+            if (isset($_SESSION["usuario"])) {
+                $nav->yesSession($_SESSION["usuario"]);
+
+                if ($_SESSION["genero"] == 'Hombre') {
+                    $RBmale = 'checked="checked"';
+                    $RBnb = '';
+                } else if ($_SESSION["genero"] == 'Mujer') {
+                    $RBfemale = 'checked="checked"';
+                    $RBnb = '';
+                } else {
+                    $RBnb = 'checked="checked"';
+                }
+            } else {
+                header('Location: index.php');
+            }
         }
-        session_unset();
         ?>
 
         <div class="contGlobal">
             <div class="mainContent">
+
+                <?php
+                if ($mal) {
+                    echo "<div class='alert alert-danger' role='alert'>Fallas en lo siguiente:<br>" . $Error1 . $Error2 . "</div>";
+                }
+                ?>
+
                 <div class="container">
                     <div class="row"> 
+
                         <div class="col">                  
                             <img src="https://pbs.twimg.com/media/EjTY9nDWAAAYDdu?format=jpg&name=900x900" class="float-left imagenUserConfig" alt="..." >
 
@@ -60,55 +151,73 @@ and open the template in the editor.
                             </div>
                         </div>
                         <div class="col-8" >
-                            <form action="ConfigUser.php" onsubmit="return validacionConfig()">
+                            <form action="ConfigUser.php" onsubmit="return validacionConfig()" method="post" enctype='multipart/form-data'>
 
-                                <label for="UsuarioConfig">Usuario</label>
-                                <input type="text" class="form-control campoConfig" id="UsuarioConfig" name="UsuarioConfig" placeholder=" ">
+                                <label for="UsuarioConfig" class="user-select-none">Usuario</label>
+                                <input type="text" class="form-control campoConfig" id="UsuarioConfig" name="UsuarioConfig" value="<?php echo $_SESSION["usuario"] ?>">
 
-                                <label for="mailCofig">Correo electrónico</label>
-                                <input type="text" class="form-control campoConfig" id="mailCofig" name="mailCofig" placeholder=" ">
+                                <label for="mailCofig" class="user-select-none">Correo electrónico</label>
+                                <input type="text" class="form-control campoConfig" id="mailCofig" name="mailCofig" value="<?php echo $_SESSION["correo"] ?>">
 
-                                <label for="contraConfig">Contraseña</label>
-                                <input type="password" class="form-control campoConfig" id="contraConfig" name="contraConfig" placeholder=" ">
+                                <label for="contraConfig" class="user-select-none">Contraseña</label>
+                                <input type="password" class="form-control campoConfig" id="contraConfig" name="contraConfig" value="<?php echo $_SESSION["contraseishon"] ?>">
 
-                                <label for="confirmarContraConfig">Confirmar contraseña</label>
-                                <input type="password" class="form-control campoConfig" id="confirmarContraConfig" name="confirmarContraConfig" placeholder=" ">
+                                <label for="confirmarContraConfig" class="user-select-none">Confirmar contraseña</label>
+                                <input type="password" class="form-control campoConfig" id="confirmarContraConfig" name="confirmarContraConfig" value="<?php echo $_SESSION["contraseishon"] ?>">
 
-                                <div class="separadorConfig"></div>
+                                <div class="separadorConfig user-select-none"></div>
 
-                                <label for="nombreConfig">Nombre</label>
-                                <input type="text" class="form-control campoConfig" id="nombreConfig" name="nombreConfig" placeholder=" ">
+                                <label for="nombreConfig" class="user-select-none">Nombre</label>
+                                <input type="text" class="form-control campoConfig" id="nombreConfig" name="nombreConfig" value="<?php echo $_SESSION["nombre"] ?>">
 
-                                <label for="apellidoPaConfig">Apellido paterno</label>
-                                <input type="text" class="form-control campoConfig" id="apellidoPaConfig" name="apellidoPaConfig" placeholder=" ">
+                                <label for="apellidoPaConfig" class="user-select-none">Apellido paterno</label>
+                                <input type="text" class="form-control campoConfig" id="apellidoPaConfig" name="apellidoPaConfig" value="<?php echo $_SESSION["paterno"] ?>">
 
-                                <label for="apellidoMaConfig">Apellido materno</label>
-                                <input type="text" class="form-control campoConfig" id="apellidoMaConfig" name="apellidoMaConfig" placeholder=" ">
+                                <label for="apellidoMaConfig" class="user-select-none">Apellido materno</label>
+                                <input type="text" class="form-control campoConfig" id="apellidoMaConfig" name="apellidoMaConfig" value="<?php echo $_SESSION["materno"] ?>">
 
-                                <label for="TelefonoConfig">Telefono</label>
-                                <input type="number" class="form-control campoConfig" id="TelefonoConfig" name="TelefonoConfig" placeholder=" ">
+                                <label for="TelefonoConfig" class="user-select-none">Telefono</label>
+                                <input type="number" class="form-control campoConfig" id="TelefonoConfig" name="TelefonoConfig" value="<?php echo $_SESSION["telefono"] ?>">
 
-                                <label  for="nacimiento">Fecha de nacimiento</label>
-                                <input type="date" id="nacimiento" class="campoConfig" name="nacimiento" value="2020-01-01" min="1900-01-01" max="2020-12-31">
+                                <label  for="nacimiento" class="user-select-none">Fecha de nacimiento</label>
+                                <input type="date" id="nacimiento" class="campoConfig" name="nacimiento" min="1900-01-01" max="2020-12-31" value="<?php echo $_SESSION["nacimiento"] ?>">
 
                                 <p id="seccion">Genero:</p>
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" id="maculino" name="generoConfig" class="custom-control-input">
-                                    <label class="custom-control-label" for="maculino">Maculino</label>
+                                    <input type="radio" id="maculino" name="generoConfig" class="custom-control-input" <?php echo $RBmale; ?> value="Hombre">
+                                    <label class="custom-control-label user-select-none" for="maculino">Maculino</label>
                                 </div>
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" id="femenino" name="generoConfig" class="custom-control-input">
-                                    <label class="custom-control-label" for="femenino">Femenino</label>
+                                    <input type="radio" id="femenino" name="generoConfig" class="custom-control-input" <?php echo $RBfemale; ?> value="Mujer">
+                                    <label class="custom-control-label user-select-none" for="femenino">Femenino</label>
                                 </div>
                                 <div class="custom-control custom-radio">
-                                    <input type="radio" id="noBinario" name="generoConfig" class="custom-control-input">
-                                    <label class="custom-control-label" for="noBinario">no binario</label>
+                                    <input type="radio" id="noBinario" name="generoConfig" class="custom-control-input" <?php echo $RBnb; ?> value="No Binario">
+                                    <label class="custom-control-label user-select-none" for="noBinario">No Binario</label>
                                 </div>
 
                                 <button class="btn btn-primary btnConfig" type="submit">Cambiar Datos</button>
 
                             </form>
-                            <button class="btn btn-primary btnBaja" type="submit" onclick="BajaUsuariro()">Darse de baja </button>
+
+                            <?php
+                            if ($_SESSION["privilegio"] == "Registrado") {
+                                echo '<br class="user-select-none">
+                                        <form action="ConfigUser.php" method="post" enctype="multipart/form-data">
+
+                                            <input id="ConfirmarCKB" type="checkbox" name="ConfirmarCKB" value="No" class="user-select-none"/>
+                                            <label for="ConfirmarCKB" class="user-select-none">Marca esta casilla si quieres dar de baja tu cuenta</label>
+
+                                            <br class="user-select-none">
+
+                                            <label for="bajaText">Copia y pega la frase "Dar de Baja mi cuenta" sin los "", en el siguiente campo</label>
+                                            <input type="text" class="form-control campoConfig" id="bajaText" name="bajaText">
+
+                                            <button class="btn btn-primary btnBaja" type="submit" onclick="BajaUsuariro()">Darse de baja</button>
+
+                                        </form>';
+                            }
+                            ?>
                         </div>
                     </div>  
                 </div>
@@ -118,21 +227,10 @@ and open the template in the editor.
 
             <div class="barra overflow-auto">
                 <div class="separador">CATEGORÍAS</div>
-                <div class="category user-select-none" style="background: #3300cc">
-                    Texto por aquí
-                </div>
-                <div class="category user-select-none" style="background: #333300">
-                    Texto por allá
-                </div>
-                <div class="category user-select-none" style="background: #ff9999">
-                    Texto en todas partes
-                </div>
-                <div class="category user-select-none" style="background: #6666ff" onclick="alertaRoja()">
-                    Alerta Roja
-                </div>
-                <div class="category user-select-none" style="background: #ff6633" onclick="Redirect('formato.php')">
-                    Al Formato
-                </div>
+                <?php
+                $barra = new category();
+                $barra->llenaLaBarra();
+                ?>
             </div>
         </div>
 
@@ -153,8 +251,5 @@ and open the template in the editor.
                 </div>
             </div>
         </footer>
-        <?php
-        // put your code here
-        ?>
     </body>
 </html>

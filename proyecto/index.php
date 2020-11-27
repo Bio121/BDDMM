@@ -28,21 +28,49 @@ and open the template in the editor.
         $nav = new navbar();
         $nav->simple();
         $mal = 0;
+        $regis = false;
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $ses = new inicioSesión();
-            $usuario = $_POST["Usuario"];
-            $correo = $_POST["Correo"];
-            $contraseña = $_POST["Contraseña"];
-            $result = $ses->verdad($usuario, $correo, $contraseña);
-            if (!empty($result)) {
-                $_SESSION["usuario"] = $result[0];
-                $_SESSION["correo"] = $result[1];
-                $nav->yesSession($_SESSION["usuario"]);
-            } else {
-                $mal = 1;
-                $_SESSION["usuario"] = null;
+            if (isset($_POST["salir"])) {
+                session_unset();
+                session_destroy();
                 $nav->notSession();
+            } else {
+
+                $ses = new inicioRegistro();
+                $usuario = $_POST["Usuario"];
+                $correo = $_POST["Correo"];
+                $contraseña = $_POST["Contraseña"];
+                
+                if (isset($_POST["Phone"])) {
+                    $telefono = $_POST["Phone"];
+                    $texto = $ses->registro($telefono, $correo, $usuario, $contraseña);
+                    $regis = true;
+                    echo $texto;
+                }
+
+                $result = $ses->inicio($usuario, $correo, $contraseña);
+                if (!empty($result)) {
+                    $_SESSION["nombre"] = $result[0];
+                    $_SESSION["paterno"] = $result[1];
+                    $_SESSION["materno"] = $result[2];
+                    $_SESSION["telefono"] = $result[3];
+                    $_SESSION["correo"] = $result[4];
+                    $_SESSION["usuario"] = $result[5];
+                    $_SESSION["contraseishon"] = $result[6];
+                    $_SESSION["imagen"] = $result[7];
+                    $_SESSION["genero"] = $result[8];
+                    $_SESSION["nacimiento"] = $result[9];
+                    $_SESSION["privilegio"] = $result[10];
+                    $nav->yesSession($_SESSION["usuario"]);
+                } else {
+                    if ($regis) {
+                        $mal += 1;
+                    }
+                    $mal += 1;
+                    $_SESSION["usuario"] = null;
+                    $nav->notSession();
+                }
             }
         } else {
             if (isset($_SESSION["usuario"])) {
@@ -61,6 +89,9 @@ and open the template in the editor.
                 <?php
                 if ($mal == 1) {
                     echo "<div class='alert alert-danger' role='alert'>Inicio de Sesión Incorrecto</div>";
+                }
+                if ($mal == 2) {
+                    echo "<div class='alert alert-danger' role='alert'>Registro de Usuario Incorrecto</div>";
                 }
                 ?>
 

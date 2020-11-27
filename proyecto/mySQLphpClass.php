@@ -59,16 +59,25 @@ class mySQLphpClass extends configSQLphp {
 
     function usuarios($nombre, $paterno, $materno, $telefono, $correo, $usuario, $contraseña, $imagen, $genero, $nacimiento, $privilegio, $newUser, $seleccion) {
         $this->connect();
-        $sql = "call proc_dml_usuario( " . $nombre . ", " . $paterno . ", " . $materno . ", " . $telefono . ", " . $correo . ", " . $usuario . ", " . $contraseña
-                . ", " . $imagen . ", " . $genero . ", " . $nacimiento . ", " . $privilegio . ", " . $newUser . ", " . $seleccion . ");";
+        if ($nombre == null && $paterno == null && $materno == null && $imagen == null && $genero == null && $nacimiento == null && $newUser == null) {
+            $sql = "call proc_dml_usuario(null, null, null, '" . $telefono . "', '" . $correo . "', '" . $usuario . "', '" . $contraseña
+                    . "', null, null, null, '" . $privilegio . "', null, '" . $seleccion . "');";
+        } else if($nacimiento == null){
+            "call proc_dml_usuario('" . $nombre . "', '" . $paterno . "', '" . $materno . "', '" . $telefono . "', '" . $correo . "', '" . $usuario . "', '" . $contraseña
+                    . "', null, '" . $genero . "', null, '" . $privilegio . "', '" . $newUser . "', '" . $seleccion . "');";
+        }
+        else {
+            $sql = "call proc_dml_usuario('" . $nombre . "', '" . $paterno . "', '" . $materno . "', '" . $telefono . "', '" . $correo . "', '" . $usuario . "', '" . $contraseña
+                    . "', '" . $imagen . "', '" . $genero . "', '" . $nacimiento . "', '" . $privilegio . "', '" . $newUser . "', '" . $seleccion . "');";
+        }
         $this->connectionString->query($sql);
         $this->byebye();
-        return 0;
+        return $sql;
     }
 
     function seccion($orden, $color, $nombre, $estado, $newName, $seleccion) {
         $this->connect();
-        $sql = "call proc_dml_seccion( " . $orden . ", " . $color . ", " . $nombre . ", " . $estado . ", " . $newName . ", " . $seleccion . ");";
+        $sql = "call proc_dml_seccion('" . $orden . "', '" . $color . "', '" . $nombre . "', '" . $estado . "', '" . $newName . "', '" . $seleccion . "');";
         $this->connectionString->query($sql);
         $this->byebye();
         return 0;
@@ -76,7 +85,7 @@ class mySQLphpClass extends configSQLphp {
 
     function noticias($codigo, $lugar, $fecha, $fechaPost, $reportero, $titulo, $desc, $seccion, $estado, $commEDT, $keywords, $likes, $seleccion) {
         $this->connect();
-        $sql = "call proc_dml_noticia( " . $codigo . ", " . $lugar . ", " . $fecha . ", " . $fechaPost . ", " . $reportero . ", " . $titulo . ", " . $desc
+        $sql = "call proc_dml_noticia(" . $codigo . ", " . $lugar . ", " . $fecha . ", " . $fechaPost . ", " . $reportero . ", " . $titulo . ", " . $desc
                 . ", " . $seccion . ", " . $estado . ", " . $commEDT . ", " . $keywords . ", " . $likes . ", " . $seleccion . ");";
         $this->connectionString->query($sql);
         $this->byebye();
@@ -128,7 +137,8 @@ class mySQLphpClass extends configSQLphp {
         if (!empty($result) && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
 
-                $result2 = array($row["usuario"], $row["correo"]);
+                $result2 = array($row["nombre"], $row["apellidoPaterno"], $row["apellidoMaterno"], $row["telefono"],
+                    $row["correo"],$row["usuario"],$row["contraseña"],$row["imagen"],$row["genero"],$row["fecha_nacimiento"],$row["privilegio"],);
             }
         } else {
             $result2 = null;
