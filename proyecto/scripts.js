@@ -20,6 +20,11 @@ function like(x) {
     document.getElementById("input").innerHTML = count + 1;
 }
 
+function indexCat(site) {
+    site = 0;
+    window.location.href = "noticia.php";
+}
+
 
 function validacionRegistrarse() {
 
@@ -220,4 +225,5 @@ function salirDeAquí() {
   request.open("GET", "cerrarSesión.php", true);
   request.send();
 }
+
 

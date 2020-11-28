@@ -1,4 +1,3 @@
-
 <?php
 if (session_id() == '') {
     session_start();
@@ -26,6 +25,7 @@ and open the template in the editor.
     <body>
 
         <?php
+        include "imagen.php";
         include "classes.php";
 
         $nav = new navbar();
@@ -50,28 +50,28 @@ and open the template in the editor.
                     $mal = true;
                     $adios = false;
                 }
-                $nav->yesSession($_SESSION["usuario"]);
+                $nav->yesSession($_SESSION["usuario"],$_SESSION["imagen"]);
                 if ($adios) {
-                    $newUser = $_SESSION["usuario"];
-                    $nombre = 'queImporta';
-                    $paterno = 'queImporta';
-                    $materno = 'queImporta';
+                    $newUser = null;
+                    $nombre = null;
+                    $paterno = null;
+                    $materno = null;
                     $telefono = 'queImporta';
                     $correo = $_SESSION["correo"];
                     $usuario = $_SESSION["usuario"];
                     $contraseña = $_SESSION["contraseishon"];
                     $confimacion = 'queImporta';
-                    $genero = 'queImporta';
+                    $genero = null;
                     $nacimiento = null;
-                    $imagen = '';
+                    $imagen = null;
                     $con = new mySQLphpClass();
-                    $con->usuarios($nombre, $paterno, $materno, $telefono, $correo, $usuario, $contraseña, $imagen, $genero, $nacimiento, $_SESSION["privilegio"], $newUser, 'D');
+                    $con->usuarios($nombre, $paterno, $materno, $telefono, $correo, $usuario, $contraseña, $imagen, $genero, $nacimiento, $_SESSION["privilegio"], $newUser, 'd');
                     session_unset();
                     session_destroy();
                     header('Location: index.php');
                 }
             } else {
-                $nav->yesSession($_SESSION["usuario"]);
+                $nav->yesSession($_SESSION["usuario"],$_SESSION["imagen"]);
                 $newUser = $_SESSION["usuario"];
                 $nombre = $_POST["nombreConfig"];
                 $paterno = $_POST["apellidoPaConfig"];
@@ -85,14 +85,31 @@ and open the template in the editor.
                 $confimacion = $_POST["confirmarContraConfig"];
                 $genero = $_POST["generoConfig"];
                 $nacimiento = $_POST["nacimiento"];
-                $imagen = '';
-                if (empty($nacimiento)) {
-                    $nacimiento = null;
+                $imagen = '';                
+                
+                if((isset($_FILES['image'])) && ($_FILES['image'] !='')){
+		$file = $_FILES['image']; 	
+		$temName = $file['tmp_name'];
+		$fp = fopen($temName, "rb");
+		$contenido = fread($fp, filesize($temName));
+                                                    
+		$imagen = addslashes($contenido);
+		fclose($fp);
+                  
                 }
+                
+                
+
+                if (empty($nacimiento)) {
+                $nacimiento = null;                    
+                }
+                
                 $update = new mySQLphpClass();
                 $ses = new inicioRegistro();
                 $update->usuarios($nombre, $paterno, $materno, $telefono, $correo, $usuario, $contraseña, $imagen, $genero, $nacimiento, $_SESSION["privilegio"], $newUser, 'U');
                 $result = $ses->inicio($newUser, $correo, $contraseña);
+                
+                
                 if (!empty($result)) {
                     $_SESSION["nombre"] = $result[0];
                     $_SESSION["paterno"] = $result[1];
@@ -105,12 +122,12 @@ and open the template in the editor.
                     $_SESSION["genero"] = $result[8];
                     $_SESSION["nacimiento"] = $result[9];
                     $_SESSION["privilegio"] = $result[10];
-                    $nav->yesSession($_SESSION["usuario"]);
+                    $nav->yesSession($_SESSION["usuario"],$_SESSION["imagen"]);
                 }
             }
         } else {
             if (isset($_SESSION["usuario"])) {
-                $nav->yesSession($_SESSION["usuario"]);
+                $nav->yesSession($_SESSION["usuario"],$_SESSION["imagen"]);
 
                 if ($_SESSION["genero"] == 'Hombre') {
                     $RBmale = 'checked="checked"';
@@ -139,20 +156,27 @@ and open the template in the editor.
                 <div class="container">
                     <div class="row"> 
 
-                        <div class="col">                  
-                            <img src="https://pbs.twimg.com/media/EjTY9nDWAAAYDdu?format=jpg&name=900x900" class="float-left imagenUserConfig" alt="..." >
 
-                            <div class="custom-file">
-
-                                <div class="btn btn-outline-secondary btn-rounded waves-effect float-left">
-                                    <input type="file" >
-                                </div>
-
-                            </div>
-                        </div>
                         <div class="col-8" >
                             <form action="ConfigUser.php" onsubmit="return validacionConfig()" method="post" enctype='multipart/form-data'>
+                                <div class="col">                  
+                                    <?php
+                                    
+                                    //$sesw = new imger();
+                                    //$sesw->imaU($_SESSION["imagen"]);
+                                    $img_str = base64_encode($_SESSION["imagen"]);
+                                    echo '<img src="data:image/jpg;base64,'.$img_str.'" class="float-left imagenUserConfig" alt="Img "/>';                            
+                                    ?>
+                                    
 
+                                    <div class="custom-file">
+
+                                        <div class="btn btn-outline-secondary btn-rounded waves-effect float-left">
+                                            <input type="file" id="archivo" name="image" accept="image/png,image/jpeg">
+                                        </div>
+
+                                    </div>
+                                </div>
                                 <label for="UsuarioConfig" class="user-select-none">Usuario</label>
                                 <input type="text" class="form-control campoConfig" id="UsuarioConfig" name="UsuarioConfig" value="<?php echo $_SESSION["usuario"] ?>">
 

@@ -62,7 +62,7 @@ and open the template in the editor.
                     $_SESSION["genero"] = $result[8];
                     $_SESSION["nacimiento"] = $result[9];
                     $_SESSION["privilegio"] = $result[10];
-                    $nav->yesSession($_SESSION["usuario"]);
+                    $nav->yesSession($_SESSION["usuario"],$_SESSION["imagen"]);
                 } else {
                     if ($regis) {
                         $mal += 1;
@@ -74,7 +74,7 @@ and open the template in the editor.
             }
         } else {
             if (isset($_SESSION["usuario"])) {
-                $nav->yesSession($_SESSION["usuario"]);
+                $nav->yesSession($_SESSION["usuario"],$_SESSION["imagen"]);
             } else {
                 $_SESSION["usuario"] = null;
                 $nav->notSession();
@@ -263,7 +263,7 @@ and open the template in the editor.
 
 
 
-                <div class="nota" onclick="noticia(01)">
+                <div class="nota" onclick="indexCat(01)">
                     <div class="flash">¡ÚLTIMO MOMENTO!</div>
                     <div class="row no-gutters">
                         <div class="col-12">
@@ -303,7 +303,7 @@ and open the template in the editor.
 
                 <?php
                 $noticias = new noticias();
-                $noticias->enHome(3);
+                $noticias->enHome(null);
                 ?>
 
             </div>
@@ -334,9 +334,16 @@ and open the template in the editor.
                         </div>
                     </div>
                 </div>
-            </footer>
-
-        </div>
-
+                <div class="row">
+                    <div class="col">
+                        cómo va todo?
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <?php
+        // put your code here
+        //phpinfo();
+        ?>
     </body>
 </html>
