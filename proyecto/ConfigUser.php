@@ -59,7 +59,7 @@ and open the template in the editor.
                     $mal = true;
                     $adios = false;
                 }
-                $nav->yesSession($_SESSION["usuario"],$_SESSION["imagen"]);
+                $nav->yesSession($_SESSION["usuario"],$_SESSION["privilegio"],$_SESSION["imagen"]);
                 if ($adios) {
                     $newUser = null;
                     $nombre = null;
@@ -80,7 +80,7 @@ and open the template in the editor.
                     header('Location: index.php');
                 }
             } else {
-                $nav->yesSession($_SESSION["usuario"],$_SESSION["imagen"]);
+                $nav->yesSession($_SESSION["usuario"],$_SESSION["privilegio"],$_SESSION["imagen"]);
                 $newUser = $_SESSION["usuario"];
                 $nombre = $_POST["nombreConfig"];
                 $paterno = $_POST["apellidoPaConfig"];
@@ -132,12 +132,12 @@ and open the template in the editor.
                     $_SESSION["genero"] = $result[8];
                     $_SESSION["nacimiento"] = $result[9];
                     $_SESSION["privilegio"] = $result[10];
-                    $nav->yesSession($_SESSION["usuario"],$_SESSION["imagen"]);
+                    $nav->yesSession($_SESSION["usuario"],$_SESSION["privilegio"],$_SESSION["imagen"]);
                 }
             }
         } else {
             if (isset($_SESSION["usuario"])) {
-                $nav->yesSession($_SESSION["usuario"],$_SESSION["imagen"]);
+                $nav->yesSession($_SESSION["usuario"],$_SESSION["privilegio"],$_SESSION["imagen"]);
 
                 if ($_SESSION["genero"] == 'Hombre') {
                     $RBmale = 'checked="checked"';

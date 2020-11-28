@@ -139,9 +139,23 @@ and open the template in the editor.
         $news = new mySQLphpClass();
 
         if ($_SERVER["REQUEST_METHOD"] == "POST" || $_SERVER["REQUEST_METHOD"] == "GET") {
-            $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
+            $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"],$_SESSION["imagen"]);
 
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                
+                if((isset($_FILES['image'])) && ($_FILES['image']['tmp_name'] !='')){
+                        $file = $_FILES['image'];
+                        $temName = $file['tmp_name'];
+                        $fp = fopen($temName, "rb");
+                        $contenido = fread($fp, filesize($temName));
+                        $imagen = addslashes($contenido);
+                        fclose($fp);
+                        $_SESSION["imagen"] = $imagen;
+                        echo $imagen;
+                        $img_str = base64_encode($_SESSION["imagen"]);
+                        echo '<img src="data:image/jpg;base64,'.$img_str.'" class="float-left imagenUserConfig" alt="Img "/>';
+                }
+                
                 if (array_key_exists('createNew', $_POST)) {
                     $result = $news->noticias(null, 'Escribe aquí el lugar del suceso.', null, null, $_SESSION["usuario"], "Título de la Noticia",
                             "Descripción de la Noticia", null, "Pendiente", null, 'Escribe aquí palabras clave que identifiquen esta noticia', "0", "I");
@@ -174,7 +188,6 @@ and open the template in the editor.
                     $orden = substr($_POST["editFile"], 1);
                     $code = $_POST["code"];
                     if ($tipo == 'I') {
-                        $imagen = '1';
                         $video = null;
                         $texto = null;
                         $tamaño = '1';
@@ -256,7 +269,10 @@ and open the template in the editor.
             }
         } else {
             if (isset($_SESSION["usuario"])) {
-                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
+                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"],$_SESSION["imagen"]);
+                
+                $_SESSION["imagen"] = 0;
+                
                 $news = new mySQLphpClass();
                 $result = $news->get_misNoticias(null, null, null, $_SESSION["noticiaActual"]);
 

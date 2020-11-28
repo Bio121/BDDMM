@@ -32,7 +32,7 @@ and open the template in the editor.
         $color = '';
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
+            $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"],$_SESSION["imagen"]);
 
             if (array_key_exists('existent', $_POST)) {
                 $_SESSION["noticiaActual"] = $_POST["existent"];
@@ -105,7 +105,7 @@ and open the template in the editor.
             }
         } else {
             if (isset($_SESSION["usuario"])) {
-                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
+                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"],$_SESSION["imagen"]);
                 $news = new mySQLphpClass();
                 $result = $news->get_misNoticias(null, null, null, $_SESSION["noticiaActual"]);
 

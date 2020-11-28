@@ -29,7 +29,8 @@ and open the template in the editor.
         $nav->simple();
         $mal = 0;
         $regis = false;
-        $seccion="ee";
+        $seccion = "ee";
+        $opc = 'T';
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (isset($_POST["salir"])) {
                 session_unset();
@@ -41,7 +42,7 @@ and open the template in the editor.
                 $usuario = $_POST["Usuario"];
                 $correo = $_POST["Correo"];
                 $contraseña = $_POST["Contraseña"];
-                
+
                 if (isset($_POST["Phone"])) {
                     $telefono = $_POST["Phone"];
                     $texto = $ses->registro($telefono, $correo, $usuario, $contraseña);
@@ -62,7 +63,7 @@ and open the template in the editor.
                     $_SESSION["genero"] = $result[8];
                     $_SESSION["nacimiento"] = $result[9];
                     $_SESSION["privilegio"] = $result[10];
-                    $nav->yesSession($_SESSION["usuario"],$_SESSION["imagen"]);
+                    $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"], $_SESSION["imagen"]);
                 } else {
                     if ($regis) {
                         $mal += 1;
@@ -74,24 +75,21 @@ and open the template in the editor.
             }
         } else {
             if (isset($_SESSION["usuario"])) {
-                $nav->yesSession($_SESSION["usuario"],$_SESSION["imagen"]);
+                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"], $_SESSION["imagen"]);
             } else {
                 $_SESSION["usuario"] = null;
                 $nav->notSession();
             }
         }
-        
+
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
-            if(isset($_GET["variable1"])){
+            if (isset($_GET["variable1"])) {
                 $seccion = $_GET["variable1"];
                 $opc = "C";
-            }
-            else{
+            } else {
                 $opc = "T";
             }
-
         }
-        
         ?>
 
         <div class="contGlobal">
@@ -143,7 +141,6 @@ and open the template in the editor.
                     </ol>
                     <div class="carousel-inner">
                         <?php
-
                         $noticias->Vistas(null);
                         ?>
 
@@ -202,8 +199,7 @@ and open the template in the editor.
                 </div>
 
                 <?php
-                
-                $noticias->enHome(null,$opc,$seccion);
+                $noticias->enHome(null, $opc, $seccion);
                 ?>
 
             </div>
@@ -234,16 +230,9 @@ and open the template in the editor.
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        cómo va todo?
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <?php
-        // put your code here
-        //phpinfo();
-        ?>
+
+
+            </footer>
+        </div>
     </body>
 </html>

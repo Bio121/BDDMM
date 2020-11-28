@@ -101,8 +101,10 @@ class noticias {
     function enHome($cant,$opc,$categoria) {
         $conn = new mySQLphpClass();
         $result = $conn->get_noticias($cant);
+        $img = '#';
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
+                if (array_key_exists('imagen', $row)){$img = $row["imagen"];}
                 if($opc == "T"){
                     $now  = time();
                     $target = strtotime($row["fechaPublicado"]);
@@ -114,7 +116,7 @@ class noticias {
                     echo "<div class='row no-gutters'>
                           <div class='col-12'><h2>" . $row["Título"] . "</h2></div></div>
                           <div class='row no-gutters'><div class='col-lg-5'>
-                          <img src=" . $row["imagen"]  . " class='notaIMG'/>
+                          <img src=" . $img  . " class='notaIMG'/>
                           </div><div class='col-lg-7 p-2'><div class='row no-gutters' style='height: 90%;'>
                           <p>" . $row["Descripción"] . "</p></div><div class='row no-gutters'>
                           <div class='col'><p class='autor'>" . $row["Nombre_Rep"] . " - " . $row["fechaPublicado"] .
@@ -131,7 +133,7 @@ class noticias {
                             echo "<div class='row no-gutters'>
                                   <div class='col-12'><h2>" . $row["Título"] . "</h2></div></div>
                                   <div class='row no-gutters'><div class='col-lg-5'>
-                                  <img src=" . $row["imagen"] . " class='notaIMG'/>
+                                  <img src=" . $img . " class='notaIMG'/>
                                   </div><div class='col-lg-7 p-2'><div class='row no-gutters' style='height: 90%;'>
                                   <p>" . $row["Descripción"] . "</p></div><div class='row no-gutters'>
                                   <div class='col'><p class='autor'>" . $row["Nombre_Rep"] . " - " . $row["fechaPublicado"] .
@@ -146,20 +148,21 @@ class noticias {
     function Vistas($cant) {
         $conn = new mySQLphpClass();$ind = 0;
         $result = $conn->get_noticiasNew($cant);
+        $img ='#';
         if ($result->num_rows > 0) {
-// output data of each row
             while ($row = $result->fetch_assoc()) {
                   $now = time();$ind = $ind + 1;
                   $target = strtotime($row["fechaPublicado"]);
                   $diff = $now - $target;
-                  if($ind == 1)echo "<div class='carousel-item active'><div class='nota' onclick='noticia(01)'>";
-                  if($ind > 1)echo "<div class='carousel-item'><div class='nota' onclick='noticia(01)'>";
+                  if (array_key_exists('imagen', $row)){$img = $row["imagen"];}
+                  if($ind == 1){echo "<div class='carousel-item active'><div class='nota' onclick='noticia(01)'>";}
+                  if($ind > 1){echo "<div class='carousel-item'><div class='nota' onclick='noticia(01)'>";}
                   if ($diff <= 68417) {
                       echo "<div class='flash'>¡ÚLTIMO MOMENTO!</div>";
                   }
                   echo "<div class='row no-gutters'>
                         <div class='col-12'><h2>" . $row["Título"] . "</h2></div></div>
-                        <div class='row no-gutters'><div class='col-lg-5'><img src=" . $row["imagen"] . " class='notaIMG'/>
+                        <div class='row no-gutters'><div class='col-lg-5'><img src=" . $img . " class='notaIMG'/>
                         </div><div class='col-lg-7 p-2'><div class='row no-gutters' style='height: 90%;'>
                         <p>" . $row["Descripción"] . "</p></div><div class='row no-gutters'>
                         <div class='col'><p class='autor'>" . $row["Nombre_Rep"] . " - " . $row["fechaPublicado"] . "</p></div></div></div></div></div></div>";
@@ -253,7 +256,7 @@ class navbar {
         echo $code;
     }
 
-    function yesSession($nombre, $privilegio) {
+    function yesSession($nombre, $privilegio, $imagen) {
         $page = 'index.php';
         if ($privilegio == 'Editor') {
             $page = 'HomeEditor.php';
@@ -261,7 +264,7 @@ class navbar {
         if ($privilegio == 'Reportero') {
             $page = 'Home.php';
         }
-        $code = "<nav class='nav navbar navbar-expand-lg navbar-dark fixed-top'>
+        echo "<nav class='nav navbar navbar-expand-lg navbar-dark fixed-top'>
                     <a class='navbar-brand' href='index.php'>Novedades del Bot</a>    
                     <div class='div-inline ml-auto  usuarioNav' > ";       
         $img_str = base64_encode($imagen);
@@ -379,10 +382,11 @@ class archivos {
         }
     }
 
-    private function imash($size, $orden) {
+    private function imash($size, $orden, $imagen) {
+        $img_str = base64_encode($imagen);
         $id = 'modal' . $orden;
         $str = '<div class="row py-3"><div class="col" align="center">
-                  <img src="https://pbs.twimg.com/media/EgvGhYbXYAA2Ean?format=png&name=small" class="figure-img img-fluid rounded ' . $size . '" alt="..."><div class="editBTN" data-toggle="modal" data-target="#' . $id . '">
+                  <img src="data:image/jpg;base64,'.$img_str.'" class="figure-img img-fluid rounded ' . $size . '" alt="..."><div class="editBTN" data-toggle="modal" data-target="#' . $id . '">
                   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                   <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                   <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
@@ -407,7 +411,7 @@ class archivos {
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
                 <form action="preview.php" method="post" enctype="multipart/form-data"><div class="modal-body"><div class=" user-select-none"><input type="text" class="form-control" name="code" value="' . $code . '"readonly="readonly" style="color: #e9ecef;">
                 </div><div class="input-group"><div class="custom-file"><div class="btn btn-outline-secondary btn-rounded waves-effect float-left">
-                <input type="file"></div></div></div></div><div class="modal-footer"><button type="submit" class="btn btn-danger" name="deleteFile" value="I' . $orden . '">Eliminar</button>
+                <input type="file" name="image" accept="image/png,image/jpeg"></div></div></div></div><div class="modal-footer"><button type="submit" class="btn btn-danger" name="deleteFile" value="I' . $orden . '">Eliminar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
                 <button type="submit" class="btn btn-primary" name="editFile" value="I' . $orden . '">Aceptar</button></div></form></div></div></div>';
         array_push($this->arr, $str);
@@ -438,7 +442,7 @@ class archivos {
             if ($row["tamaño"] == 3) {
                 $size = 'noticiaIMG-gd';
             }
-            echo $this->imash($size, $row["orden"]);
+            echo $this->imash($size, $row["orden"], $row["imagen"]);
             $this->imashModal($row["orden"], $row["clave"]);
         } else if ($row["tipo"] == 'texto') {
             echo $this->tecsto($row["texto"], $row["orden"]);

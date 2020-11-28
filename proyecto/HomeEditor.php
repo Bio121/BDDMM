@@ -30,7 +30,7 @@ and open the template in the editor.
         $orden = 'D';
         $estado = null;
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
+            $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"],$_SESSION["imagen"]);
 
             if (array_key_exists('asc', $_POST)) {
                 $orden = 'A';
@@ -77,7 +77,7 @@ and open the template in the editor.
                 if ($_SESSION["privilegio"] != 'Editor') {
                     header('Location: index.php');
                 }
-                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
+                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"],$_SESSION["imagen"]);
             } else {
                 header('Location: index.php');
             }
