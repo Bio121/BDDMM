@@ -182,7 +182,6 @@ function CrearSeccion() {
     }
 
     alert("seccion creada exitosamente");
-    window.close();
 }
     
 function BajaSeccion() {

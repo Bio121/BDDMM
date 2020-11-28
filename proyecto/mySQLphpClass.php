@@ -116,6 +116,14 @@ class mySQLphpClass extends configSQLphp {
         $this->byebye();
         return $result;
     }
+    
+    function Crear_secciones($orden,$color,$nombre,$estado,$nuevoNombre,$Seleccion) {
+        $this->connect();
+        $sql = "call proc_dml_seccion(" . $orden . ", '$color', '$nombre', '$estado', '$nuevoNombre', '$Seleccion');";
+        $this->connectionString->query($sql);
+        $this->byebye();
+
+    }
 
     function get_noticias($cant) {
         $this->connect();
@@ -144,21 +152,5 @@ class mySQLphpClass extends configSQLphp {
             $result2 = null;
         }
         return $result2;
-    }
-
-    function imaUs($usuario, $correo, $contraseña) {
-        $this->connect();
-        $sql = "call proc_inSes('" . $usuario . "', '" . $correo . "', '" . $contraseña . "');";
-        $result = $this->connectionString->query($sql);
-        $this->byebye();
-        if (!empty($result) && $result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                
-                $result2 = $row["imagen"];
-            }
-        } else {
-            $result2 = null;
-        }
-        return $result2;
-    }    
+    } 
 }

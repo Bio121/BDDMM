@@ -25,7 +25,6 @@ and open the template in the editor.
     <body>
 
         <?php
-        include "imagen.php";
         include "classes.php";
 
         $nav = new navbar();

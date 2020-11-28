@@ -15,15 +15,74 @@ class category {
         $conn = new mySQLphpClass();
         $result = $conn->get_secciones();
         if ($result->num_rows > 0) {
-// output data of each row
             while ($row = $result->fetch_assoc()) {
-                echo "<div class='category user-select-none' onclick='indexCat(01)' style='background: #" . $row["Color"] . "'>" . $row["Nombre"] . "</div>";
+                if($row["Estado"] == "a"){
+                  echo "<div class='category user-select-none' onclick='indexCat(01)' style='background: #" . $row["Color"] . "'>" . $row["Nombre"] . "</div>";  
+                }
+                
             }
         } else {
             echo "0 results";
         }
         $conn = null;
     }
+    
+    function seleccionCategoria(){
+        $conn = new mySQLphpClass();
+        $result = $conn->get_secciones();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $nombre = rawurlencode($row["Nombre"]);
+                if($row["Estado"]=="a"){$estar="activo";}
+                else{$estar="inactivo";}
+                echo "<div class='card listaCard' onclick=". "Redirect('creacionSeccion.php?variable1=" . $row["Color"] . "&variable2=" . $nombre . "&variable3=" . $row["Orden"] . "&variable4=" . $row["Estado"] . "')" . " style='background: #" . $row["Color"] . "'>
+                    <div class='row no-gutters'>
+                        <div class='col-md-8'>
+                            <div class='card-body'>
+                                <h5 class='card-title'>" . $row["Nombre"] . "</h5>
+                                <p class='card-text'>
+                                    " . $estar . "
+                                </p>
+                            </div>
+                        </div></div></div>";   
+            }
+        } else {
+            echo "0 results";
+        }
+        $conn = null;
+    }
+    
+    function EliminarCategoria(){
+        $conn = new mySQLphpClass();
+        $result = $conn->get_secciones();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $nombre = rawurlencode($row["Nombre"]);
+                if($row["Estado"] == "a"){
+                echo "<div class='card listaCard' onclick=". "Redirect('EliminarSeccion.php?variable1=" . $row["Color"] . "&variable2=" . $nombre . "&variable3=" . $row["Orden"] . "&variable4=" . $row["Estado"] . "')" . " style='background: #" . $row["Color"] . "'>
+                    <div class='row no-gutters'>
+                        <div class='col-md-8'>
+                            <div class='card-body'>
+                                <h5 class='card-title'>" . $row["Nombre"] . "</h5>
+                                <p class='card-text'>
+                                    " . $row["Orden"] . "
+                                </p>
+                            </div>
+                        </div></div></div>";
+                }
+            }
+        } else {
+            echo "0 results";
+        }
+        $conn = null;
+    }
+    
+    function CrearCategoria($orden,$color,$nombre,$estado,$nuevoNombre,$Seleccion){
+        $conn = new mySQLphpClass();
+        $conn->Crear_secciones($orden,$color,$nombre,$estado,$nuevoNombre,$Seleccion);
+        $conn = null;
+    }
+    
     function dropdown() {
         $conn = new mySQLphpClass();
         $result = $conn->get_secciones();
