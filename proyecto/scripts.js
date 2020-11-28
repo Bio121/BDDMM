@@ -20,6 +20,11 @@ function like(x) {
     document.getElementById("input").innerHTML = count + 1;
 }
 
+function indexCat(site) {
+    site = 0;
+    window.location.href = "noticia.php";
+}
+
 
 function validacionRegistrarse() {
 
@@ -177,7 +182,6 @@ function CrearSeccion() {
     }
 
     alert("seccion creada exitosamente");
-    window.close();
 }
     
 function BajaSeccion() {
@@ -220,4 +224,5 @@ function salirDeAquí() {
   request.open("GET", "cerrarSesión.php", true);
   request.send();
 }
+
 

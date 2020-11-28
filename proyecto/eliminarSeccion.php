@@ -28,42 +28,25 @@ and open the template in the editor.
 
             <div class="notaLista">
 
-                <div class="card listaCard" onclick="BajaSeccion()" style="background: #1be4d0">
-                    <div class="row no-gutters">
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">seccion 1</h5>
-                                <p class="card-text">
-                                    posicion
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card listaCard" onclick="BajaSeccion()" style="background: #ccccff">
-                    <div class="row no-gutters">
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">seccion 2</h5>
-                                <p class="card-text">
-                                    posicion
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="notaLista">
 
-                <div class="card listaCard" onclick="BajaSeccion()" style="background: #9cffa9">
-                    <div class="row no-gutters">
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">seccion 3</h5>
-                                <p class="card-text">
-                                    posicion
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <?php
+                    include "classes.php";
+                    $barra = new category();
+                    if ($_SERVER["REQUEST_METHOD"] == "GET") {
+                        if (isset($_GET["variable2"])) {
+                            $orden = $_GET["variable3"];
+                            $color = $_GET["variable1"];
+                            $nombre = $_GET["variable2"];
+                            $estado = $_GET["variable4"];
+                            $nuevoNombre = $_GET["variable2"];
+                            $opc = "b";
+                            $barra->CrearCategoria($orden,$color,$nombre,$estado,$nuevoNombre,$opc);
+                        }
+                    }
+
+                    $barra->EliminarCategoria();
+                    ?>
                 </div>
             </div>
 

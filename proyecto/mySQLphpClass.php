@@ -120,6 +120,14 @@ class mySQLphpClass extends configSQLphp {
         $this->byebye();
         return $result;
     }
+    
+    function Crear_secciones($orden,$color,$nombre,$estado,$nuevoNombre,$Seleccion) {
+        $this->connect();
+        $sql = "call proc_dml_seccion(" . $orden . ", '$color', '$nombre', '$estado', '$nuevoNombre', '$Seleccion');";
+        $this->connectionString->query($sql);
+        $this->byebye();
+
+    }
 
     function get_noticias($cant) {
         $this->connect();
@@ -132,7 +140,17 @@ class mySQLphpClass extends configSQLphp {
         $this->byebye();
         return $result;
     }
-
+    function get_noticiasNew($cant) {
+        $this->connect();
+        if ($cant == null) {
+            $sql = "call proc_noticiasNew(null);";
+        } else {
+            $sql = "call proc_noticiasNew(" . $cant . ");";
+        }
+        $result = $this->connectionString->query($sql);
+        $this->byebye();
+        return $result;
+    }
     function initSes($usuario, $correo, $contraseña) {
         $this->connect();
         $sql = "call proc_inSes('" . $usuario . "', '" . $correo . "', '" . $contraseña . "');";
@@ -140,7 +158,7 @@ class mySQLphpClass extends configSQLphp {
         $this->byebye();
         if (!empty($result) && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-
+                
                 $result2 = array($row["nombre"], $row["apellidoPaterno"], $row["apellidoMaterno"], $row["telefono"],
                     $row["correo"], $row["usuario"], $row["contraseña"], $row["imagen"], $row["genero"], $row["fecha_nacimiento"], $row["privilegio"],);
             }

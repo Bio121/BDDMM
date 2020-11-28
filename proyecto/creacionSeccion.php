@@ -24,21 +24,73 @@ and open the template in the editor.
             <a class="navbar-brand" href="index.php">Novedades del Bot</a>
 
         </nav>
+        <?php
+        include "classes.php";
+        
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $opc = $_POST["opc"];
+            if($_POST["nombreN"] != ""){
+                $nombre = $_POST["nombreN"];                
+            }
+            else{
+                $nombre = $_POST["nombreSeccion"];
+            }
+            $barra = new category();
+            $orden = $_POST["posicionSeccion"];
+            $color = substr($_POST["colorSeccion"], -6);
+            $estado = "a";
+            $nuevoNombre = $_POST["nombreSeccion"];
+            $barra->CrearCategoria($orden,$color,$nombre,$estado,$nuevoNombre,$opc);
+            $nombre = $nuevoNombre;
+            $opc = "U";
+            $boton = "modificar y activar sección";
+
+            
+        }
+        
+        if ($_SERVER["REQUEST_METHOD"] == "GET") {
+            if(isset($_GET["variable2"])){
+                $orden = $_GET["variable3"];
+                $color = $_GET["variable1"];
+                $nombre = $_GET["variable2"];
+                $estado = $_GET["variable4"];
+                $nuevoNombre = $_GET["variable2"];
+                $opc = "U";
+                $boton = "modificar y activar sección sección";
+            }
+            else{
+                $orden = "";
+                $color = "";
+                $nombre = "";
+                $estado = "";
+                $nuevoNombre = "";
+                $opc = "I";
+                $boton = "crear y activar sección";
+            }
+
+        }
+        else{
+
+        }
+        ?>
+        
         <div class="row"> 
             <div class="col-8 seccion" >
-                <form action="" onsubmit="CrearSeccion()">
+                <form action="creacionSeccion.php" onsubmit="" method="post" enctype='multipart/form-data'>
 
                     <label for="nombreSeccion">Nombre</label>
-                    <input type="text" class="form-control campoConfig" id="nombreSeccion" name="nombreSeccion" placeholder=" ">
+                    <input type="text" class="form-control campoConfig" id="nombreSeccion" name="nombreSeccion" value="<?php echo $nombre ?>">
 
                     <label for="posicionSeccion">posicion</label>
-                    <input type="text" class="form-control campoConfig" id="posicionSeccion" name="posicionSeccion" placeholder=" ">
+                    <input type="text" class="form-control campoConfig" id="posicionSeccion" name="posicionSeccion" value="<?php echo $orden ?>">
                     
                     <label for="colorSeccion">escoga el color</label>
                     <br>
-                    <input type="color" id="colorSeccion">
+                    <input type="color" id="colorSeccion" name="colorSeccion" value="<?php echo '#' . "$color" ?>">
                     <br>
-                    <button class="btn btn-primary btnConfig" type="submit">Crear Seccion</button>
+                    <input type="hidden" name="opc" value="<?php echo $opc ?>" />
+                    <input type="hidden" name="nombreN" value="<?php echo $nombre ?>" />
+                    <button class="btn btn-primary btnConfig" type="submit"><?php echo $boton ?></button>
 
                 </form>
             </div>
