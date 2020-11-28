@@ -49,12 +49,14 @@ class mySQLphpClass extends configSQLphp {
         $this->connectionString->close();
     }
 
-    function seleccionaEso() {
-        $this->connect();
-        $sql = "select nombre, apellidoPaterno, apellidoMaterno, usuario, correo from USUARIO where usuario like 'ira3ck';";
-        $result = $this->connectionString->query($sql);
-        $this->byebye();
-        return $result;
+    function varQuery($string){
+        if($string == null){
+            $string = "null";
+        }
+        else{
+            $string = "'" . $string . "'";
+        }
+        return $string;
     }
 
     function usuarios($nombre, $paterno, $materno, $telefono, $correo, $usuario, $contraseña, $imagen, $genero, $nacimiento, $privilegio, $newUser, $seleccion) {
@@ -62,11 +64,10 @@ class mySQLphpClass extends configSQLphp {
         if ($nombre == null && $paterno == null && $materno == null && $imagen == null && $genero == null && $nacimiento == null && $newUser == null) {
             $sql = "call proc_dml_usuario(null, null, null, '" . $telefono . "', '" . $correo . "', '" . $usuario . "', '" . $contraseña
                     . "', null, null, null, '" . $privilegio . "', null, '" . $seleccion . "');";
-        } else if($nacimiento == null){
+        } else if ($nacimiento == null) {
             "call proc_dml_usuario('" . $nombre . "', '" . $paterno . "', '" . $materno . "', '" . $telefono . "', '" . $correo . "', '" . $usuario . "', '" . $contraseña
                     . "', null, '" . $genero . "', null, '" . $privilegio . "', '" . $newUser . "', '" . $seleccion . "');";
-        }
-        else {
+        } else {
             $sql = "call proc_dml_usuario('" . $nombre . "', '" . $paterno . "', '" . $materno . "', '" . $telefono . "', '" . $correo . "', '" . $usuario . "', '" . $contraseña
                     . "', '" . $imagen . "', '" . $genero . "', '" . $nacimiento . "', '" . $privilegio . "', '" . $newUser . "', '" . $seleccion . "');";
         }
@@ -84,12 +85,14 @@ class mySQLphpClass extends configSQLphp {
     }
 
     function noticias($codigo, $lugar, $fecha, $fechaPost, $reportero, $titulo, $desc, $seccion, $estado, $commEDT, $keywords, $likes, $seleccion) {
+        
         $this->connect();
-        $sql = "call proc_dml_noticia(" . $codigo . ", " . $lugar . ", " . $fecha . ", " . $fechaPost . ", " . $reportero . ", " . $titulo . ", " . $desc
-                . ", " . $seccion . ", " . $estado . ", " . $commEDT . ", " . $keywords . ", " . $likes . ", " . $seleccion . ");";
-        $this->connectionString->query($sql);
+        $sql = "call proc_dml_noticia(" . $this->varQuery($codigo) . ", " . $this->varQuery($lugar) . ", " . $this->varQuery($fecha) . ", " . $this->varQuery($fechaPost)
+                . ", " . $this->varQuery($reportero) . ", " . $this->varQuery($titulo) . ", " . $this->varQuery($desc) . ", " . $this->varQuery($seccion) . ", "
+                . $this->varQuery($estado) . ", " . $this->varQuery($commEDT) . ", " . $this->varQuery($keywords) . ", " . $this->varQuery($likes) . ", " . $this->varQuery($seleccion) . ");";
+        $result = $this->connectionString->query($sql);
         $this->byebye();
-        return 0;
+        return $result;
     }
 
     function comentarios($clave, $texto, $fecha, $responde, $noticia, $usuario, $seleccion) {
@@ -102,8 +105,9 @@ class mySQLphpClass extends configSQLphp {
 
     function archivos($tipo, $seleccion, $noticia, $orden, $clave, $imagen, $video, $texto, $tamaño) {
         $this->connect();
-        $sql = "call proc_dml_archivos( " . $tipo . ", " . $seleccion . ", " . $noticia . ", " . $orden . ", " . $clave . ", " . $imagen . ", " . $video
-                . ", " . $texto . ", " . $tamaño . ");";
+        $sql = "call proc_dml_archivos(" . $this->varQuery($tipo) . ", " . $this->varQuery($seleccion) . ", " . $this->varQuery($noticia) . ", " . $this->varQuery($orden) . ", "
+                . $this->varQuery($clave) . ", " . $this->varQuery($imagen) . ", " . $this->varQuery($video)
+                . ", " . $this->varQuery($texto) . ", " . $this->varQuery($tamaño) . ");";
         $this->connectionString->query($sql);
         $this->byebye();
         return 0;
@@ -138,12 +142,44 @@ class mySQLphpClass extends configSQLphp {
             while ($row = $result->fetch_assoc()) {
 
                 $result2 = array($row["nombre"], $row["apellidoPaterno"], $row["apellidoMaterno"], $row["telefono"],
-                    $row["correo"],$row["usuario"],$row["contraseña"],$row["imagen"],$row["genero"],$row["fecha_nacimiento"],$row["privilegio"],);
+                    $row["correo"], $row["usuario"], $row["contraseña"], $row["imagen"], $row["genero"], $row["fecha_nacimiento"], $row["privilegio"],);
             }
         } else {
             $result2 = null;
         }
         return $result2;
+    }
+
+    function get_misNoticias($usuario, $orden, $estado, $codigo) {
+        $this->connect();
+        
+        $sql = "call proc_misNoticias(" . $this->varQuery($usuario) . ", " . $this->varQuery($orden) . ", " . $this->varQuery($estado) . ", " . $this->varQuery($codigo) . ");";
+        
+        $result = $this->connectionString->query($sql);
+        $this->byebye();
+        return $result;
+    }
+    
+    function get_lasNoticias($orden, $estado, $codigo) {
+        $this->connect();
+        
+        $sql = "call proc_lasNoticias(" . $this->varQuery($orden) . ", " . $this->varQuery($estado) . ", " . $this->varQuery($codigo) . ");";
+        
+        $result = $this->connectionString->query($sql);
+        $this->byebye();
+        return $result;
+    }
+
+    function get_Archivos($codigo, $tipo, $orden) {
+        $this->connect();
+        if ($orden == null) {
+            $sql = "call proc_archivos(" . $codigo . ", '" . $tipo . "', null);";
+        } else {
+            $sql = "call proc_archivos(" . $codigo . ", null, " . $orden . ");";
+        }
+        $result = $this->connectionString->query($sql);
+        $this->byebye();
+        return $result;
     }
 
 }

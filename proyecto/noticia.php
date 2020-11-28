@@ -100,7 +100,7 @@ and open the template in the editor.
             if (!empty($result)) {
                 $_SESSION["usuario"] = $result[0];
                 $_SESSION["correo"] = $result[1];
-                $nav->yesSession($_SESSION["usuario"]);
+                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
             } else {
                 $mal = 1;
                 $_SESSION["usuario"] = null;
@@ -108,7 +108,7 @@ and open the template in the editor.
             }
         } else {
             if (isset($_SESSION["usuario"])) {
-                $nav->yesSession($_SESSION["usuario"]);
+                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
             } else {
                 $_SESSION["usuario"] = null;
                 $nav->notSession();

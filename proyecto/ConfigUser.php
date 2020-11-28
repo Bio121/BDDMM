@@ -37,6 +37,15 @@ and open the template in the editor.
         $Error1 = '';
         $Error2 = '';
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if ($_SESSION["genero"] == 'Hombre') {
+                $RBmale = 'checked="checked"';
+                $RBnb = '';
+            } else if ($_SESSION["genero"] == 'Mujer') {
+                $RBfemale = 'checked="checked"';
+                $RBnb = '';
+            } else {
+                $RBnb = 'checked="checked"';
+            }
 
             if (isset($_POST["ConfirmarCKB"]) || isset($_POST["bajaText"])) {
                 $adios = true;
@@ -50,7 +59,7 @@ and open the template in the editor.
                     $mal = true;
                     $adios = false;
                 }
-                $nav->yesSession($_SESSION["usuario"]);
+                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
                 if ($adios) {
                     $newUser = $_SESSION["usuario"];
                     $nombre = 'queImporta';
@@ -105,12 +114,12 @@ and open the template in the editor.
                     $_SESSION["genero"] = $result[8];
                     $_SESSION["nacimiento"] = $result[9];
                     $_SESSION["privilegio"] = $result[10];
-                    $nav->yesSession($_SESSION["usuario"]);
+                    $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
                 }
             }
         } else {
             if (isset($_SESSION["usuario"])) {
-                $nav->yesSession($_SESSION["usuario"]);
+                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
 
                 if ($_SESSION["genero"] == 'Hombre') {
                     $RBmale = 'checked="checked"';

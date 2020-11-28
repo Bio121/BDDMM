@@ -62,7 +62,7 @@ and open the template in the editor.
                     $_SESSION["genero"] = $result[8];
                     $_SESSION["nacimiento"] = $result[9];
                     $_SESSION["privilegio"] = $result[10];
-                    $nav->yesSession($_SESSION["usuario"]);
+                    $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
                 } else {
                     if ($regis) {
                         $mal += 1;
@@ -74,7 +74,7 @@ and open the template in the editor.
             }
         } else {
             if (isset($_SESSION["usuario"])) {
-                $nav->yesSession($_SESSION["usuario"]);
+                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
             } else {
                 $_SESSION["usuario"] = null;
                 $nav->notSession();

@@ -1,3 +1,8 @@
+
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -18,36 +23,128 @@ and open the template in the editor.
     </head>
     <body>
 
-        <!--NAVBAR (INICIO)-->
-        <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top fixed-top-2">
-            <form class="form-inline ml-auto">
-                <div class="md-form my-0">
-                    <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-                </div>
-                <button href="#!" class="btn btn-primary btn-outline-white btn-md my-0 ml-sm-2" type="submit">Buscar</button>
-            </form>
-        </nav>
+        <?php
+        include "classes.php";
 
-        <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top">
-            <a class="navbar-brand" href="index.php">Novedades del Bot</a>
+        $nav = new navbar();
+        $nav->simple();
+        $news = new mySQLphpClass();
+        $color = '';
 
-            <div class="div-inline ml-auto  usuarioNav" > 
-                <img src="https://pbs.twimg.com/media/EjTY9nDWAAAYDdu?format=jpg&name=900x900" class="imgNavBar float-left imagenUserNavbar" alt="img de navbar">
-                <a class="nav-link dropdown-toggle usuarioNomNav" href="#" id="navbarDropdown nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ira3ck 
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="home.php">perfil</a>
-                    <a class="dropdown-item" href="ConfigUser.php">configuracion de perfil</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="index.php">cerrar sesion</a>
-                </div>
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
 
-            </div>
+            if (array_key_exists('existent', $_POST)) {
+                $_SESSION["noticiaActual"] = $_POST["existent"];
+            }
+            if (array_key_exists('aprove', $_POST)) {
+                $news->noticias($_SESSION["noticiaActual"], null, null, null, null, null, null, null, 'Aprobada', null, null, null, "U");
+            }
+            if (array_key_exists('reject', $_POST)) {
+                $news->noticias($_SESSION["noticiaActual"], null, null, null, null, null, null, null, 'Rechazada', null, null, null, "U");
+            }
+            if (array_key_exists('publish', $_POST)) {
+                $news->noticias($_SESSION["noticiaActual"], null, null, null, null, null, null, null, 'Publicada', null, null, null, "U");
+            }
+            if (array_key_exists('editComment', $_POST)) {
+                $news->noticias($_SESSION["noticiaActual"], null, null, null, null, null, null, null, 'Pendiente', null, null, null, "U");
+            }
 
+            $news = new mySQLphpClass();
+            $result = $news->get_misNoticias(null, null, null, $_SESSION["noticiaActual"]);
 
-        </nav>
-        <!--NAVBAR (FIN)-->
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $lugar = $row["lugar"];
+                    $fechaNEW = $row["fechaNoticia"];
+
+                    if (empty($row["fechaPublicado"])) {
+                        $fechaPOST = 'PENDIENTE';
+                    } else {
+                        $fechaPOST = $row["fechaPublicado"];
+                    }
+
+                    $reportero = $row["reporteroFK"];
+                    $repNombre = $row["nombreCompleto"];
+                    $titulo = $row["título"];
+                    $desc = $row["descripción"];
+
+                    if (empty($row["secciónFK"])) {
+                        $seccion = 'Ninguna aún. Elige una.';
+                    } else {
+                        $seccion = $row["secciónFK"];
+                    }
+
+                    $estado = $row["estado"];
+
+                    if (empty($row["comentariosEditor"])) {
+                        $editCOMM = '';
+                    } else {
+                        $editCOMM = $row["comentariosEditor"];
+                    }
+
+                    $keyword = $row["palabras_clave"];
+                    $likes = $row["likes"];
+                    $lastUpdate = $row["lastUpdate"];
+
+                    if ($estado == 'Aprobada') {
+                        $color = 'info';
+                    }
+                    if ($estado == 'Rechazada') {
+                        $color = 'danger';
+                    }
+                    if ($estado == 'Pendiente') {
+                        $color = 'warning';
+                    }
+                    if ($estado == 'Publicada') {
+                        $color = 'success';
+                    }
+                }
+            } else {
+                echo "0 results";
+            }
+        } else {
+            if (isset($_SESSION["usuario"])) {
+                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
+                $news = new mySQLphpClass();
+                $result = $news->get_misNoticias(null, null, null, $_SESSION["noticiaActual"]);
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $lugar = $row["lugar"];
+                        $fechaNEW = $row["fechaNoticia"];
+
+                        if (empty($row["fechaPublicado"])) {
+                            $fechaPOST = 'PENDIENTE';
+                        } else {
+                            $fechaPOST = $row["fechaPublicado"];
+                        }
+
+                        $reportero = $row["reporteroFK"];
+                        $repNombre = $row["nombreCompleto"];
+                        $titulo = $row["título"];
+                        $desc = $row["descripción"];
+                        $seccion = $row["secciónFK"];
+                        $estado = $row["estado"];
+
+                        if (empty($row["comentariosEditor"])) {
+                            $editCOMM = '';
+                        } else {
+                            $editCOMM = $row["comentariosEditor"];
+                        }
+
+                        $keyword = $row["palabras_clave"];
+                        $likes = $row["likes"];
+                        $lastUpdate = $row["lastUpdate"];
+                    }
+                } else {
+                    echo "0 results";
+                }
+            } else {
+                header('Location: index.php');
+            }
+        }
+        ?>
 
         <!--CONTENIDO (INICIO)-->
         <div class="contGlobal">
@@ -55,91 +152,41 @@ and open the template in the editor.
 
                 <div class="container">
                     <div class="row">
+                        <div class="col-6">
+                            <div class="card text-white mb-3 <?php echo 'bg-' . $color; ?>" style="max-width: 18rem;">
+                                <div class="card-header"><?php echo $estado; ?></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class='mt-3'>Esta noticia pertenece a la Sección: <?php echo $seccion ?></p>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col text-muted"><small>
-                                20 de octubre, 2020.<br>Guadalupe, Nuevo León.
+                                <?php echo $fechaNEW; ?><br><?php echo $lugar; ?>
                             </small></div>                    
                     </div>
                     <div class="row py-3">
                         <div class="col">
                             <div class="jumbotron" style="background: #e1cce5">
-                                <h1>Individuo pierde en Buscaminas</h1>
-                                <h6>Triste historia de un individuo que iba a ganar, pero el destino tenía otros planes.</h6>
+                                <h1><?php echo $titulo; ?></h1>
+                                <h6><?php echo $desc; ?></h6>
                             </div>
                         </div>                    
                     </div>
-                    <div class="row py-3">
-                        <div class="col" align="center">
-                            <figure class="figure">
-                                <img src="https://pbs.twimg.com/media/EgvGhYbXYAA2Ean?format=png&name=small" class="figure-img img-fluid rounded noticiaIMG-gd" alt="...">
-                                <figcaption class="figure-caption">El desenlace de ese 50/50 no fue el 50 favorable.</figcaption>
-                            </figure>
-                        </div>   
-                    </div>
-                    <div class="row py-3">
-                        <div class="col">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi in nisl nibh. 
-                                Donec consequat dapibus dolor et interdum. Donec eget suscipit magna, nec vulputate eros. 
-                                Suspendisse convallis fermentum tellus, a finibus nibh condimentum tristique. 
-                                Quisque commodo lectus sit amet nulla efficitur, at sodales ipsum porttitor. 
-                                Vestibulum nec justo odio. Integer vitae hendrerit enim.</p>
 
-                            <p>Aliquam neque lacus, euismod ac nulla eget, interdum pellentesque diam. 
-                                Donec ac mi non quam pharetra eleifend. Aenean ultrices finibus tellus id aliquam. 
-                                Ut gravida ipsum eu neque sollicitudin, nec pharetra augue convallis. Nam vitae elementum ex. 
-                                Maecenas sit amet auctor nulla. Vivamus eget scelerisque risus, hendrerit imperdiet enim. 
-                                Cras orci nibh, rutrum non dignissim vitae, hendrerit nec augue. Mauris sit amet purus nibh. 
-                                Sed sit amet scelerisque tellus, sed blandit ligula.</p>
 
-                            <p>Nunc sapien justo, accumsan sit amet luctus et, consectetur sed lacus. 
-                                Cras sed dui at tortor gravida gravida. Cras luctus rutrum est at convallis. 
-                                Suspendisse nisi magna, sodales nec iaculis vitae, finibus id erat. 
-                                Curabitur ut sem cursus arcu tempor suscipit. Integer ut neque placerat, posuere ipsum quis, vulputate leo. 
-                                Duis laoreet, ligula non efficitur vehicula, dui eros bibendum elit, eget volutpat purus tellus at ante. 
-                                Aliquam sit amet volutpat turpis. Suspendisse dignissim finibus purus at volutpat. 
-                                Donec a lacus vel turpis vestibulum cursus ac vitae magna. Proin mollis justo et tincidunt vestibulum. 
-                                Aenean fermentum ipsum sit amet leo luctus, suscipit lobortis felis semper. 
-                                Morbi eleifend semper justo, vulputate vehicula massa faucibus eget. Nunc in consectetur dolor.</p>
+                    <?php
+                    $files = new archivos($_SESSION["noticiaActual"]);
+                    $files->cargarArchivos();
+                    ?>
 
-                            <p>Curabitur vehicula quis erat eu ullamcorper. 
-                                Sed rutrum quam tortor, at vulputate ex feugiat vitae. Sed orci massa, feugiat ut varius ut, pharetra vel quam. 
-                                Suspendisse mattis, est id fermentum sodales, nibh metus ullamcorper justo, vitae blandit ex risus non arcu. Nulla a est metus. 
-                                Aliquam id luctus erat, tristique finibus urna. Vestibulum in rhoncus neque.</p>
-
-                            <p>Curabitur efficitur ultricies mauris, eget eleifend quam tincidunt sed. 
-                                Phasellus eu tristique arcu, a placerat diam. Morbi tincidunt odio eu malesuada porttitor. 
-                                Donec ac erat ac nulla viverra fermentum. Praesent lacus velit, tempus pretium augue eu, egestas vulputate mauris. 
-                                Donec cursus consequat est, a tristique ante posuere malesuada. Sed imperdiet nibh ac efficitur tempor. 
-                                Morbi non ultrices erat, eu congue dolor.</p>
-                        </div>   
-                    </div>
-                    <div class="row py-3">
-                        <div class="col" align="center">
-                            <figure class="figure">
-                                <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="figure-img img-fluid rounded noticiaIMG-gd" alt="...">
-                                <figcaption class="figure-caption">La frustración de un artista que solo quería relajarse.</figcaption>
-                            </figure>
-                        </div>   
-                    </div>
-                    <div class="row py-3">
-                        <div class="col">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi in nisl nibh. 
-                                Donec consequat dapibus dolor et interdum. Donec eget suscipit magna, nec vulputate eros. 
-                                Suspendisse convallis fermentum tellus, a finibus nibh condimentum tristique. 
-                                Quisque commodo lectus sit amet nulla efficitur, at sodales ipsum porttitor. 
-                                Vestibulum nec justo odio. Integer vitae hendrerit enim.</p>
-
-                            <p>Aliquam neque lacus, euismod ac nulla eget, interdum pellentesque diam. 
-                                Donec ac mi non quam pharetra eleifend. Aenean ultrices finibus tellus id aliquam. 
-                                Ut gravida ipsum eu neque sollicitudin, nec pharetra augue convallis. Nam vitae elementum ex. 
-                                Maecenas sit amet auctor nulla. Vivamus eget scelerisque risus, hendrerit imperdiet enim. 
-                                Cras orci nibh, rutrum non dignissim vitae, hendrerit nec augue. Mauris sit amet purus nibh. 
-                                Sed sit amet scelerisque tellus, sed blandit ligula.</p>
-                        </div>   
-                    </div>
                 </div>
                 <div class="row">
                     <div class="col text-muted" align="right"><small>
-                            Publicado el 20 de octubre, 2020.
+                            <?php echo 'Fecha de publicación: ' . $fechaPOST; ?>
                         </small></div>
                 </div>                
                 <div class="row py-3">
@@ -150,7 +197,7 @@ and open the template in the editor.
                                     <img src="https://pbs.twimg.com/profile_images/1313334758114562048/G7bWOycn_400x400.jpg" alt="Avatar">
                                 </div>
                                 <div class="col-9 text-center m-auto text-wrap">
-                                    Reportero 2
+                                    <?php echo $repNombre ?>
                                 </div>
                             </div>
                         </div>
@@ -161,70 +208,147 @@ and open the template in the editor.
 
             <!--BARRA (INICIO)-->
             <div class="barra overflow-auto">
+
+                <button type="button" class="btn btn-light my-3 d-block d-sm-block d-md-block d-lg-none" data-toggle="modal" data-target="#modalAutor" style="width: 100%;padding-top: 100%;position: relative; padding-bottom: 0; ">
+                    <p style="position: absolute; font-size: 8vw; top: 2%; left: 0%; bottom: 0; right: 0;">A</p>
+                </button>
+
+                <button type="button" class="btn btn-light my-3 d-block d-sm-block d-md-block d-lg-none" data-toggle="modal" data-target="#modalStatus" style="width: 100%;padding-top: 100%;position: relative; padding-bottom: 0; ">
+                    <p style="position: absolute; font-size: 8vw; top: 2%; left: 0%; bottom: 0; right: 0;">E</p>
+                </button>
+
+                <button type="button" class="btn btn-light my-3 d-block d-sm-block d-md-block d-lg-none" data-toggle="modal" data-target="#modalComment" style="width: 100%;padding-top: 100%;position: relative; padding-bottom: 0; ">
+                    <p style="position: absolute; font-size: 8vw; top: 2%; left: 0%; bottom: 0; right: 0;">C</p>
+                </button>
+
                 <div class="perfil" style="color: azure;">
-                    <div class="row no-gutters">
-                        <div class="col tituloPrewieEditor">
+                    <div class="row no-gutters mt-3">
+                        <div class="col tituloPrewieEditor d-none d-lg-block">
                             <h2>Autor</h2>
                         </div>
                     </div>
                     <div class="row no-gutters">
                         <div class="col">
-                            <img class="imgReviewPrevieEditor" src="https://pbs.twimg.com/profile_images/1313334758114562048/G7bWOycn_400x400.jpg" alt="Avatar">
+                            <img class="imgReviewPrevieEditor d-none d-lg-block" src="https://pbs.twimg.com/profile_images/1313334758114562048/G7bWOycn_400x400.jpg" alt="Avatar">
                         </div>
-                        <div class="col py-2 text-center">
+                        <div class="col py-2 text-center d-none d-lg-block">
                             <br>
                             <div class="col py-2 text-center">
-                                <h4>ira3ck</h4>
+                                <h4><?php echo $reportero ?></h4>
                             </div>
                         </div>
 
                     </div>
                     <div class="row no-gutters">
-                        <div class="col py-3 text-center">
-                            <p>Pequeña pero concisa descripción del reportero.</p>
+                        <div class="col py-3 text-center d-none d-lg-block">
+                            <p><?php echo $repNombre ?></p>
                         </div>
                     </div>
-                    <div class="row no-gutters">
-                        <div class="col py-3 text-center">
-                            <button type="button" class="btn btn-primary" onclick="publicarNoticia()">Publicar Noticia</button>
+                    <form action="previewEditor.php" method="post" enctype='multipart/form-data'>
+                        <div class="row no-gutters">
+                            <div class="col py-3 text-center d-none d-lg-block">
+                                <button type="submit" class="btn btn-danger" name="reject">Rechazar Noticia</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row no-gutters">
-                        <div class="col py-3 text-center">
-                            <label for="comentarioEditor">Comentario</label>
-                            <textarea name="txtArea" rows="20" cols="25"></textarea>
-                            <button type="button" class="btn btn-primary btnRegreasarEditor" onclick="RegresarNoticia()">Regresar al Autor</button>
+                        <div class="row no-gutters">
+                            <div class="col py-3 text-center d-none d-lg-block">
+                                <button type="submit" class="btn btn-info" name="aprove">Aprobar Noticia</button>
+                            </div>
                         </div>
-                    </div>
+                        <div class="row no-gutters">
+                            <div class="col py-3 text-center d-none d-lg-block">
+                                <button type="submit" class="btn btn-success" name="publish">Publicar Noticia</button>
+                            </div>
+                        </div>
+                        <div class="row no-gutters">
+                            <div class="col py-3 text-center d-none d-lg-block">
+                                <label for="comentarioEditor">Comentario</label>
+                                <textarea name="txtArea" rows="10" cols="25"><?php echo $editCOMM ?></textarea>
+                                <button type="submit" class="btn btn-warning btnRegreasarEditor" onclick="RegresarNoticia()" name="editComment">Regresar al Autor</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             <!--BARRA (FIN)-->
         </div>
         <!--CONTENIDO (FIN)-->
 
-        <!--FOOTER (INICIO)-->
-        <footer>
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        qué onda
+        <!-- Modal Estado -->
+        <div class="modal fade" id="modalStatus" data-backdrop="static" data-keyboard="true" tabindex="-1" aria-labelledby="modalStatus" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Opciones</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div class="col">
-                        qué tal
-                    </div>
+                    <form action="previewEditor.php" method="post" enctype='multipart/form-data'> 
+                        <div class="input-group">
+                            <button type="submit" class="btn btn-danger m-2" name="reject">Rechazar Noticia</button>
+
+                            <button type="submit" class="btn btn-info m-2" name="aprove">Aprobar Noticia</button>
+
+                            <button type="submit" class="btn btn-success m-2" name="publish">Publicar Noticia</button>
+                        </div>   
                 </div>
-                <div class="row">
-                    <div class="col">
-                        cómo va todo?
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Comentatios del Editor -->
+    <div class="modal fade" id="modalComment" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="modalComment" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Editar Título y Descripción</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="previewEditor.php" method="post" enctype='multipart/form-data'>
+                    <div class="modal-body">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Comentarios</span>
+                            </div>
+                            <textarea class="form-control" aria-label="titleDescModal" name="txtArea" id="textAreaField" rows="10" cols="25"><?php echo $editCOMM; ?></textarea>
+                        </div>
                     </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
+                        <button type="submit" class="btn btn-primary" name="editComment" value="editComment">Aceptar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--FOOTER (INICIO)-->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    qué onda
+                </div>
+                <div class="col">
+                    qué tal
                 </div>
             </div>
-        </footer>
-        <!--FOOTER (FIN)-->
+            <div class="row">
+                <div class="col">
+                    cómo va todo?
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!--FOOTER (FIN)-->
 
-        <?php
-        // put your code here
-        //phpinfo();
-        ?>
-    </body>
+    <?php
+    // put your code here
+    //phpinfo();
+    ?>
+</body>
 </html>

@@ -1,3 +1,8 @@
+
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <!--
 To change this license header, choose License Headers in Project Properties.
@@ -17,34 +22,67 @@ and open the template in the editor.
     </head>
     <body>
 
-        <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top fixed-top-2">
-            <form class="form-inline ml-auto">
-                <div class="md-form my-0">
-                    <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-                </div>
-                <button href="#!" class="btn btn-primary btn-outline-white btn-md my-0 ml-sm-2" type="submit">Buscar</button>
-            </form>
-        </nav>
+        <?php
+        include "classes.php";
 
-        <nav class="nav navbar navbar-expand-lg navbar-dark fixed-top">
-            <a class="navbar-brand" href="index.php">Novedades del Bot</a>
+        $nav = new navbar();
+        $nav->simple();
+        $orden = 'D';
+        $estado = null;
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
 
-            <div class="div-inline ml-auto  usuarioNav" > 
-                <img src="https://pbs.twimg.com/media/EjTY9nDWAAAYDdu?format=jpg&name=900x900" class="imgNavBar float-left imagenUserNavbar" alt="img de navbar">
-                <a class="nav-link dropdown-toggle usuarioNomNav" href="#" id="navbarDropdown nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    ira3ck 
-                </a>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="home.php">perfil</a>
-                    <a class="dropdown-item" href="ConfigUser.php">configuracion de perfil</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="index.php">cerrar sesion</a>
-                </div>
-
-            </div>
-
-
-        </nav>
+            if (array_key_exists('asc', $_POST)) {
+                $orden = 'A';
+                $estado = null;
+            }
+            if (array_key_exists('desc', $_POST)) {
+                $orden = 'D';
+                $estado = null;
+            }
+            if (array_key_exists('ascPen', $_POST)) {
+                $orden = 'A';
+                $estado = 'Pendiente';
+            }
+            if (array_key_exists('descPen', $_POST)) {
+                $orden = 'D';
+                $estado = 'Pendiente';
+            }
+            if (array_key_exists('ascRec', $_POST)) {
+                $orden = 'A';
+                $estado = 'Rechazada';
+            }
+            if (array_key_exists('descRec', $_POST)) {
+                $orden = 'D';
+                $estado = 'Rechazada';
+            }
+            if (array_key_exists('ascPub', $_POST)) {
+                $orden = 'A';
+                $estado = 'Publicada';
+            }
+            if (array_key_exists('descPub', $_POST)) {
+                $orden = 'D';
+                $estado = 'Publicada';
+            }
+            if (array_key_exists('ascApr', $_POST)) {
+                $orden = 'A';
+                $estado = 'Aprobada';
+            }
+            if (array_key_exists('descApr', $_POST)) {
+                $orden = 'D';
+                $estado = 'Aprobada';
+            }
+        } else {
+            if (isset($_SESSION["usuario"])) {
+                if ($_SESSION["privilegio"] != 'Editor') {
+                    header('Location: index.php');
+                }
+                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"]);
+            } else {
+                header('Location: index.php');
+            }
+        }
+        ?>
 
 
         <div class="contGlobal">
@@ -63,221 +101,40 @@ and open the template in the editor.
                     Elimina una sección
                 </button>
 
+                <form action="homeEditor.php" method="post" enctype='multipart/form-data'>
                 <div class="dropright">
                     <button class="btn btn-secondary dropdown-toggle" style="background: #ccccff; border-color: #9999ff;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Criterio de Orden
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <p class="dropdown-item">Más recientes</p>
-                        <p class="dropdown-item">Más antiguos</p>
-                        <p class="dropdown-item">Pendientes de aprobación (recientes)</p>
-                        <p class="dropdown-item">Pendientes de aprobación (antiguos)</p>
+                        <input type="submit" class="dropdown-item" value="Más recientes (histórico)" name="desc">
+                            <input type="submit" class="dropdown-item" value="Más antiguos (histórico)" name="asc">
+                            <input type="submit" class="dropdown-item" value="Pendientes de aprobación (recientes)" name="descPen">
+                            <input type="submit" class="dropdown-item" value="Pendientes de aprobación (antiguos)" name="ascPen">
+                            <input type="submit" class="dropdown-item" value="Rechazadas (recientes)" name="descRec">
+                            <input type="submit" class="dropdown-item" value="Rechazadas (antiguos)" name="ascRec">
+                            <input type="submit" class="dropdown-item" value="Aprobadas (recientes)" name="descApr">
+                            <input type="submit" class="dropdown-item" value="Aprobadas (antiguos)" name="ascApr">
+                            <input type="submit" class="dropdown-item" value="Publicadas (recientes)" name="descPub">
+                            <input type="submit" class="dropdown-item" value="Publicadas (antiguos)" name="ascPub">
 
                     </div>
                 </div>
-
+                </form>
+                
                 <div class="listaNotas overflow-auto my-2">
 
                     <div class="notaLista">
 
-                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">El trabajo es demasiado complicado</h5>
-                                        <p class="card-text">
-                                            Resulta que el trabajo es muy difícil. No sabemos qué hacer al respecto, pero sí es muy complicado. 
-                                            Pero, ¿qué hacer al respecto? Esa es una muy buena pregunta, ya veremos qué se podrá hacer al respecto.
-                                        </p>
-                                        <p class="card-text"><small class="text-muted">Última actualización hace 3 minutos</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">El trabajo es demasiado complicado</h5>
-                                        <p class="card-text">
-                                            Resulta que el trabajo es muy difícil. No sabemos qué hacer al respecto, pero sí es muy complicado. 
-                                            Pero, ¿qué hacer al respecto? Esa es una muy buena pregunta, ya veremos qué se podrá hacer al respecto.
-                                        </p>
-                                        <p class="card-text"><small class="text-muted">Última actualización hace 3 minutos</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">El trabajo es demasiado complicado</h5>
-                                        <p class="card-text">
-                                            Resulta que el trabajo es muy difícil. No sabemos qué hacer al respecto, pero sí es muy complicado. 
-                                            Pero, ¿qué hacer al respecto? Esa es una muy buena pregunta, ya veremos qué se podrá hacer al respecto.
-                                        </p>
-                                        <p class="card-text"><small class="text-muted">Última actualización hace 3 minutos</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">El trabajo es demasiado complicado</h5>
-                                        <p class="card-text">
-                                            Resulta que el trabajo es muy difícil. No sabemos qué hacer al respecto, pero sí es muy complicado. 
-                                            Pero, ¿qué hacer al respecto? Esa es una muy buena pregunta, ya veremos qué se podrá hacer al respecto.
-                                        </p>
-                                        <p class="card-text"><small class="text-muted">Última actualización hace 3 minutos</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">El trabajo es demasiado complicado</h5>
-                                        <p class="card-text">
-                                            Resulta que el trabajo es muy difícil. No sabemos qué hacer al respecto, pero sí es muy complicado. 
-                                            Pero, ¿qué hacer al respecto? Esa es una muy buena pregunta, ya veremos qué se podrá hacer al respecto.
-                                        </p>
-                                        <p class="card-text"><small class="text-muted">Última actualización hace 3 minutos</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">El trabajo es demasiado complicado</h5>
-                                        <p class="card-text">
-                                            Resulta que el trabajo es muy difícil. No sabemos qué hacer al respecto, pero sí es muy complicado. 
-                                            Pero, ¿qué hacer al respecto? Esa es una muy buena pregunta, ya veremos qué se podrá hacer al respecto.
-                                        </p>
-                                        <p class="card-text"><small class="text-muted">Última actualización hace 3 minutos</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">El trabajo es demasiado complicado</h5>
-                                        <p class="card-text">
-                                            Resulta que el trabajo es muy difícil. No sabemos qué hacer al respecto, pero sí es muy complicado. 
-                                            Pero, ¿qué hacer al respecto? Esa es una muy buena pregunta, ya veremos qué se podrá hacer al respecto.
-                                        </p>
-                                        <p class="card-text"><small class="text-muted">Última actualización hace 3 minutos</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">El trabajo es demasiado complicado</h5>
-                                        <p class="card-text">
-                                            Resulta que el trabajo es muy difícil. No sabemos qué hacer al respecto, pero sí es muy complicado. 
-                                            Pero, ¿qué hacer al respecto? Esa es una muy buena pregunta, ya veremos qué se podrá hacer al respecto.
-                                        </p>
-                                        <p class="card-text"><small class="text-muted">Última actualización hace 3 minutos</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">El trabajo es demasiado complicado</h5>
-                                        <p class="card-text">
-                                            Resulta que el trabajo es muy difícil. No sabemos qué hacer al respecto, pero sí es muy complicado. 
-                                            Pero, ¿qué hacer al respecto? Esa es una muy buena pregunta, ya veremos qué se podrá hacer al respecto.
-                                        </p>
-                                        <p class="card-text"><small class="text-muted">Última actualización hace 3 minutos</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card listaCard" onclick="Redirect('previewEditor.php')">
-                            <div class="row no-gutters">
-                                <div class="col-md-4">
-                                    <img src="https://pbs.twimg.com/media/EdqjfxzXgAAdIgm?format=jpg&name=4096x4096" class="card-img" alt="...">
-                                </div>
-                                <div class="col-md-8">
-                                    <div class="card-body">
-                                        <h5 class="card-title">El trabajo es demasiado complicado</h5>
-                                        <p class="card-text">
-                                            Resulta que el trabajo es muy difícil. No sabemos qué hacer al respecto, pero sí es muy complicado. 
-                                            Pero, ¿qué hacer al respecto? Esa es una muy buena pregunta, ya veremos qué se podrá hacer al respecto.
-                                        </p>
-                                        <p class="card-text"><small class="text-muted">Última actualización hace 3 minutos</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        <?php
+                        $lista = new noticias();
+                        $lista->lasNoticias($orden, $estado);
+                        ?>
 
                     </div>
 
                 </div>
 
-                 <div class="btn-group " role="group" aria-label="Anterior Siguiente" style="float: right;">
-                        <button type="button" class="btn btn-secondary" style="background: #ccccff; border-color: #9999ff;">
-                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-left-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3.86 8.753l5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
-                            </svg>
-                        </button>
-                        <button type="button" class="btn btn-secondary" style="background: #ccccff; border-color: #9999ff;">
-                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-right-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12.14 8.753l-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
-                            </svg>
-                        </button>
-                    </div>
-                
             </div>
 
 
@@ -291,24 +148,24 @@ and open the template in the editor.
                     </div>
                     <div class="row no-gutters">
                         <div class="col py-2 text-center">
-                            <h3>ira3ck</h3>
+                            <h3><?php echo $_SESSION["usuario"] ?></h3>
                         </div>
                     </div>
                     <div class="row no-gutters">
                         <div class="col px-2 text-center">
-                            <p>ira3ck@correo.com</p>
+                            <p><?php echo $_SESSION["correo"] ?></p>
 
                         </div>
                     </div>
                     <div class="row no-gutters">
                         <div class="col px-2 text-right">
-                            <p>Editor</p>
+                            <p><?php echo $_SESSION["privilegio"] ?></p>
 
                         </div>
                     </div>
                     <div class="row no-gutters">
                         <div class="col py-3 text-center">
-                            <p>Pequeña pero concisa descripción del usuario.</p>
+                            <p><?php echo $_SESSION["nombre"] . ' ' . $_SESSION["paterno"] . ' ' . $_SESSION["materno"] ?></p>
                         </div>
                     </div>
                 </div>
