@@ -136,7 +136,17 @@ class mySQLphpClass extends configSQLphp {
         $this->byebye();
         return $result;
     }
-
+    function get_noticiasNew($cant) {
+        $this->connect();
+        if ($cant == null) {
+            $sql = "call proc_noticiasNew(null);";
+        } else {
+            $sql = "call proc_noticiasNew(" . $cant . ");";
+        }
+        $result = $this->connectionString->query($sql);
+        $this->byebye();
+        return $result;
+    }
     function initSes($usuario, $correo, $contraseña) {
         $this->connect();
         $sql = "call proc_inSes('" . $usuario . "', '" . $correo . "', '" . $contraseña . "');";

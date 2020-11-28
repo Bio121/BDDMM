@@ -17,7 +17,8 @@ class category {
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 if($row["Estado"] == "a"){
-                  echo "<div class='category user-select-none' onclick='indexCat(01)' style='background: #" . $row["Color"] . "'>" . $row["Nombre"] . "</div>";  
+                   $nombre = rawurlencode($row["Nombre"]);
+                  echo "<div class='category user-select-none' onclick=". "Redirect('index.php?variable1=" . $nombre . "')" . " style='background: #" . $row["Color"] . "'>" . $row["Nombre"] . "</div>";  
                 }
                 
             }
@@ -98,32 +99,78 @@ class category {
     }
 }
 class noticias {
-    function enHome($cant) {
+    function enHome($cant,$opc,$categoria) {
         $conn = new mySQLphpClass();
         $result = $conn->get_noticias($cant);
         if ($result->num_rows > 0) {
 // output data of each row
             while ($row = $result->fetch_assoc()) {
-                $now  = time();
-                $target = strtotime($row["fechaPublicado"]);
-                $diff   = $now - $target;
-                echo "<div class='nota' onclick='noticia(01)'>";
-                if ($diff <= 68417) {
-                    echo "<div class='flash'>¡ÚLTIMO MOMENTO!</div>";
+                if($opc == "T"){
+                    $now  = time();
+                    $target = strtotime($row["fechaPublicado"]);
+                    $diff   = $now - $target;
+                    echo "<div class='nota' onclick='noticia(01)'>";
+                    if ($diff <= 68417) {
+                        echo "<div class='flash'>¡ÚLTIMO MOMENTO!</div>";
+                    }
+                    echo "<div class='row no-gutters'>
+                          <div class='col-12'><h2>" . $row["Título"] . "</h2></div></div>
+                          <div class='row no-gutters'><div class='col-lg-5'>
+                          <img src=" . $row["imagen"]  . " class='notaIMG'/>
+                          </div><div class='col-lg-7 p-2'><div class='row no-gutters' style='height: 90%;'>
+                          <p>" . $row["Descripción"] . "</p></div><div class='row no-gutters'>
+                          <div class='col'><p class='autor'>" . $row["Nombre_Rep"] . " - " . $row["fechaPublicado"] .
+                    "</p></div></div></div></div></div>";}
+                if($opc == "C"){
+                        if($categoria == $row["SecciónFK"]){
+                            $now = time();
+                            $target = strtotime($row["fechaPublicado"]);
+                            $diff = $now - $target;
+                            echo "<div class='nota' onclick='noticia(01)'>";
+                            if ($diff <= 68417) {
+                                echo "<div class='flash'>¡ÚLTIMO MOMENTO!</div>";
+                            }
+                            echo "<div class='row no-gutters'>
+                                  <div class='col-12'><h2>" . $row["Título"] . "</h2></div></div>
+                                  <div class='row no-gutters'><div class='col-lg-5'>
+                                  <img src=" . $row["imagen"] . " class='notaIMG'/>
+                                  </div><div class='col-lg-7 p-2'><div class='row no-gutters' style='height: 90%;'>
+                                  <p>" . $row["Descripción"] . "</p></div><div class='row no-gutters'>
+                                  <div class='col'><p class='autor'>" . $row["Nombre_Rep"] . " - " . $row["fechaPublicado"] .
+                            "</p></div></div></div></div></div>";}
                 }
-                echo "<div class='row no-gutters'>
-                      <div class='col-12'><h2>" . $row["Título"] . "</h2></div></div>
-                      <div class='row no-gutters'><div class='col-lg-5'>
-                      <img src=" . $row["imagen"]  . " class='notaIMG'/>
-                      </div><div class='col-lg-7 p-2'><div class='row no-gutters' style='height: 90%;'>
-                      <p>" . $row["Descripción"] . "</p></div><div class='row no-gutters'>
-                      <div class='col'><p class='autor'>" . $row["Nombre_Rep"] . " - " . $row["fechaPublicado"] .
-                "</p></div></div></div></div></div>";
             }
         } else {
             echo "0 results";
         }
     }
+    
+    function Vistas($cant) {
+        $conn = new mySQLphpClass();$ind = 0;
+        $result = $conn->get_noticiasNew($cant);
+        if ($result->num_rows > 0) {
+// output data of each row
+            while ($row = $result->fetch_assoc()) {
+                  $now = time();$ind = $ind + 1;
+                  $target = strtotime($row["fechaPublicado"]);
+                  $diff = $now - $target;
+                  if($ind == 1)echo "<div class='carousel-item active'><div class='nota' onclick='noticia(01)'>";
+                  if($ind > 1)echo "<div class='carousel-item'><div class='nota' onclick='noticia(01)'>";
+                  if ($diff <= 68417) {
+                      echo "<div class='flash'>¡ÚLTIMO MOMENTO!</div>";
+                  }
+                  echo "<div class='row no-gutters'>
+                        <div class='col-12'><h2>" . $row["Título"] . "</h2></div></div>
+                        <div class='row no-gutters'><div class='col-lg-5'><img src=" . $row["imagen"] . " class='notaIMG'/>
+                        </div><div class='col-lg-7 p-2'><div class='row no-gutters' style='height: 90%;'>
+                        <p>" . $row["Descripción"] . "</p></div><div class='row no-gutters'>
+                        <div class='col'><p class='autor'>" . $row["Nombre_Rep"] . " - " . $row["fechaPublicado"] . "</p></div></div></div></div></div></div>";
+            }
+        } else {
+            echo "0 results";
+        }
+    }
+
 }
 class navbar {
     private $inSes;

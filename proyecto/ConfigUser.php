@@ -25,6 +25,7 @@ and open the template in the editor.
     <body>
 
         <?php
+
         include "classes.php";
 
         $nav = new navbar();
@@ -62,7 +63,7 @@ and open the template in the editor.
                     $confimacion = 'queImporta';
                     $genero = null;
                     $nacimiento = null;
-                    $imagen = null;
+                    $imagen = $_SESSION["imagen"];
                     $con = new mySQLphpClass();
                     $con->usuarios($nombre, $paterno, $materno, $telefono, $correo, $usuario, $contraseña, $imagen, $genero, $nacimiento, $_SESSION["privilegio"], $newUser, 'd');
                     session_unset();
@@ -84,17 +85,18 @@ and open the template in the editor.
                 $confimacion = $_POST["confirmarContraConfig"];
                 $genero = $_POST["generoConfig"];
                 $nacimiento = $_POST["nacimiento"];
-                $imagen = '';                
-                
-                if((isset($_FILES['image'])) && ($_FILES['image'] !='')){
-		$file = $_FILES['image']; 	
-		$temName = $file['tmp_name'];
-		$fp = fopen($temName, "rb");
-		$contenido = fread($fp, filesize($temName));
-                                                    
-		$imagen = addslashes($contenido);
-		fclose($fp);
-                  
+
+                if((isset($_FILES['image'])) && ($_FILES['image']['tmp_name'] !='')){
+                        $file = $_FILES['image']; 	
+                        $temName = $file['tmp_name'];
+                        $fp = fopen($temName, "rb");
+                        $contenido = fread($fp, filesize($temName));                                  
+                        $imagen = addslashes($contenido);
+                        fclose($fp);   
+                    
+                }
+                else{
+                     $imagen = $_SESSION["imagen"];
                 }
                 
                 
@@ -171,7 +173,7 @@ and open the template in the editor.
                                     <div class="custom-file">
 
                                         <div class="btn btn-outline-secondary btn-rounded waves-effect float-left">
-                                            <input type="file" id="archivo" name="image" accept="image/png,image/jpeg">
+                                            <input type="file" id="archivo" name="image" value="<?php echo "data:image/jpg;base64,'.$img_str.'" ?>" accept="image/png,image/jpeg">
                                         </div>
 
                                     </div>
