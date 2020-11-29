@@ -1,4 +1,5 @@
 <?php
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -10,33 +11,37 @@
  * @author ira3ck
  */
 include 'mySQLphpClass.php';
+
 class category {
+
     function llenaLaBarra() {
         $conn = new mySQLphpClass();
         $result = $conn->get_secciones();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                if($row["Estado"] == "a"){
-                   $nombre = rawurlencode($row["Nombre"]);
-                  echo "<div class='category user-select-none' onclick=". "Redirect('index.php?variable1=" . $nombre . "')" . " style='background: #" . $row["Color"] . "'>" . $row["Nombre"] . "</div>";  
+                if ($row["Estado"] == "a") {
+                    $nombre = rawurlencode($row["Nombre"]);
+                    echo "<div class='category user-select-none' onclick=" . "Redirect('index.php?variable1=" . $nombre . "')" . " style='background: #" . $row["Color"] . "'>" . $row["Nombre"] . "</div>";
                 }
-                
             }
         } else {
             echo "0 results";
         }
         $conn = null;
     }
-    
-    function seleccionCategoria(){
+
+    function seleccionCategoria() {
         $conn = new mySQLphpClass();
         $result = $conn->get_secciones();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $nombre = rawurlencode($row["Nombre"]);
-                if($row["Estado"]=="a"){$estar="activo";}
-                else{$estar="inactivo";}
-                echo "<div class='card listaCard' onclick=". "Redirect('creacionSeccion.php?variable1=" . $row["Color"] . "&variable2=" . $nombre . "&variable3=" . $row["Orden"] . "&variable4=" . $row["Estado"] . "')" . " style='background: #" . $row["Color"] . "'>
+                if ($row["Estado"] == "a") {
+                    $estar = "activo";
+                } else {
+                    $estar = "inactivo";
+                }
+                echo "<div class='card listaCard' onclick=" . "Redirect('creacionSeccion.php?variable1=" . $row["Color"] . "&variable2=" . $nombre . "&variable3=" . $row["Orden"] . "&variable4=" . $row["Estado"] . "')" . " style='background: #" . $row["Color"] . "'>
                     <div class='row no-gutters'>
                         <div class='col-md-8'>
                             <div class='card-body'>
@@ -45,22 +50,22 @@ class category {
                                     " . $estar . "
                                 </p>
                             </div>
-                        </div></div></div>";   
+                        </div></div></div>";
             }
         } else {
             echo "0 results";
         }
         $conn = null;
     }
-    
-    function EliminarCategoria(){
+
+    function EliminarCategoria() {
         $conn = new mySQLphpClass();
         $result = $conn->get_secciones();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $nombre = rawurlencode($row["Nombre"]);
-                if($row["Estado"] == "a"){
-                echo "<div class='card listaCard' onclick=". "Redirect('EliminarSeccion.php?variable1=" . $row["Color"] . "&variable2=" . $nombre . "&variable3=" . $row["Orden"] . "&variable4=" . $row["Estado"] . "')" . " style='background: #" . $row["Color"] . "'>
+                if ($row["Estado"] == "a") {
+                    echo "<div class='card listaCard' onclick=" . "Redirect('EliminarSeccion.php?variable1=" . $row["Color"] . "&variable2=" . $nombre . "&variable3=" . $row["Orden"] . "&variable4=" . $row["Estado"] . "')" . " style='background: #" . $row["Color"] . "'>
                     <div class='row no-gutters'>
                         <div class='col-md-8'>
                             <div class='card-body'>
@@ -77,13 +82,13 @@ class category {
         }
         $conn = null;
     }
-    
-    function CrearCategoria($orden,$color,$nombre,$estado,$nuevoNombre,$Seleccion){
+
+    function CrearCategoria($orden, $color, $nombre, $estado, $nuevoNombre, $Seleccion) {
         $conn = new mySQLphpClass();
-        $conn->Crear_secciones($orden,$color,$nombre,$estado,$nuevoNombre,$Seleccion);
+        $conn->Crear_secciones($orden, $color, $nombre, $estado, $nuevoNombre, $Seleccion);
         $conn = null;
     }
-    
+
     function dropdown() {
         $conn = new mySQLphpClass();
         $result = $conn->get_secciones();
@@ -96,19 +101,24 @@ class category {
         }
         $conn = null;
     }
+
 }
+
 class noticias {
-    function enHome($cant,$opc,$categoria) {
+
+    function enHome($cant, $opc, $categoria) {
         $conn = new mySQLphpClass();
         $result = $conn->get_noticias($cant);
         $img = '#';
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                if (array_key_exists('imagen', $row)){$img = $row["imagen"];}
-                if($opc == "T"){
-                    $now  = time();
+                if (array_key_exists('imagen', $row)) {
+                    $img = $row["imagen"];
+                }
+                if ($opc == "T") {
+                    $now = time();
                     $target = strtotime($row["fechaPublicado"]);
-                    $diff   = $now - $target;
+                    $diff = $now - $target;
                     echo "<div class='nota' onclick='noticia(01)'>";
                     if ($diff <= 68417) {
                         echo "<div class='flash'>¡ÚLTIMO MOMENTO!</div>";
@@ -116,51 +126,61 @@ class noticias {
                     echo "<div class='row no-gutters'>
                           <div class='col-12'><h2>" . $row["Título"] . "</h2></div></div>
                           <div class='row no-gutters'><div class='col-lg-5'>
-                          <img src=" . $img  . " class='notaIMG'/>
+                          <img src=" . $img . " class='notaIMG'/>
                           </div><div class='col-lg-7 p-2'><div class='row no-gutters' style='height: 90%;'>
                           <p>" . $row["Descripción"] . "</p></div><div class='row no-gutters'>
                           <div class='col'><p class='autor'>" . $row["Nombre_Rep"] . " - " . $row["fechaPublicado"] .
-                    "</p></div></div></div></div></div>";}
-                if($opc == "C"){
-                        if($categoria == $row["SecciónFK"]){
-                            $now = time();
-                            $target = strtotime($row["fechaPublicado"]);
-                            $diff = $now - $target;
-                            echo "<div class='nota' onclick='noticia(01)'>";
-                            if ($diff <= 68417) {
-                                echo "<div class='flash'>¡ÚLTIMO MOMENTO!</div>";
-                            }
-                            echo "<div class='row no-gutters'>
+                    "</p></div></div></div></div></div>";
+                }
+                if ($opc == "C") {
+                    if ($categoria == $row["SecciónFK"]) {
+                        $now = time();
+                        $target = strtotime($row["fechaPublicado"]);
+                        $diff = $now - $target;
+                        echo "<div class='nota' onclick='noticia(01)'>";
+                        if ($diff <= 68417) {
+                            echo "<div class='flash'>¡ÚLTIMO MOMENTO!</div>";
+                        }
+                        echo "<div class='row no-gutters'>
                                   <div class='col-12'><h2>" . $row["Título"] . "</h2></div></div>
                                   <div class='row no-gutters'><div class='col-lg-5'>
                                   <img src=" . $img . " class='notaIMG'/>
                                   </div><div class='col-lg-7 p-2'><div class='row no-gutters' style='height: 90%;'>
                                   <p>" . $row["Descripción"] . "</p></div><div class='row no-gutters'>
                                   <div class='col'><p class='autor'>" . $row["Nombre_Rep"] . " - " . $row["fechaPublicado"] .
-                            "</p></div></div></div></div></div>";}
+                        "</p></div></div></div></div></div>";
+                    }
                 }
             }
         } else {
             echo "0 results";
         }
     }
-    
+
     function Vistas($cant) {
-        $conn = new mySQLphpClass();$ind = 0;
+        $conn = new mySQLphpClass();
+        $ind = 0;
         $result = $conn->get_noticiasNew($cant);
-        $img ='#';
+        $img = '#';
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
-                  $now = time();$ind = $ind + 1;
-                  $target = strtotime($row["fechaPublicado"]);
-                  $diff = $now - $target;
-                  if (array_key_exists('imagen', $row)){$img = $row["imagen"];}
-                  if($ind == 1){echo "<div class='carousel-item active'><div class='nota' onclick='noticia(01)'>";}
-                  if($ind > 1){echo "<div class='carousel-item'><div class='nota' onclick='noticia(01)'>";}
-                  if ($diff <= 68417) {
-                      echo "<div class='flash'>¡ÚLTIMO MOMENTO!</div>";
-                  }
-                  echo "<div class='row no-gutters'>
+                $now = time();
+                $ind = $ind + 1;
+                $target = strtotime($row["fechaPublicado"]);
+                $diff = $now - $target;
+                if (array_key_exists('imagen', $row)) {
+                    $img = $row["imagen"];
+                }
+                if ($ind == 1) {
+                    echo "<div class='carousel-item active'><div class='nota' onclick='noticia(01)'>";
+                }
+                if ($ind > 1) {
+                    echo "<div class='carousel-item'><div class='nota' onclick='noticia(01)'>";
+                }
+                if ($diff <= 68417) {
+                    echo "<div class='flash'>¡ÚLTIMO MOMENTO!</div>";
+                }
+                echo "<div class='row no-gutters'>
                         <div class='col-12'><h2>" . $row["Título"] . "</h2></div></div>
                         <div class='row no-gutters'><div class='col-lg-5'><img src=" . $img . " class='notaIMG'/>
                         </div><div class='col-lg-7 p-2'><div class='row no-gutters' style='height: 90%;'>
@@ -191,7 +211,7 @@ class noticias {
             echo "0 results";
         }
     }
-    
+
     function lasNoticias($orden, $estado) {
         $conn = new mySQLphpClass();
         $result = $conn->get_lasNoticias($orden, $estado, null);
@@ -213,9 +233,12 @@ class noticias {
     }
 
 }
+
 class navbar {
+
     private $inSes;
     private $regis;
+
     function navbar() {
         $this->inSes = "<div class = 'dropdown ml-auto iniciarSesionDrop'><button class = 'btn btn-secondary dropdown-toggle pull-right' type = 'button' id = 'dropdownMenuButton' data-toggle = 'dropdown' aria-haspopup = 'true' aria-expanded = 'false'>
                   Iniciar Sesión</button><div class = 'dropdown-menu dropdown-menu-right'><form class = 'px-4 py-3' action = 'index.php' onsubmit = 'return validacionInicioSesion()' method = 'post' enctype='multipart/form-data'>
@@ -232,6 +255,7 @@ class navbar {
                   </div><div class = 'form-group'><label for = 'contraseñaConfirmarRegistrarse'>Confirmar Contraseña</label><input type = 'password' class = 'form-control' id = 'contraseñaConfirmarRegistrarse' placeholder = 'Confirmar Contraseña'>
                   </div><button type = 'submit' class = 'btn btn-primary' >Registrarse</button></form></div></div>";
     }
+
     function simple() {
         $code = "<nav class='nav navbar navbar-expand-lg navbar-dark fixed-top fixed-top-2'>
                     <form class='form-inline ml-auto'>
@@ -243,6 +267,7 @@ class navbar {
                 </nav>";
         echo $code;
     }
+
     function notSession() {
         $code = "<nav class = 'nav navbar navbar-expand-lg navbar-dark fixed-top'>
                     <a class = 'navbar-brand' href = 'index.php'>Novedades del Bot</a>
@@ -266,7 +291,7 @@ class navbar {
         }
         echo "<nav class='nav navbar navbar-expand-lg navbar-dark fixed-top'>
                     <a class='navbar-brand' href='index.php'>Novedades del Bot</a>    
-                    <div class='div-inline ml-auto  usuarioNav' > ";       
+                    <div class='div-inline ml-auto  usuarioNav' > ";
         $img_str = base64_encode($imagen);
         echo '<img src="data:image/jpg;base64,' . $img_str . '" class="imgNavBar float-left imagenUserNavbar" alt="img de navbar "/>';
         echo "<a class='nav-link dropdown-toggle usuarioNomNav' href='#' id='navbarDropdown nav' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
@@ -283,18 +308,23 @@ class navbar {
                     </div> 
                 </nav>";
     }
+
 }
+
 class inicioRegistro {
+
     function inicio($usuario, $correo, $contraseña) {
         $conn = new mySQLphpClass();
         $result = $conn->initSes($usuario, $correo, $contraseña);
         return $result;
     }
+
     function registro($telefono, $correo, $usuario, $contraseña) {
         $conn = new mySQLphpClass();
         $result = $conn->usuarios(null, null, null, $telefono, $correo, $usuario, $contraseña, null, null, null, 'Registrado', null, 'I');
         return $result;
     }
+
 }
 
 class preview {
@@ -340,14 +370,24 @@ class preview {
         $text = '';
         $color = '';
         if ($estado == 'Aprobada') {
-            $title = 'ESTADO: Revisada y Aprobada';$text = 'La noticia ha sido aprobada, y está lista para ser publicada.'; $color = 'bg-info';
+            $title = 'ESTADO: Revisada y Aprobada';
+            $text = 'La noticia ha sido aprobada, y está lista para ser publicada.';
+            $color = 'bg-info';
         } else if ($estado == 'Pendiente') {
-            $title = 'ESTADO: Pendiente de corrección';$text = 'La noticia no puede ser publicada porque hay uno o más detalles que atender.'; $color = 'bg-warning';
+            $title = 'ESTADO: Pendiente de corrección';
+            $text = 'La noticia no puede ser publicada porque hay uno o más detalles que atender.';
+            $color = 'bg-warning';
         } else if ($estado == 'Rechazada') {
-            $title = 'ESTADO: Rechazada por el Editor'; $text = 'El Editor ha decidido rechazar la noticia, por lo tanto no podrá ser publicada.'; $color = 'bg-danger';
+            $title = 'ESTADO: Rechazada por el Editor';
+            $text = 'El Editor ha decidido rechazar la noticia, por lo tanto no podrá ser publicada.';
+            $color = 'bg-danger';
         } else if ($estado == 'Publicada') {
-            $title = 'ESTADO: Publicada'; $text = 'La noticia ya ha sido publicada en el portal de noticias.'; $color = 'bg-success';
-        } else {echo 'NADA';}
+            $title = 'ESTADO: Publicada';
+            $text = 'La noticia ya ha sido publicada en el portal de noticias.';
+            $color = 'bg-success';
+        } else {
+            echo 'NADA';
+        }
         echo '<div class="modal fade" id="modalStatus" tabindex="-1" aria-labelledby="modalStatusLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content ' . $color . '">
               <div class="modal-header"><h5 class="modal-title" id="modalStatusLabel">' . $title . '</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span></button></div><div class="modal-body">' . $text . '</div></div></div></div>';
@@ -383,10 +423,10 @@ class archivos {
     }
 
     private function imash($size, $orden, $imagen) {
-        $img_str = base64_encode($imagen);
+        //$img_str = base64_encode($imagen);
         $id = 'modal' . $orden;
         $str = '<div class="row py-3"><div class="col" align="center">
-                  <img src="data:image/jpg;base64,'.$img_str.'" class="figure-img img-fluid rounded ' . $size . '" alt="..."><div class="editBTN" data-toggle="modal" data-target="#' . $id . '">
+                  <img src="data:image/jpg;base64,' . $imagen . '" class="figure-img img-fluid rounded ' . $size . '" alt="..."><div class="editBTN" data-toggle="modal" data-target="#' . $id . '">
                   <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                   <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                   <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
@@ -411,7 +451,7 @@ class archivos {
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>
                 <form action="preview.php" method="post" enctype="multipart/form-data"><div class="modal-body"><div class=" user-select-none"><input type="text" class="form-control" name="code" value="' . $code . '"readonly="readonly" style="color: #e9ecef;">
                 </div><div class="input-group"><div class="custom-file"><div class="btn btn-outline-secondary btn-rounded waves-effect float-left">
-                <input type="file" name="image" accept="image/png,image/jpeg"></div></div></div></div><div class="modal-footer"><button type="submit" class="btn btn-danger" name="deleteFile" value="I' . $orden . '">Eliminar</button>
+                <input type="file" id="archivo" name="image" accept="image/png,image/jpeg"></div></div></div></div><div class="modal-footer"><button type="submit" class="btn btn-danger" name="deleteFile" value="I' . $orden . '">Eliminar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
                 <button type="submit" class="btn btn-primary" name="editFile" value="I' . $orden . '">Aceptar</button></div></form></div></div></div>';
         array_push($this->arr, $str);
@@ -459,3 +499,4 @@ class archivos {
     }
 
 }
+

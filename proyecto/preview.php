@@ -139,23 +139,10 @@ and open the template in the editor.
         $news = new mySQLphpClass();
 
         if ($_SERVER["REQUEST_METHOD"] == "POST" || $_SERVER["REQUEST_METHOD"] == "GET") {
-            $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"],$_SESSION["imagen"]);
+            $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"], $_SESSION["imagen"]);
 
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                
-                if((isset($_FILES['image'])) && ($_FILES['image']['tmp_name'] !='')){
-                        $file = $_FILES['image'];
-                        $temName = $file['tmp_name'];
-                        $fp = fopen($temName, "rb");
-                        $contenido = fread($fp, filesize($temName));
-                        $imagen = addslashes($contenido);
-                        fclose($fp);
-                        $_SESSION["imagen"] = $imagen;
-                        echo $imagen;
-                        $img_str = base64_encode($_SESSION["imagen"]);
-                        echo '<img src="data:image/jpg;base64,'.$img_str.'" class="float-left imagenUserConfig" alt="Img "/>';
-                }
-                
+
                 if (array_key_exists('createNew', $_POST)) {
                     $result = $news->noticias(null, 'Escribe aquí el lugar del suceso.', null, null, $_SESSION["usuario"], "Título de la Noticia",
                             "Descripción de la Noticia", null, "Pendiente", null, 'Escribe aquí palabras clave que identifiquen esta noticia', "0", "I");
@@ -188,18 +175,22 @@ and open the template in the editor.
                     $orden = substr($_POST["editFile"], 1);
                     $code = $_POST["code"];
                     if ($tipo == 'I') {
+                        if ((isset($_FILES['image'])) && ($_FILES['image']['tmp_name'] != '')) {
+                            $img_2 = $_FILES['image']['tmp_name'];
+                            $imagen = base64_encode(file_get_contents(addslashes($img_2)));
+                        }
                         $video = null;
                         $texto = null;
                         $tamaño = '1';
                     }
                     if ($tipo == 'T') {
-                        $imagen = null;
+                        $_SESSION["imagen2"] = null;
                         $video = null;
                         $texto = $_POST["textomodal" . $orden];
                         $tamaño = null;
                     }
                     if ($tipo == 'V') {
-                        $imagen = null;
+                        $_SESSION["imagen2"] = null;
                         $video = '1';
                         $texto = null;
                         $tamaño = null;
@@ -269,10 +260,8 @@ and open the template in the editor.
             }
         } else {
             if (isset($_SESSION["usuario"])) {
-                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"],$_SESSION["imagen"]);
-                
-                $_SESSION["imagen"] = 0;
-                
+                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"], $_SESSION["imagen"]);
+
                 $news = new mySQLphpClass();
                 $result = $news->get_misNoticias(null, null, null, $_SESSION["noticiaActual"]);
 
@@ -334,6 +323,7 @@ and open the template in the editor.
                                 </div>
                             </form>
                             <p class='mt-3'>Esta noticia pertenece a la Sección: <?php echo $seccion ?></p>
+
                         </div>
                     </div>
                     <div class="row">
@@ -514,7 +504,7 @@ and open the template in the editor.
         $prev->ventanasModales($estado, $editCOMM);
         $files->modales();
         ?>
-        
+
         <!-- Modal Palabras Clave -->
         <div class="modal fade" id="keywordsModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="keywordsModal" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">

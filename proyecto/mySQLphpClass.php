@@ -105,12 +105,10 @@ class mySQLphpClass extends configSQLphp {
 
     function archivos($tipo, $seleccion, $noticia, $orden, $clave, $imagen, $video, $texto, $tamaño) {
         $this->connect();
-        $sql = "call proc_dml_archivos(" . $this->varQuery($tipo) . ", " . $this->varQuery($seleccion) . ", " . $this->varQuery($noticia) . ", " . $this->varQuery($orden) . ", "
-                . $this->varQuery($clave) . ", " . $this->varQuery($imagen) . ", " . $this->varQuery($video)
-                . ", " . $this->varQuery($texto) . ", " . $this->varQuery($tamaño) . ");";
+        $sql = "call proc_dml_archivos({$this->varQuery($tipo)}, {$this->varQuery($seleccion)}, {$this->varQuery($noticia)}, {$this->varQuery($orden)}, {$this->varQuery($clave)}, {$this->varQuery($imagen)}, {$this->varQuery($video)},  {$this->varQuery($texto)} , {$this->varQuery($tamaño)});";
         $this->connectionString->query($sql);
         $this->byebye();
-        return 0;
+        return $sql;
     }
 
     function get_secciones() {

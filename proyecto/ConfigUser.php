@@ -175,7 +175,7 @@ and open the template in the editor.
                                     //$sesw = new imger();
                                     //$sesw->imaU($_SESSION["imagen"]);
                                     $img_str = base64_encode($_SESSION["imagen"]);
-                                    echo '<img src="data:image/jpg;base64,'.$img_str.'" class="float-left imagenUserConfig" alt="Img "/>';                            
+                                    echo '<img src="data:image/jpg;base64,'.$img_str.'"alt="Img "/>';                            
                                     ?>
                                     
 
