@@ -47,6 +47,7 @@ and open the template in the editor.
                     $telefono = $_POST["Phone"];
                     $texto = $ses->registro($telefono, $correo, $usuario, $contraseña);
                     $regis = true;
+                    echo $texto;
                 }
 
                 $result = $ses->inicio($usuario, $correo, $contraseña);
@@ -88,6 +89,23 @@ and open the template in the editor.
             } else {
                 $opc = "T";
             }
+            
+            if (isset($_GET["busqueda"])){
+                $busqueda= $_GET["busqueda"];    
+            }
+            else{
+            $busqueda = "";}
+                
+            if (isset($_GET["inicio"])){
+                $inicio= $_GET["inicio"];
+            }
+
+                
+            if (isset($_GET["final"])){
+                $fin= $_GET["final"];
+            }
+
+                
         }
         ?>
 
@@ -95,43 +113,21 @@ and open the template in the editor.
 
             <div class="mainContent">
 
-                <?php
-                if ($mal == 1) {
-                    echo "<div class='alert alert-danger' role='alert'>Inicio de Sesión Incorrecto</div>";
-                }
-                if ($mal == 2) {
-                    echo "<div class='alert alert-danger' role='alert'>Registro de Usuario Incorrecto</div>";
-                }
-                ?>
-
-
-                <div class="separador"><h3>Lo más leído</h3></div>
-
-                <div id="carouselExampleIndicators" class="carousel slide mx-auto mostRead" data-ride="carousel">
-                    <ol class="carousel-indicators">
-                        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                    </ol>
-                    <div class="carousel-inner">
-                        <?php
-                        $noticias->Vistas(null);
-                        ?>
-
+                <form action="buscar.php" method="get" class="" >
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control form-control-lg" name="busqueda" id="busqueda" placeholder="busqueda" value="<?php echo $busqueda ?>">
+                        <div class="input-group-append">
+                            <button href='#!' class='btn  btn-outline-secondary' type='submit'>Buscar</button>
+                        </div>
                     </div>
-                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </div>
-
+                    <label  for="inicio" class="user-select-none">Inicio de busqueda</label>
+                    <input type="date" id="inicio" class="campoConfig" name="inicio" min="1900-01-01" max="<?php echo date("Y-m-d") ?>" value="<?php echo $inicio ?>">
+                    <label  for="final" class="user-select-none">Final de busqueda</label>
+                    <input type="date" id="final" class="campoConfig" name="final" min="1900-01-01" max="<?php echo date("Y-m-d") ?>" value="<?php echo $fin ?>">
+                    
+                </form>
 
                 <div class="separador"></div>
-
 
 
                 <?php

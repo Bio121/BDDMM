@@ -231,7 +231,7 @@ and open the template in the editor.
                                 <div class="col-3">
                                     <?php
                                     $img = "https://pbs.twimg.com/media/EiNYM5CWAAAh9PV?format=png&name=240x240";
-                                    if (!empty($_SESSION["imagen"])) {
+                                    if (!empty($authorIMG)) {
                                         $img = "data:image/jpg;base64," . base64_encode($authorIMG);
                                     }
                                     ?>

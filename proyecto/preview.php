@@ -198,6 +198,7 @@ and open the template in the editor.
                     if ($tipo == 'T') {
                         $_SESSION["imagen2"] = null;
                         $video = null;
+                        $imagen = NULL;
                         $texto = $_POST["textomodal" . $orden];
                         $tamaño = null;
                     }
@@ -212,6 +213,7 @@ and open the template in the editor.
                         $texto = null;
                         $tamaño = $_POST["sizeConfigVid" . $orden];
                     }
+                    
                     $news->archivos($tipo, 'U', $_SESSION["noticiaActual"], null, $code, $imagen, $video, $texto, $tamaño);
                 }
 

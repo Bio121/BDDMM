@@ -35,8 +35,8 @@ function validacionRegistrarse() {
     }
 
     usuario = document.getElementById("usuarioRegistrarse").value;
-    if (usuario == null || usuario.length == 0 || /^\s+$/.test(usuario)) {
-        alert("agrege un usuario");
+    if (usuario == null || usuario.length == 0 || pass.length > 15 || /^\s+$/.test(usuario)) {
+        alert("agrege un usuario con menos de 15 caracteres");
         return false;
     }
 

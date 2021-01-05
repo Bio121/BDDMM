@@ -183,7 +183,7 @@ and open the template in the editor.
                                     <div class="custom-file">
 
                                         <div class="btn btn-outline-secondary btn-rounded waves-effect float-left">
-                                            <input type="file" id="archivo" name="image" value="<?php echo "data:image/jpg;base64,'.$img_str.'" ?>" accept="image/png,image/jpeg">
+                                            <input type="file" id="archivo" name="image"  accept="image/png,image/jpeg">
                                         </div>
 
                                     </div>
