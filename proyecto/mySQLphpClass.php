@@ -97,7 +97,8 @@ class mySQLphpClass extends configSQLphp {
 
     function comentarios($clave, $texto, $fecha, $responde, $noticia, $usuario, $seleccion) {
         $this->connect();
-        $sql = "call proc_dml_comentarios( " . $clave . ", " . $texto . ", " . $fecha . ", " . $responde . ", " . $noticia . ", " . $usuario . ", " . $seleccion . ");";
+        $sql = "call proc_dml_comentarios( " . $this->varQuery($clave) . ", " . $this->varQuery($texto) . ", " . $this->varQuery($fecha) . ", "
+                . $this->varQuery($responde) . ", " . $this->varQuery($noticia) . ", " . $this->varQuery($usuario) . ", " . $this->varQuery($seleccion) . ");";
         $this->connectionString->query($sql);
         $this->byebye();
         return 0;
@@ -124,7 +125,6 @@ class mySQLphpClass extends configSQLphp {
         $sql = "call proc_dml_seccion(" . $orden . ", '$color', '$nombre', '$estado', '$nuevoNombre', '$Seleccion');";
         $this->connectionString->query($sql);
         $this->byebye();
-
     }
 
     function get_noticias($cant) {
@@ -149,6 +149,7 @@ class mySQLphpClass extends configSQLphp {
         $this->byebye();
         return $result;
     }
+    
     function initSes($usuario, $correo, $contraseña) {
         $this->connect();
         $sql = "call proc_inSes('" . $usuario . "', '" . $correo . "', '" . $contraseña . "');";
@@ -193,6 +194,34 @@ class mySQLphpClass extends configSQLphp {
         } else {
             $sql = "call proc_archivos(" . $codigo . ", null, " . $orden . ");";
         }
+        $result = $this->connectionString->query($sql);
+        $this->byebye();
+        return $result;
+    }
+    
+    function get_misComentarios($noticia, $responde) {
+        $this->connect();
+        
+        $sql = "call proc_Comentarios(" . $this->varQuery($noticia) . ", " . $this->varQuery($responde) . ");";
+        
+        $result = $this->connectionString->query($sql);
+        $this->byebye();
+        return $result;
+    }
+    
+    function newsInteractions($seleccion, $noticia) {
+        $this->connect();
+        
+        $sql = "call proc_NewsInteractions(" . $this->varQuery($seleccion) . ", " . $this->varQuery($noticia) . ");";
+        
+        $result = $this->connectionString->query($sql);
+        $this->byebye();
+        return $result;
+    }
+    
+    function get_Reporteros() {
+        $this->connect();
+        $sql = "call proc_Reporteros();";
         $result = $this->connectionString->query($sql);
         $this->byebye();
         return $result;

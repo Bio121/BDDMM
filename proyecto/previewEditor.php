@@ -19,7 +19,40 @@ and open the template in the editor.
         <script src= "scripts.js";></script>
         <meta charset="UTF-8">
         <title>Novedades del Bot</title>
-
+        <style>
+            .noticiaIMG-ch{
+                display: block;
+                width: 100%;
+                max-width: 400px;
+                height: auto;
+            }
+            .noticiaIMG-md{
+                display: block;
+                width: 100%;
+                max-width: 600px;
+                height: auto;
+            }
+            .noticiaIMG-gd{
+                display: block;
+                width: 100%;
+                max-width: 800px;
+                height: auto;
+            }
+            .responder{
+                color: #50278a;
+            }
+            .responder:hover{
+                color: #9966ff;
+            }
+            .responder:active{
+                color: #cbb1d1;
+            }
+        </style>
+        <script>
+            $('#myModal').on('shown.bs.modal', function () {
+                $('#myInput').trigger('focus')
+            })
+        </script>
     </head>
     <body>
 
@@ -32,7 +65,7 @@ and open the template in the editor.
         $color = '';
 
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"],$_SESSION["imagen"]);
+            $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"], $_SESSION["imagen"]);
 
             if (array_key_exists('existent', $_POST)) {
                 $_SESSION["noticiaActual"] = $_POST["existent"];
@@ -65,6 +98,7 @@ and open the template in the editor.
                     }
 
                     $reportero = $row["reporteroFK"];
+                    $authorIMG = $row["AuthorIMG"];
                     $repNombre = $row["nombreCompleto"];
                     $titulo = $row["título"];
                     $desc = $row["descripción"];
@@ -105,7 +139,7 @@ and open the template in the editor.
             }
         } else {
             if (isset($_SESSION["usuario"])) {
-                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"],$_SESSION["imagen"]);
+                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"], $_SESSION["imagen"]);
                 $news = new mySQLphpClass();
                 $result = $news->get_misNoticias(null, null, null, $_SESSION["noticiaActual"]);
 
@@ -126,6 +160,7 @@ and open the template in the editor.
                         $desc = $row["descripción"];
                         $seccion = $row["secciónFK"];
                         $estado = $row["estado"];
+                        $authorIMG = $row["AuthorIMG"];
 
                         if (empty($row["comentariosEditor"])) {
                             $editCOMM = '';
@@ -180,7 +215,7 @@ and open the template in the editor.
 
                     <?php
                     $files = new archivos($_SESSION["noticiaActual"]);
-                    $files->cargarArchivos();
+                    $files->cargarNoticia();
                     ?>
 
                 </div>
@@ -194,7 +229,13 @@ and open the template in the editor.
                         <div class="autor">
                             <div class="row no-gutters">
                                 <div class="col-3">
-                                    <img src="https://pbs.twimg.com/profile_images/1313334758114562048/G7bWOycn_400x400.jpg" alt="Avatar">
+                                    <?php
+                                    $img = "https://pbs.twimg.com/media/EiNYM5CWAAAh9PV?format=png&name=240x240";
+                                    if (!empty($_SESSION["imagen"])) {
+                                        $img = "data:image/jpg;base64," . base64_encode($authorIMG);
+                                    }
+                                    ?>
+                                    <img src="<?php echo $img; ?>" alt="Avatar">
                                 </div>
                                 <div class="col-9 text-center m-auto text-wrap">
                                     <?php echo $repNombre ?>
@@ -203,6 +244,24 @@ and open the template in the editor.
                         </div>
                     </div>   
                 </div>
+
+                <div class="separador"></div>
+                <!--SECCIÓN DE COMENTARIOS-->
+
+                <div class="row mt-3">
+                    <h3 class="mx-auto">COMENTARIOS</h3> 
+                </div>
+
+                <!--COMENTARIOS DE VERDAD-->
+                <div class="listaNotas overflow-auto my-2">
+
+                    <?php
+                    $comentarios = new comentarios($_SESSION["noticiaActual"]);
+                    $comentarios->cargarComentariosDevMode();
+                    ?>
+
+                </div>
+
             </div>
 
 
@@ -229,7 +288,7 @@ and open the template in the editor.
                     </div>
                     <div class="row no-gutters">
                         <div class="col">
-                            <img class="imgReviewPrevieEditor d-none d-lg-block" src="https://pbs.twimg.com/profile_images/1313334758114562048/G7bWOycn_400x400.jpg" alt="Avatar">
+                            <img class="imgReviewPrevieEditor d-none d-lg-block mx-auto" src="data:image/jpg;base64,<?php echo base64_encode($authorIMG); ?>" alt="Avatar">
                         </div>
                         <div class="col py-2 text-center d-none d-lg-block">
                             <br>
@@ -296,6 +355,10 @@ and open the template in the editor.
                 </form>
             </div>
         </div>
+
+        <?php
+        $comentarios->modales();
+        ?>
     </div>
 
     <!-- Modal Comentatios del Editor -->

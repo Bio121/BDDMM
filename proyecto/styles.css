@@ -78,7 +78,7 @@ and open the template in the editor.
     background: #f0e1f7;
 }
 .notaIMG{
-    max-width: 100%;
+    max-width: 200px;
     min-width: 200px;
     height: auto;
 }

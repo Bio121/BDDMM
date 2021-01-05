@@ -1,6 +1,7 @@
 
 <?php
 session_start();
+ob_start();
 ?>
 
 <!DOCTYPE html>
@@ -89,7 +90,6 @@ and open the template in the editor.
             .editBTN:hover{
                 color: #9966ff;
             }
-
             .agregarBTN{
                 position: relative;
                 border: dotted #ddc5e3 3px;
@@ -100,19 +100,16 @@ and open the template in the editor.
                 background-color: #f5e2ff;
                 color: #351a5e;
             }
-
             .agregarBTN:hover{
                 border: dotted #f5e2ff 3px;
                 background-color: #ddc5e3;
                 color: #351a5e;
             }
-
             .agregarBTN:active{
                 border: dotted #351a5e 3px;
                 background-color: #ddc5e3;
                 color: #f5e2ff;
             }
-
             .center{
                 margin: 0;
                 position: absolute;
@@ -121,7 +118,15 @@ and open the template in the editor.
                 -ms-transform: translate(-50%, -50%);
                 transform: translate(-50%, -50%);
             }
-
+            .responder{
+                color: #50278a;
+            }
+            .responder:hover{
+                color: #9966ff;
+            }
+            .responder:active{
+                color: #cbb1d1;
+            }
         </style>
         <script>
             $('#myModal').on('shown.bs.modal', function () {
@@ -142,6 +147,12 @@ and open the template in the editor.
             $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"], $_SESSION["imagen"]);
 
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+                if (array_key_exists('NewDelete', $_POST)) {
+                    $bye = new mySQLphpClass();
+                    $bye->noticias($_SESSION["noticiaActual"], null, null, null, null, null, null, null, null, null, null, null, 'D');
+                    header('Location: home.php');
+                }
 
                 if (array_key_exists('createNew', $_POST)) {
                     $result = $news->noticias(null, 'Escribe aquí el lugar del suceso.', null, null, $_SESSION["usuario"], "Título de la Noticia",
@@ -175,13 +186,14 @@ and open the template in the editor.
                     $orden = substr($_POST["editFile"], 1);
                     $code = $_POST["code"];
                     if ($tipo == 'I') {
+                        $imagen = null;
                         if ((isset($_FILES['image'])) && ($_FILES['image']['tmp_name'] != '')) {
                             $img_2 = $_FILES['image']['tmp_name'];
                             $imagen = base64_encode(file_get_contents(addslashes($img_2)));
                         }
                         $video = null;
                         $texto = null;
-                        $tamaño = '1';
+                        $tamaño = $_POST["sizeConfig" . $orden];
                     }
                     if ($tipo == 'T') {
                         $_SESSION["imagen2"] = null;
@@ -191,9 +203,14 @@ and open the template in the editor.
                     }
                     if ($tipo == 'V') {
                         $_SESSION["imagen2"] = null;
-                        $video = '1';
+                        $video = null;
+                        if ((isset($_FILES['video'])) && ($_FILES['video']['tmp_name'] != '')) {
+                            $img_2 = $_FILES['video']['tmp_name'];
+                            $video = base64_encode(file_get_contents(addslashes($img_2)));
+                        }
+                        $imagen = null;
                         $texto = null;
-                        $tamaño = null;
+                        $tamaño = $_POST["sizeConfigVid" . $orden];
                     }
                     $news->archivos($tipo, 'U', $_SESSION["noticiaActual"], null, $code, $imagen, $video, $texto, $tamaño);
                 }
@@ -203,6 +220,12 @@ and open the template in the editor.
                     $orden = substr($_POST["deleteFile"], 1);
                     $code = $_POST["code"];
                     $news->archivos($tipo, 'D', $_SESSION["noticiaActual"], null, $code, null, null, null, null);
+                }
+
+                if (array_key_exists('commentDelete', $_POST)) {
+                    $claveComment = $_POST["clave"];
+                    $comm = new comentarios($_SESSION["noticiaActual"]);
+                    $comm->deleteComment($claveComment);
                 }
             }
 
@@ -446,7 +469,13 @@ and open the template in the editor.
                         <div class="autor">
                             <div class="row no-gutters">
                                 <div class="col-3">
-                                    <img src="https://pbs.twimg.com/profile_images/1313334758114562048/G7bWOycn_400x400.jpg" alt="Avatar">
+                                    <?php
+                                    $img = "https://pbs.twimg.com/media/EiNYM5CWAAAh9PV?format=png&name=240x240";
+                                    if (!empty($_SESSION["imagen"])) {
+                                        $img = "data:image/jpg;base64," . base64_encode($_SESSION["imagen"]);
+                                    }
+                                    ?>
+                                    <img src="<?php echo $img; ?>" alt="Avatar">
                                 </div>
                                 <div class="col-9 text-center m-auto text-wrap">
                                     <?php echo $repNombre ?>
@@ -468,6 +497,28 @@ and open the template in the editor.
                         </div>
                     </div>   
                 </div>
+
+
+                <div class="separador"></div>
+                <!--SECCIÓN DE COMENTARIOS-->
+
+                <div class="row mt-3">
+                    <h3 class="mx-auto">COMENTARIOS</h3> 
+                </div>
+
+                <!--COMENTARIOS DE VERDAD-->
+                <div class="listaNotas overflow-auto my-2">
+
+                    <?php
+                    $comentarios = new comentarios($_SESSION["noticiaActual"]);
+                    $comentarios->cargarComentariosDevMode();
+                    ?>
+
+                </div>
+
+                <button type="button" class="btn btn-danger btn-lg p-2 px-5 my-5" data-toggle="modal" data-target="#deleteNEW">
+                    Eliminar la noticia
+                </button>
 
             </div>
 
@@ -503,6 +554,7 @@ and open the template in the editor.
         <?php
         $prev->ventanasModales($estado, $editCOMM);
         $files->modales();
+        $comentarios->modales();
         ?>
 
         <!-- Modal Palabras Clave -->
@@ -593,6 +645,31 @@ and open the template in the editor.
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
                             <button type="submit" class="btn btn-primary" name="editTitleDesc" value="editTitleDesc">Aceptar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Eliminar Noticia -->
+        <div class="modal fade" id="deleteNEW" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="deleteNEWmodal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Eliminar Noticia</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="preview.php" method="post" enctype="multipart/form-data">
+                        <div class="modal-body">
+                            <h3>¿Está seguro de querer eliminar esta Noticia?</h3>
+                            <h5>(Los resultados serán permanentes)</h5>
+                            <p>Tome en cuenta que eliminar la noticia también elimina los comentarios que se le han hecho.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
+                            <button type="submit" class="btn btn-danger" name="NewDelete" value="NewDelete">Aceptar</button>
                         </div>
                     </form>
                 </div>

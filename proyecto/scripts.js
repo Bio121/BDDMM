@@ -17,7 +17,7 @@ function noticia(site) {
 function like(x) {
     x.classList.toggle("bi-suit-heart-fill");
     var count = document.getElementById("likeCounter").innerHTML;
-    document.getElementById("input").innerHTML = count + 1;
+    document.getElementById("likeCounter").innerHTML = count + 1;
 }
 
 function indexCat(site) {

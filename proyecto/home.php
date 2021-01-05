@@ -144,7 +144,13 @@ and open the template in the editor.
                 <div class="perfil" style="color: azure;">
                     <div class="row no-gutters">
                         <div class="col">
-                            <img src="https://pbs.twimg.com/profile_images/1313334758114562048/G7bWOycn_400x400.jpg" alt="Avatar">
+                            <?php 
+                            $img = "https://pbs.twimg.com/media/EiNYM5CWAAAh9PV?format=png&name=240x240";
+                            if(!empty($_SESSION["imagen"])){
+                                $img = "data:image/jpg;base64," . base64_encode($_SESSION["imagen"]);
+                            }
+                            ?>
+                            <img src='<?php echo $img ?>' alt='Avatar' style="height: auto;">
                         </div>
                     </div>
                     <div class="row no-gutters">

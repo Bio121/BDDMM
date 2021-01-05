@@ -19,6 +19,56 @@ and open the template in the editor.
         <script src= "scripts.js";></script>
         <meta charset="UTF-8">
         <title>Home</title>
+        <style>
+            .equis{
+                position: absolute;
+                right: 10px;
+                display: block;
+                padding-bottom: 5%;
+                color: #50278a;
+            }
+            .equis:hover{
+                color: #9966ff;
+            }
+            .equis:active{
+                color: #cbb1d1;
+            }
+            .repContainer{
+                background: #e1cce5;
+                border-radius: 10px;
+                width: 100%;
+                overflow-x: auto;
+                white-space: nowrap;
+                overflow-y: hidden;
+                padding: 3px;
+            }
+            .repUser{
+                position: relative;
+                bottom: 20%;
+                display: inline-block;
+                border: dotted #ddc5e3 3px;
+                border-radius: 10px;
+                min-height: 13rem;
+                min-width: 8em;
+                font-size: 20px;
+                background-color: #f5e2ff;
+                color: #351a5e;
+                padding: 0;
+            }
+            .repIMG>img{
+                width: 6rem;
+                height: 6rem;
+                border-radius: 50%;
+                margin-left: 20%;
+                margin-top: 15%;
+                margin-bottom: 8px;
+            }
+            .addGuy{
+                position: relative;
+                text-align: center;
+                color: #351a5e;
+            }
+        </style>
     </head>
     <body>
 
@@ -30,7 +80,7 @@ and open the template in the editor.
         $orden = 'D';
         $estado = null;
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"],$_SESSION["imagen"]);
+            $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"], $_SESSION["imagen"]);
 
             if (array_key_exists('asc', $_POST)) {
                 $orden = 'A';
@@ -72,12 +122,22 @@ and open the template in the editor.
                 $orden = 'D';
                 $estado = 'Aprobada';
             }
+
+            if (isset($_POST["Phone"])) {
+                $ses = new inicioRegistro();
+                $usuario = $_POST["Usuario"];
+                $correo = $_POST["Correo"];
+                $contraseña = $_POST["Contraseña"];
+                $telefono = $_POST["Phone"];
+                $texto = $ses->regReportero($telefono, $correo, $usuario, $contraseña);
+                $regis = true;
+            }
         } else {
             if (isset($_SESSION["usuario"])) {
                 if ($_SESSION["privilegio"] != 'Editor') {
                     header('Location: index.php');
                 }
-                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"],$_SESSION["imagen"]);
+                $nav->yesSession($_SESSION["usuario"], $_SESSION["privilegio"], $_SESSION["imagen"]);
             } else {
                 header('Location: index.php');
             }
@@ -90,24 +150,62 @@ and open the template in the editor.
 
                 <h1>¡Bienvenido de nuevo Editor!</h1>
                 <p class="mb-5">Listos para checar algunas noticias :D</p>
+                <div class="row justify-content-center">
+                    <button type="button" class="btn btn-success btn-lg p-2 px-5 m-2" onclick="ventanaNueva('creacionSeccion.php')">
+                        Crea una nueva sección
+                    </button>
+                    <button type="button" class="btn btn-warning btn-lg p-2 px-5 m-2" onclick="ventanaNueva('escogerSeccion.php')">
+                        Modifica una sección
+                    </button>
+                    <button type="button" class="btn btn-danger btn-lg p-2 px-5 m-2" onclick="ventanaNueva('eliminarSeccion.php')">
+                        Elimina una sección
+                    </button>
+                </div>
 
-                <button type="button" class="btn btn-success btn-lg p-2 px-5 my-5" onclick="ventanaNueva('creacionSeccion.php')">
-                    Crea una nueva sección
-                </button>
-                <button type="button" class="btn btn-warning btn-lg p-2 px-5 my-5" onclick="ventanaNueva('escogerSeccion.php')">
-                    Modifica una sección
-                </button>
-                <button type="button" class="btn btn-danger btn-lg p-2 px-5 my-5" onclick="ventanaNueva('eliminarSeccion.php')">
-                    Elimina una sección
-                </button>
+                <div class="separador my-3 user-select-none"><h4 class="mb-3">Reporteros</h4></div>
+
+                <div class="repContainer user-select-none">
+
+                    <?php
+                    $rep = new reporteros();
+                    $rep->fillReporteros();
+                    ?>
+
+                    <div class="repUser my-auto user-select-none">
+                        <div class="row">
+                            <div class="equis text-right pr-1" data-toggle="modal" data-target="#modal22">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="row repIMG mx-auto">
+                            <img src="https://pbs.twimg.com/media/EiNYM5CWAAAh9PV?format=png&name=240x240" alt="Avatar">
+                        </div>
+                        <div>
+                            <p class="text-center">MMMMMMM</p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row pt-3 justify-content-center">
+                    <button type="button" class="btn btn-success btn-lg px-5" data-toggle="modal" data-target="#modalNewRep">
+                        Dar de alta un Reportero
+                    </button>
+                </div>
+
+
+                <div class="separador my-3 user-select-none"><h4 class="mb-3">Noticias</h4></div>
 
                 <form action="homeEditor.php" method="post" enctype='multipart/form-data'>
-                <div class="dropright">
-                    <button class="btn btn-secondary dropdown-toggle" style="background: #ccccff; border-color: #9999ff;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Criterio de Orden
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <input type="submit" class="dropdown-item" value="Más recientes (histórico)" name="desc">
+                    <div class="dropright">
+                        <button class="btn btn-secondary dropdown-toggle" style="background: #ccccff; border-color: #9999ff;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Criterio de Orden
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <input type="submit" class="dropdown-item" value="Más recientes (histórico)" name="desc">
                             <input type="submit" class="dropdown-item" value="Más antiguos (histórico)" name="asc">
                             <input type="submit" class="dropdown-item" value="Pendientes de aprobación (recientes)" name="descPen">
                             <input type="submit" class="dropdown-item" value="Pendientes de aprobación (antiguos)" name="ascPen">
@@ -118,10 +216,10 @@ and open the template in the editor.
                             <input type="submit" class="dropdown-item" value="Publicadas (recientes)" name="descPub">
                             <input type="submit" class="dropdown-item" value="Publicadas (antiguos)" name="ascPub">
 
+                        </div>
                     </div>
-                </div>
                 </form>
-                
+
                 <div class="listaNotas overflow-auto my-2">
 
                     <div class="notaLista">
@@ -143,7 +241,13 @@ and open the template in the editor.
                 <div class="perfil" style="color: azure;">
                     <div class="row no-gutters">
                         <div class="col">
-                            <img src="https://pbs.twimg.com/profile_images/1313334758114562048/G7bWOycn_400x400.jpg" alt="Avatar">
+                            <?php
+                            $img = "https://pbs.twimg.com/media/EiNYM5CWAAAh9PV?format=png&name=240x240";
+                            if (!empty($_SESSION["imagen"])) {
+                                $img = "data:image/jpg;base64," . base64_encode($_SESSION["imagen"]);
+                            }
+                            ?>
+                            <img src='<?php echo $img; ?>' alt='Avatar' style="height: auto;">
                         </div>
                     </div>
                     <div class="row no-gutters">
@@ -172,6 +276,56 @@ and open the template in the editor.
 
             </div>
         </div>
+
+        <!-- Ventanas Modales -->
+
+        <!-- Modal Crear nuevo Reportero -->
+        <div class="modal fade" id="modalNewRep" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="newRepModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Registrar Reportero</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="HomeEditor.php" method="post" enctype='multipart/form-data' onsubmit = 'return validacionRegistrarse()'>
+                        <div class="modal-body">
+                            <div class = 'dropdown RegistrarseDrop'>
+                                <div class = 'form-group'>
+                                    <label for = 'emailRegistrarse'>Email</label>
+                                    <input type = 'email' class = 'form-control' id = 'emailRegistrarse' placeholder = 'correo@ejemplo.com' name = 'Correo'>
+                                </div>
+                                <div class = 'form-group'>
+                                    <label for = 'usuarioRegistrarse'>Usuario</label>
+                                    <input type = 'text' class = 'form-control' id = 'usuarioRegistrarse' placeholder = 'Usuario' name = 'Usuario'>
+                                </div>
+                                <div class = 'form-group'>
+                                    <label for = 'telefonoRegistrarse'>Teléfono</label>
+                                    <input type = 'text' class = 'form-control' id = 'telefonoRegistrarse' placeholder = 'Teléfono' name = 'Phone'>
+                                </div>
+                                <div class = 'form-group'>
+                                    <label for = 'contraseñaRegistrarse'>Contraseña</label>
+                                    <input type = 'password' class = 'form-control' id = 'contraseñaRegistrarse' placeholder = 'Contraseña' name = 'Contraseña'>
+                                </div>
+                                <div class = 'form-group'>
+                                    <label for = 'contraseñaConfirmarRegistrarse'>Confirmar Contraseña</label>
+                                    <input type = 'password' class = 'form-control' id = 'contraseñaConfirmarRegistrarse' placeholder = 'Confirmar Contraseña'>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button>
+                            <button type="submit" class="btn btn-primary" name="CreateRep" value="CreateRep">Registrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <?php
+        $rep->modales();
+        ?>
 
         <footer>
             <div class="container">

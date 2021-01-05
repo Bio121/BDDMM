@@ -47,7 +47,6 @@ and open the template in the editor.
                     $telefono = $_POST["Phone"];
                     $texto = $ses->registro($telefono, $correo, $usuario, $contraseña);
                     $regis = true;
-                    echo $texto;
                 }
 
                 $result = $ses->inicio($usuario, $correo, $contraseña);
@@ -159,7 +158,7 @@ and open the template in the editor.
                 <div class="separador"></div>
 
 
-
+                <!--
                 <div class="nota" onclick="indexCat(01)">
                     <div class="flash">¡ÚLTIMO MOMENTO!</div>
                     <div class="row no-gutters">
@@ -196,7 +195,7 @@ and open the template in the editor.
 
                         </div>
                     </div>
-                </div>
+                </div> --!>
 
                 <?php
                 $noticias->enHome(null, $opc, $seccion);
