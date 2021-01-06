@@ -77,7 +77,8 @@ and open the template in the editor.
                 $news->noticias($_SESSION["noticiaActual"], null, null, null, null, null, null, null, 'Rechazada', null, null, null, "U");
             }
             if (array_key_exists('publish', $_POST)) {
-                $news->noticias($_SESSION["noticiaActual"], null, null, null, null, null, null, null, 'Publicada', null, null, null, "U");
+                $currentDateTime = date('Y-m-d H:i:s');
+                $news->noticias($_SESSION["noticiaActual"], null, null, $currentDateTime, null, null, null, null, 'Publicada', null, null, null, "U");
             }
             if (array_key_exists('editComment', $_POST)) {
                 $news->noticias($_SESSION["noticiaActual"], null, null, null, null, null, null, null, 'Pendiente', null, null, null, "U");
@@ -288,7 +289,13 @@ and open the template in the editor.
                     </div>
                     <div class="row no-gutters">
                         <div class="col">
-                            <img class="imgReviewPrevieEditor d-none d-lg-block mx-auto" src="data:image/jpg;base64,<?php echo base64_encode($authorIMG); ?>" alt="Avatar">
+                            <?php
+                                    $img = "https://pbs.twimg.com/media/EiNYM5CWAAAh9PV?format=png&name=240x240";
+                                    if (!empty($authorIMG)) {
+                                        $img = "data:image/jpg;base64," . base64_encode($authorIMG);
+                                    }
+                                    ?>
+                            <img class="imgReviewPrevieEditor d-none d-lg-block mx-auto" src="<?php echo $img; ?>" alt="Avatar">
                         </div>
                         <div class="col py-2 text-center d-none d-lg-block">
                             <br>

@@ -1,6 +1,7 @@
 
 <?php
 session_start();
+ob_start();
 ?>
 
 <!DOCTYPE html>
@@ -131,6 +132,12 @@ and open the template in the editor.
                 $telefono = $_POST["Phone"];
                 $texto = $ses->regReportero($telefono, $correo, $usuario, $contraseña);
                 $regis = true;
+            }
+
+            if (isset($_POST["RepDelete"])) {
+                $con = new mySQLphpClass();
+                $usuario = $_POST["RepDelete"];
+                $str=$con->usuarios(null, null, null, null, null, $usuario, null, null, null, null, null, null, 'd');
             }
         } else {
             if (isset($_SESSION["usuario"])) {

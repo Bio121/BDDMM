@@ -196,6 +196,7 @@ and open the template in the editor.
                         $tamaño = $_POST["sizeConfig" . $orden];
                     }
                     if ($tipo == 'T') {
+                        $imagen = null;
                         $_SESSION["imagen2"] = null;
                         $video = null;
                         $imagen = NULL;

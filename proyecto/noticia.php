@@ -187,7 +187,7 @@ and open the template in the editor.
             
             if(isset($_GET["like"])){
                 $con = new mySQLphpClass();
-                $con->newsInteractions('L', $_GET["newX"]);
+                $con->newsInteractions('L', $_GET["newX"], $_SESSION["usuario"]);
                 header('Location: noticia.php?new=' . $_GET["newX"]);
             }
             
@@ -216,7 +216,7 @@ and open the template in the editor.
                     }
                     $userIMG = $row["userIMG"];
                     
-                    $new->newsInteractions("V", $codigo);
+                    $new->newsInteractions("V", $codigo, null);
                 } else {
                     $byebye = true;
                 }

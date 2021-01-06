@@ -61,16 +61,9 @@ class mySQLphpClass extends configSQLphp {
 
     function usuarios($nombre, $paterno, $materno, $telefono, $correo, $usuario, $contraseña, $imagen, $genero, $nacimiento, $privilegio, $newUser, $seleccion) {
         $this->connect();
-        if ($nombre == null && $paterno == null && $materno == null && $imagen == null && $genero == null && $nacimiento == null && $newUser == null) {
-            $sql = "call proc_dml_usuario(null, null, null, '" . $telefono . "', '" . $correo . "', '" . $usuario . "', '" . $contraseña
-                    . "', null, null, null, '" . $privilegio . "', null, '" . $seleccion . "');";
-        } else if ($nacimiento == null) {
-            "call proc_dml_usuario('" . $nombre . "', '" . $paterno . "', '" . $materno . "', '" . $telefono . "', '" . $correo . "', '" . $usuario . "', '" . $contraseña
-                    . "', null, '" . $genero . "', null, '" . $privilegio . "', '" . $newUser . "', '" . $seleccion . "');";
-        } else {
-            $sql = "call proc_dml_usuario('" . $nombre . "', '" . $paterno . "', '" . $materno . "', '" . $telefono . "', '" . $correo . "', '" . $usuario . "', '" . $contraseña
-                    . "', '" . $imagen . "', '" . $genero . "', '" . $nacimiento . "', '" . $privilegio . "', '" . $newUser . "', '" . $seleccion . "');";
-        }
+         $sql = "call proc_dml_usuario(" . $this->varQuery($nombre) . ", " . $this->varQuery($paterno) . ", " . $this->varQuery($materno) . ", " . $this->varQuery($telefono)
+                . ", " . $this->varQuery($correo) . ", " . $this->varQuery($usuario) . ", " . $this->varQuery($contraseña) . ", " . $this->varQuery($imagen) . ", "
+                . $this->varQuery($genero) . ", " . $this->varQuery($nacimiento) . ", " . $this->varQuery($privilegio) . ", " . $this->varQuery($newUser) . ", " . $this->varQuery($seleccion) . ");";
         $this->connectionString->query($sql);
         $this->byebye();
         return $sql;
@@ -230,10 +223,10 @@ class mySQLphpClass extends configSQLphp {
         return $result;
     }
     
-    function newsInteractions($seleccion, $noticia) {
+    function newsInteractions($seleccion, $noticia, $usuario) {
         $this->connect();
         
-        $sql = "call proc_NewsInteractions(" . $this->varQuery($seleccion) . ", " . $this->varQuery($noticia) . ");";
+        $sql = "call proc_NewsInteractions(" . $this->varQuery($seleccion) . ", " . $this->varQuery($noticia) . ", " . $this->varQuery($usuario) . ");";
         
         $result = $this->connectionString->query($sql);
         $this->byebye();
@@ -246,6 +239,15 @@ class mySQLphpClass extends configSQLphp {
         $result = $this->connectionString->query($sql);
         $this->byebye();
         return $result;
+    }
+    
+    function likesNew($noticia, $usuario, $noticiaNew, $usuarioNew, $seleccion) {
+        $this->connect();
+        
+        $sql = "call proc_dml_LikesNoticia(" . $this->varQuery($noticia) . ", " . $this->varQuery($usuario) . ", " .  $this->varQuery($noticiaNew) . ", " . $this->varQuery($usuarioNew) . ", " . $this->varQuery($seleccion) . ");";
+        
+        $this->connectionString->query($sql);
+        $this->byebye();
     }
 
 }

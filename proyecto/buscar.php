@@ -122,25 +122,25 @@ and open the template in the editor.
 
         <div class="contGlobal">
 
-            <div class="mainContent">
+            <div class="mainContent" style="min-height: 50em;">
 
                 <form action="buscar.php" method="get" class="" >
-                    <p>Buscar por</p>
+                    <h3>Buscar por</h3>
                     <input type="checkbox" id="opcFecha" name="opcFecha" value="1"<?php if($opcFecha == 1) echo "checked"  ?>>
-                    <label for="opcFecha"> por fecha</label>
+                    <label for="opcFecha" class="pr-3"> Por fecha</label>
                     <input type="checkbox" id="opcTitulo" name="opcTitulo" value="1"<?php if($opcTitulo == 1) echo "checked"  ?>>
-                    <label for="opcTitulo"> titulo o descripcion de la noticia</label>
+                    <label for="opcTitulo" class="pr-3"> Título o descripción de la noticia</label>
                     <input type="checkbox" id="opcPalabra" name="opcPalabra" value="1"<?php if($opcPalabra == 1) echo "checked"  ?>>
-                    <label for="opcPalabra"> palabras clave</label>
+                    <label for="opcPalabra" class="pr-3"> Palabras clave</label>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control form-control-lg" name="busqueda" id="busqueda" placeholder="busqueda" value="<?php echo $busqueda ?>">
+                        <input type="text" class="form-control form-control-lg" name="busqueda" id="busqueda" placeholder="búsqueda" value="<?php echo $busqueda ?>">
                         <div class="input-group-append">
                             <button href='#!' class='btn  btn-outline-secondary' type='submit'>Buscar</button>
                         </div>
                     </div>
-                    <label  for="inicio" class="user-select-none">Inicio de busqueda</label>
+                    <label  for="inicio" class="user-select-none">Inicio de búsqueda</label>
                     <input type="date" id="inicio" class="campoConfig" name="inicio" min="1900-01-01" max="<?php echo date("Y-m-d") ?>" placeholder="<?php echo date("Y-m-d") ?>" value="<?php echo $inicio ?>">
-                    <label  for="final" class="user-select-none">Final de busqueda</label>
+                    <label  for="final" class="user-select-none">Final de búsqueda</label>
                     <input type="date" id="final" class="campoConfig" name="final" min="1900-01-01" max="<?php echo date("Y-m-d") ?>" placeholder="<?php echo date("Y-m-d") ?>" value="<?php echo $fin ?>">
 
                 </form>

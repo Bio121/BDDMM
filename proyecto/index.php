@@ -115,7 +115,7 @@ and open the template in the editor.
                     </ol>
                     <div class="carousel-inner">
                         <?php
-                        $noticias->Vistas(null);
+                        $noticias->Vistas(3);
                         ?>
 
                     </div>
