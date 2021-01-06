@@ -161,6 +161,105 @@ class noticias {
         }
     }
 
+    function buscar($buscar, $inicio, $fin, $cant) {
+        $timeinicio = "00:00:00";
+        $timefin = "23:59:59";
+        if ($inicio == null)
+            $inicio = "1900-01-01";
+        else
+            $inicio = date('Y-m-d H:i:s', strtotime("$inicio $timeinicio"));
+        if ($fin == null)
+            $fin = date("Y-m-d H:i:s");
+        else
+            $fin = date('Y-m-d H:i:s', strtotime("$fin $timefin"));
+        $conn = new mySQLphpClass();
+         $ind = 0;
+        $result = $conn->get_noticiasBusqueda($buscar, $inicio, $fin, $cant);
+        $img = '#';
+        if($result){
+            if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                    $piece = "'noticia.php?new=" . $row["Código"] . "';";
+                    $redirect = '"window.location = ' . $piece . '"';
+                    $now = time();
+                    $ind = $ind + 1;
+                    $target = strtotime($row["fechaPublicado"]);
+                    $diff = $now - $target;
+                    if (array_key_exists('imagen', $row)) {
+                        $img = $row["imagen"];
+                    }
+                    if ($ind == 1) {
+                        echo "<div class='carousel-item active'><div class='nota' onclick=" . $redirect . ">";
+                    }
+                    if ($ind > 1) {
+                        echo "<div class='carousel-item'><div class='nota' onclick=" . $redirect . ">";
+                    }
+                    if ($diff <= 68417) {
+                        echo "<div class='flash'>¡ÚLTIMO MOMENTO!</div>";
+                    }
+                    echo "<div class='row no-gutters'>
+                        <div class='col-12'><h2>" . $row["Título"] . "</h2></div></div>
+                        <div class='row no-gutters'><div class='col-lg-5'></div><img src='data:image/jpg;base64," . $img . "' class='notaIMG' alt='...'><div class='col-lg-7 p-2'><div class='row no-gutters' style='height: 90%;'>
+                        <p>" . $row["Descripción"] . "</p></div><div class='row no-gutters'>
+                        <div class='col'><p class='autor'>" . $row["Nombre_Rep"] . " - " . $row["fechaPublicado"] . "</p></div></div></div></div></div></div>";
+                }
+            } else {
+                echo "0 results";
+            }
+         }else {
+                echo "0 results";
+            }
+         
+    }
+    
+    function buscar2($buscar, $inicio, $fin, $fecha, $titulo, $palabra) {
+        $timeinicio = "00:00:00";
+        $timefin = "23:59:59";
+        if ($inicio == null)
+            $inicio = "1900-01-01";
+        else
+            $inicio = date('Y-m-d H:i:s', strtotime("$inicio $timeinicio"));
+        if ($fin == null)
+            $fin = date("Y-m-d H:i:s");
+        else
+            $fin = date('Y-m-d H:i:s', strtotime("$fin $timefin"));
+        $conn = new mySQLphpClass();
+        $result = $conn->get_noticiasBusqueda2($buscar, $inicio, $fin, $fecha, $titulo, $palabra);
+        $img = '#';
+        if($result){
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    if (array_key_exists('imagen', $row)) {
+                        $img = $row["imagen"];
+                    }
+
+                    $piece = "'noticia.php?new=" . $row["Código"] . "';";
+                    $redirect = '"window.location = ' . $piece . '"';
+                    $now = time();
+                    $target = strtotime($row["fechaPublicado"]);
+                    $diff = $now - $target;
+                    echo "<div class='nota' onclick=" . $redirect . ">";
+                    if ($diff <= 68417) {
+                        echo "<div class='flash'>¡ÚLTIMO MOMENTO!</div>";
+                    }
+                    echo "<div class='row no-gutters'>
+                              <div class='col-12'><h2>" . $row["Título"] . "</h2></div></div>
+                              <div class='row no-gutters'><div class='col-lg-5'>
+                              <img src='data:image/jpg;base64," . $img . "' class='notaIMG' alt='...'>
+                              </div><div class='col-lg-7 p-2'><div class='row no-gutters' style='height: 90%;'>
+                              <p>" . $row["Descripción"] . "</p></div><div class='row no-gutters'>
+                              <div class='col'><p class='autor'>" . $row["Nombre_Rep"] . " - " . $row["fechaPublicado"] .
+                    "</p></div></div></div></div></div>";
+                }
+            } else {
+                echo "0 results";
+            }
+         }else {
+                echo "0 results erro";
+            }
+         
+    }
+
     function Vistas($cant) {
         $conn = new mySQLphpClass();
         $ind = 0;
@@ -196,6 +295,8 @@ class noticias {
             echo "0 results";
         }
     }
+    
+    
 
     function misNoticias($usuario, $orden, $estado) {
         $conn = new mySQLphpClass();
@@ -263,9 +364,9 @@ class navbar {
 
     function simple() {
         $code = "<nav class='nav navbar navbar-expand-lg navbar-dark fixed-top fixed-top-2'>
-                    <form class='form-inline ml-auto'>
+                    <form action='buscar.php' method='get' class='form-inline ml-auto'>
                         <div class='md-form my-0'>
-                            <input class='form-control' type='text' placeholder='Search' aria-label='Search'>
+                            <input class='form-control' type='text' name='busqueda' id='busqueda' placeholder='Search' aria-label='Search'>
                         </div>
                         <button href='#!' class='btn btn-primary btn-outline-white btn-md my-0 ml-sm-2' type='submit'>Buscar</button>
                     </form>
@@ -299,8 +400,8 @@ class navbar {
                     <a class='navbar-brand' href='index.php'>Novedades del Bot</a>    
                     <div class='div-inline ml-auto  usuarioNav' > ";
         $img_str = base64_encode($imagen);
-        if(!empty($imagen)){
-           $img = "data:image/jpg;base64," . $img_str;
+        if (!empty($imagen)) {
+            $img = "data:image/jpg;base64," . $img_str;
         }
         echo '<img src="' . $img . '" class="imgNavBar float-left imagenUserNavbar" alt="img de navbar "/>';
         echo "<a class='nav-link dropdown-toggle usuarioNomNav' href='#' id='navbarDropdown nav' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
@@ -333,7 +434,7 @@ class inicioRegistro {
         $result = $conn->usuarios(null, null, null, $telefono, $correo, $usuario, $contraseña, null, null, null, 'Registrado', null, 'I');
         return $result;
     }
-    
+
     function regReportero($telefono, $correo, $usuario, $contraseña) {
         $conn = new mySQLphpClass();
         $result = $conn->usuarios(null, null, null, $telefono, $correo, $usuario, $contraseña, null, null, null, 'Reportero', null, 'I');
@@ -348,18 +449,23 @@ class preview {
         switch ($estado) {
             case 'Aprobada':
                 echo '<div class="card text-white bg-info text-wrap my-3 d-none d-lg-block" style="max-width: 18rem;"><div class="card-header">ESTADO</div><div class="card-body">
-                  <h5 class="card-title">Revisada y Aprobada</h5><p class="card-text">La noticia ha sido aprobada, y está lista para ser publicada.</p></div></div>';break;
+                  <h5 class="card-title">Revisada y Aprobada</h5><p class="card-text">La noticia ha sido aprobada, y está lista para ser publicada.</p></div></div>';
+                break;
             case 'Pendiente':
                 echo '<div class="card text-white bg-warning text-wrap my-3 d-none d-lg-block" style="max-width: 18rem;"><div class="card-header">ESTADO</div><div class="card-body">
-                  <h5 class="card-title">Pendiente de corrección</h5><p class="card-text">La noticia no puede ser publicada porque hay uno o más detalles que atender.</p></div></div>';break;
+                  <h5 class="card-title">Pendiente de corrección</h5><p class="card-text">La noticia no puede ser publicada porque hay uno o más detalles que atender.</p></div></div>';
+                break;
             case 'Rechazada':
                 echo '<div class="card text-white bg-danger text-wrap my-3 d-none d-lg-block" style="max-width: 18rem;"><div class="card-header">ESTADO</div><div class="card-body">
-                  <h5 class="card-title">Rechazada por el Editor</h5><p class="card-text">El Editor ha decidido rechazar la noticia, por lo tanto no podrá ser publicada.</p></div></div>';break;
+                  <h5 class="card-title">Rechazada por el Editor</h5><p class="card-text">El Editor ha decidido rechazar la noticia, por lo tanto no podrá ser publicada.</p></div></div>';
+                break;
             case 'Publicada':
                 echo '<div class="card text-white bg-success text-wrap my-3 d-none d-lg-block" style="max-width: 18rem;"><div class="card-header">ESTADO</div><div class="card-body">
-                   <h5 class="card-title">Publicada</h5><p class="card-text">La noticia ya ha sido publicada en el portal de noticias.</p></div></div>';break;
+                   <h5 class="card-title">Publicada</h5><p class="card-text">La noticia ya ha sido publicada en el portal de noticias.</p></div></div>';
+                break;
             default:
-                echo 'NADA';break;
+                echo 'NADA';
+                break;
         }
     }
 
@@ -367,38 +473,54 @@ class preview {
         switch ($estado) {
             case 'Aprobada':
                 echo '<button type="button" class="btn btn-info my-3 d-block d-sm-block d-md-block d-lg-none" data-toggle="modal" data-target="#modalStatus" style="width: 100%;padding-top: 100%;position: relative; padding-bottom: 0; ">
-                  <p style="position: absolute; font-size: 8vw; top: 2%; left: 0%; bottom: 0; right: 0;">E</p></button>';break;
+                  <p style="position: absolute; font-size: 8vw; top: 2%; left: 0%; bottom: 0; right: 0;">E</p></button>';
+                break;
             case 'Pendiente':
                 echo '<button type="button" class="btn btn-warning my-3 d-block d-sm-block d-md-block d-lg-none" data-toggle="modal" data-target="#modalStatus" style="width: 100%;padding-top: 100%;position: relative; padding-bottom: 0; ">
-                  <p style="position: absolute; font-size: 8vw; top: 2%; left: 0%; bottom: 0; right: 0;">E</p></button>';break;
+                  <p style="position: absolute; font-size: 8vw; top: 2%; left: 0%; bottom: 0; right: 0;">E</p></button>';
+                break;
             case 'Rechazada':
                 echo '<button type="button" class="btn btn-danger my-3 d-block d-sm-block d-md-block d-lg-none" data-toggle="modal" data-target="#modalStatus" style="width: 100%;padding-top: 100%;position: relative; padding-bottom: 0; ">
-                  <p style="position: absolute; font-size: 8vw; top: 2%; left: 0%; bottom: 0; right: 0;">E</p></button>';break;
+                  <p style="position: absolute; font-size: 8vw; top: 2%; left: 0%; bottom: 0; right: 0;">E</p></button>';
+                break;
             case 'Publicada':
                 echo '<button type="button" class="btn btn-success my-3 d-block d-sm-block d-md-block d-lg-none" data-toggle="modal" data-target="#modalStatus" style="width: 100%;padding-top: 100%;position: relative; padding-bottom: 0; ">
-                   <p style="position: absolute; font-size: 8vw; top: 2%; left: 0%; bottom: 0; right: 0;">E</p></button>';break;
+                   <p style="position: absolute; font-size: 8vw; top: 2%; left: 0%; bottom: 0; right: 0;">E</p></button>';
+                break;
             default:
-                echo 'NADA';break;
+                echo 'NADA';
+                break;
         }
     }
 
     function ventanasModales($estado, $editComm) {
-        $title = '';$text = '';$color = '';
+        $title = '';
+        $text = '';
+        $color = '';
         switch ($estado) {
             case 'Aprobada':
-                $title = 'ESTADO: Revisada y Aprobada';$color = 'bg-info';
-                $text = 'La noticia ha sido aprobada, y está lista para ser publicada.';break;
+                $title = 'ESTADO: Revisada y Aprobada';
+                $color = 'bg-info';
+                $text = 'La noticia ha sido aprobada, y está lista para ser publicada.';
+                break;
             case 'Pendiente':
-                $title = 'ESTADO: Pendiente de corrección';$color = 'bg-warning';
-                $text = 'La noticia no puede ser publicada porque hay uno o más detalles que atender.';break;
+                $title = 'ESTADO: Pendiente de corrección';
+                $color = 'bg-warning';
+                $text = 'La noticia no puede ser publicada porque hay uno o más detalles que atender.';
+                break;
             case 'Rechazada':
-                $title = 'ESTADO: Rechazada por el Editor';$color = 'bg-danger';
-                $text = 'El Editor ha decidido rechazar la noticia, por lo tanto no podrá ser publicada.';break;
+                $title = 'ESTADO: Rechazada por el Editor';
+                $color = 'bg-danger';
+                $text = 'El Editor ha decidido rechazar la noticia, por lo tanto no podrá ser publicada.';
+                break;
             case 'Publicada':
-                $title = 'ESTADO: Publicada';$color = 'bg-success';
-                $text = 'La noticia ya ha sido publicada en el portal de noticias.';break;
+                $title = 'ESTADO: Publicada';
+                $color = 'bg-success';
+                $text = 'La noticia ya ha sido publicada en el portal de noticias.';
+                break;
             default:
-                echo 'NADA';break;
+                echo 'NADA';
+                break;
         }
         echo '<div class="modal fade" id="modalStatus" tabindex="-1" aria-labelledby="modalStatusLabel" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content ' . $color . '">
               <div class="modal-header"><h5 class="modal-title" id="modalStatusLabel">' . $title . '</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -407,6 +529,7 @@ class preview {
               <div class="modal-header"><h5 class="modal-title" id="modalCommentLabel">Comentarios</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span></button></div><div class="modal-body">' . $editComm . '</div></div></div></div>';
     }
+
 }
 
 class archivos {
@@ -424,7 +547,7 @@ class archivos {
         $i = 1;
         while (true) {
             $result = $conn->get_Archivos($this->codigo, null, $i);
-            if(empty($result)){
+            if (empty($result)) {
                 break;
             }
             $row = $result->fetch_assoc();
@@ -435,13 +558,13 @@ class archivos {
             $i++;
         }
     }
-    
-    function cargarNoticia(){
+
+    function cargarNoticia() {
         $conn = new mySQLphpClass();
         $i = 1;
         while (true) {
             $result = $conn->get_Archivos($this->codigo, null, $i);
-            if(empty($result)){
+            if (empty($result)) {
                 break;
             }
             $row = $result->fetch_assoc();
@@ -452,7 +575,7 @@ class archivos {
             $i++;
         }
     }
-    
+
     private function imashNEW($size, $orden, $imagen) {
         $id = 'modal' . $orden;
         $str = '<div class="row py-3"><div class="col" align="center">
@@ -467,7 +590,7 @@ class archivos {
                 </div></div></div>';
         return $str;
     }
-    
+
     private function vidioNEW($size, $orden, $video) {
         $id = 'modal' . $orden;
         $str = '<div class="row py-3"><div class="col" align="center">
@@ -496,7 +619,7 @@ class archivos {
                   </svg></div></div></div>';
         return $str;
     }
-    
+
     private function vidio($size, $orden, $video) {
         $id = 'modal' . $orden;
         $str = '<div class="row py-3"><div class="col" align="center">
@@ -509,11 +632,16 @@ class archivos {
     }
 
     private function imashModal($orden, $code, $tamaño) {
-        $chico = '';$mediano = '';$grande = '';
+        $chico = '';
+        $mediano = '';
+        $grande = '';
         switch ($tamaño) {
-            case '1': $chico = 'checked="checked"'; break;
-            case '2': $mediano = 'checked="checked"'; break;
-            case '3': $grande = 'checked="checked"'; break;  
+            case '1': $chico = 'checked="checked"';
+                break;
+            case '2': $mediano = 'checked="checked"';
+                break;
+            case '3': $grande = 'checked="checked"';
+                break;
             default: break;
         }
         $id = 'modal' . $orden;
@@ -547,13 +675,18 @@ class archivos {
                <button type="button" class="btn btn-secondary" data-dismiss="modal">Volver</button><button type="submit" class="btn btn-primary" name="editFile" value="T' . $orden . '">Aceptar</button></div></form></div></div></div>';
         array_push($this->arr, $str);
     }
-    
+
     private function vidioModal($orden, $code, $tamaño) {
-        $chico = '';$mediano = '';$grande = '';
+        $chico = '';
+        $mediano = '';
+        $grande = '';
         switch ($tamaño) {
-            case '1': $chico = 'checked="checked"'; break;
-            case '2': $mediano = 'checked="checked"'; break;
-            case '3': $grande = 'checked="checked"'; break;  
+            case '1': $chico = 'checked="checked"';
+                break;
+            case '2': $mediano = 'checked="checked"';
+                break;
+            case '3': $grande = 'checked="checked"';
+                break;
             default: break;
         }
         $id = 'modal' . $orden;
@@ -577,44 +710,58 @@ class archivos {
 
     private function HTMLify($row) {
         $size = '';
-        if ($row["tipo"] != 'texto'){
+        if ($row["tipo"] != 'texto') {
             switch ($row['tamaño']) {
-                case 1: $size = 'noticiaIMG-ch'; break;
-                case 2: $size = 'noticiaIMG-md'; break;
-                case 3: $size = 'noticiaIMG-gd'; break;  
+                case 1: $size = 'noticiaIMG-ch';
+                    break;
+                case 2: $size = 'noticiaIMG-md';
+                    break;
+                case 3: $size = 'noticiaIMG-gd';
+                    break;
             }
         }
         switch ($row["tipo"]) {
             case 'imagen':
                 echo $this->imash($size, $row["orden"], $row["imagen"]);
-                $this->imashModal($row["orden"], $row["clave"], $row["tamaño"]); break;
+                $this->imashModal($row["orden"], $row["clave"], $row["tamaño"]);
+                break;
             case 'texto':
                 echo $this->tecsto($row["texto"], $row["orden"]);
-            $this->tecstoModal($row["texto"], $row["orden"], $row["clave"]); break;
+                $this->tecstoModal($row["texto"], $row["orden"], $row["clave"]);
+                break;
             case 'video':
                 echo $this->vidio($size, $row["orden"], $row["video"]);
-                $this->vidioModal($row["orden"], $row["clave"], $row["tamaño"]); break;
-            default: echo 'NADA'; break;
+                $this->vidioModal($row["orden"], $row["clave"], $row["tamaño"]);
+                break;
+            default: echo 'NADA';
+                break;
         }
     }
-    
+
     private function HTMLifyNEW($row) {
         $size = '';
-        if ($row["tipo"] != 'texto'){
+        if ($row["tipo"] != 'texto') {
             switch ($row['tamaño']) {
-                case 1: $size = 'noticiaIMG-ch'; break;
-                case 2: $size = 'noticiaIMG-md'; break;
-                case 3: $size = 'noticiaIMG-gd'; break;  
+                case 1: $size = 'noticiaIMG-ch';
+                    break;
+                case 2: $size = 'noticiaIMG-md';
+                    break;
+                case 3: $size = 'noticiaIMG-gd';
+                    break;
             }
         }
         switch ($row["tipo"]) {
             case 'imagen':
-                echo $this->imashNEW($size, $row["orden"], $row["imagen"]); break;
+                echo $this->imashNEW($size, $row["orden"], $row["imagen"]);
+                break;
             case 'texto':
-                echo $this->tecstoNEW($row["texto"], $row["orden"]); break;
+                echo $this->tecstoNEW($row["texto"], $row["orden"]);
+                break;
             case 'video':
-                echo $this->vidioNEW($size, $row["orden"], $row["video"]); break;
-            default: echo 'NADA'; break;
+                echo $this->vidioNEW($size, $row["orden"], $row["video"]);
+                break;
+            default: echo 'NADA';
+                break;
         }
     }
 
@@ -626,25 +773,26 @@ class archivos {
 
 }
 
-class comentarios{
+class comentarios {
+
     private $new;
     private $arr;
-    
-    public function comentarios($codigo){
+
+    public function comentarios($codigo) {
         $this->new = $codigo;
         $this->arr = array();
     }
-    
-    public function newComment($usuario, $texto, $responde){
+
+    public function newComment($usuario, $texto, $responde) {
         $conn = new mySQLphpClass();
         $conn->comentarios(null, $texto, null, $responde, $this->new, $usuario, 'I');
     }
-    
-    public function deleteComment($clave){
+
+    public function deleteComment($clave) {
         $conn = new mySQLphpClass();
         $conn->comentarios($clave, null, null, null, null, null, 'D');
     }
-    
+
     function cargarComentarios() {
         $conn = new mySQLphpClass();
         $result = $conn->get_misComentarios($this->new, null);
@@ -665,7 +813,7 @@ class comentarios{
             echo '<div class="p-5" style="color:#857086;">Se el primero en dejar un comentario.</div>';
         }
     }
-    
+
     function cargarComentariosDevMode() {
         $conn = new mySQLphpClass();
         $result = $conn->get_misComentarios($this->new, null);
@@ -688,7 +836,7 @@ class comentarios{
         }
     }
 
-    private function addModal($id){
+    private function addModal($id) {
         $str = '<!-- Modal Comentario -->
                 <div class="modal fade" id="modal' . $id . '" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="commentModal' . $id . '" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -724,26 +872,26 @@ class comentarios{
                 </div>';
         array_push($this->arr, $str);
     }
-    
-     private function HTMLify($row, $respuesta) {
-         $img = "https://pbs.twimg.com/media/EiNYM5CWAAAh9PV?format=png&name=240x240";
-         $responde = "";
-         $enRespuesta = "";
-         $replyBTN = '<div class="responder text-right user-select-none" data-toggle="modal" data-target="#modal' . $row["Clave"] . '">
+
+    private function HTMLify($row, $respuesta) {
+        $img = "https://pbs.twimg.com/media/EiNYM5CWAAAh9PV?format=png&name=240x240";
+        $responde = "";
+        $enRespuesta = "";
+        $replyBTN = '<div class="responder text-right user-select-none" data-toggle="modal" data-target="#modal' . $row["Clave"] . '">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" fill="currentColor" class="bi bi-chat-square-fill" viewBox="0 0 16 16">
                                     <path d="M2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
                                     </svg>
                                 <small>Responder</small>
                             </div>';
-         if(isset($row["Imagen"])){
-             $img = "data:image/jpg;base64," . base64_encode($row["Imagen"]);
-         }
-         if($respuesta){
-             $responde = 'style="margin-left: 3rem;"';
-             $enRespuesta = ", En respuesta.";
-             $replyBTN = "";
-         }
-         echo '<div class="comentario" ' . $responde . '>
+        if (isset($row["Imagen"])) {
+            $img = "data:image/jpg;base64," . base64_encode($row["Imagen"]);
+        }
+        if ($respuesta) {
+            $responde = 'style="margin-left: 3rem;"';
+            $enRespuesta = ", En respuesta.";
+            $replyBTN = "";
+        }
+        echo '<div class="comentario" ' . $responde . '>
                         <div class="comentext mr-2">
                             <div class="comentor">
                                 <img class="comentIMG" src="' . $img . '"/>
@@ -754,8 +902,8 @@ class comentarios{
                         </div>
                     </div>';
     }
-    
-    private function addModalDevMode($id){
+
+    private function addModalDevMode($id) {
         $str = '<!-- Modal Comentario -->
                 <div class="modal fade" id="modal' . $id . '" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="commentModal' . $id . '" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
@@ -788,25 +936,25 @@ class comentarios{
                 </div>';
         array_push($this->arr, $str);
     }
-    
-     private function HTMLifyDevMode($row, $respuesta) {
-         $img = "https://pbs.twimg.com/media/EiNYM5CWAAAh9PV?format=png&name=240x240";
-         $responde = "";
-         $enRespuesta = "";
-         $replyBTN = '<div class="responder text-right user-select-none" data-toggle="modal" data-target="#modal' . $row["Clave"] . '">
+
+    private function HTMLifyDevMode($row, $respuesta) {
+        $img = "https://pbs.twimg.com/media/EiNYM5CWAAAh9PV?format=png&name=240x240";
+        $responde = "";
+        $enRespuesta = "";
+        $replyBTN = '<div class="responder text-right user-select-none" data-toggle="modal" data-target="#modal' . $row["Clave"] . '">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
                                     <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                                     </svg>
                                 <small>Eliminar</small>
                             </div>';
-         if(isset($row["Imagen"])){
-             $img = "data:image/jpg;base64," . base64_encode($row["Imagen"]);
-         }
-         if($respuesta){
-             $responde = 'style="margin-left: 3rem;"';
-             $enRespuesta = ", En respuesta.";
-         }
-         echo '<div class="comentario" ' . $responde . '>
+        if (isset($row["Imagen"])) {
+            $img = "data:image/jpg;base64," . base64_encode($row["Imagen"]);
+        }
+        if ($respuesta) {
+            $responde = 'style="margin-left: 3rem;"';
+            $enRespuesta = ", En respuesta.";
+        }
+        echo '<div class="comentario" ' . $responde . '>
                         <div class="comentext mr-2">
                             <div class="comentor">
                                 <img class="comentIMG" src="' . $img . '"/>
@@ -817,16 +965,17 @@ class comentarios{
                         </div>
                     </div>';
     }
-    
+
     public function modales() {
         foreach ($this->arr as $mode) {
             echo $mode;
         }
     }
+
 }
 
 class reporteros {
-    
+
     private $arr;
 
     public function fillReporteros() {
@@ -840,13 +989,13 @@ class reporteros {
             }
         }
     }
-    
-    private function HTMLify($row){
+
+    private function HTMLify($row) {
         $img = "https://pbs.twimg.com/media/EiNYM5CWAAAh9PV?format=png&name=240x240";
-        if(isset($row["Imagen"])){
-             $img = "data:image/jpg;base64," . base64_encode($row["Imagen"]);
-         }
-        $str='<div class="repUser my-auto user-select-none">
+        if (isset($row["Imagen"])) {
+            $img = "data:image/jpg;base64," . base64_encode($row["Imagen"]);
+        }
+        $str = '<div class="repUser my-auto user-select-none">
                         <div class="row">
                             <div class="equis text-right pr-1" data-toggle="modal" data-target="#modal' . $row['Usuario'] . '">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
@@ -861,10 +1010,11 @@ class reporteros {
                         <div>
                             <p class="text-center">' . $row["Usuario"] . '</p>
                         </div>
-                    </div>'; echo $str;
+                    </div>';
+        echo $str;
     }
-    
-    private function bajaModal($id){
+
+    private function bajaModal($id) {
         $str = '<div class="modal fade" id="modal' . $id . '" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="delete' . $id . '" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -895,4 +1045,5 @@ class reporteros {
             echo $mode;
         }
     }
+
 }

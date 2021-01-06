@@ -138,6 +138,27 @@ class mySQLphpClass extends configSQLphp {
         $this->byebye();
         return $result;
     }
+    
+    function get_noticiasBusqueda($buscar,$inicio,$fin,$cant) {
+        $this->connect();
+        if ($cant == null) {
+            $sql = "call proc_busqueda(' $buscar ','  $inicio  ',' $fin ', null);";
+        } else {
+            $sql = "call proc_busqueda(' $buscar ','  $inicio  ',' $fin '," . $cant . ");";
+        }
+        $result = $this->connectionString->query($sql);
+        $this->byebye();
+        return $result;
+    }
+    
+    function get_noticiasBusqueda2($buscar, $inicio, $fin, $fecha, $titulo, $palabra) {
+        $this->connect();
+        $sql = "call proc_busquedaAvanzada(' $buscar ','  $inicio  ',' $fin '," . $fecha . "," . $titulo . "," . $palabra . ");";
+        $result = $this->connectionString->query($sql);
+        $this->byebye();
+        return $result;
+    }
+    
     function get_noticiasNew($cant) {
         $this->connect();
         if ($cant == null) {

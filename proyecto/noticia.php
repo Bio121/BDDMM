@@ -136,7 +136,7 @@ and open the template in the editor.
 
         <?php
         include "classes.php";
-
+        $noticias = new noticias();
         $nav = new navbar();
         $nav->simple();
         $mal = 0;
@@ -294,123 +294,10 @@ and open the template in the editor.
                         <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
                     </ol>
                     <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <div class="nota" onclick="noticia(01)">
-                                <div class="row no-gutters">
-                                    <div class="col-12">
-                                        <h2>Individuo pierde en un Buscaminas</h2>
-                                    </div>
-                                </div>
-                                <div class="row no-gutters">
-                                    <div class="col-lg-5">
-                                        <img src="https://pbs.twimg.com/media/EgvGhYbXYAA2Ean?format=png&name=small" class="notaIMG"/>
-                                    </div>
-                                    <div class="col-lg-7 p-2">
-                                        <div class="row no-gutters" style="height: 90%;">
-                                            <p>
-                                                Donec aliquam, mauris mollis pharetra consequat, lectus dui pulvinar turpis, ut imperdiet elit erat vel elit.
-                                                Praesent at libero facilisis, efficitur sem ac, porttitor arcu.
-                                                Duis porta libero augue, a lobortis libero tempus a.
-                                                Aenean purus enim, pulvinar dictum pharetra sit amet, malesuada vel arcu.
-                                                Curabitur molestie urna nisl, vitae sollicitudin odio tempor a. In hac habitasse platea dictumst.
-                                                Etiam quis turpis vel urna ultricies pretium. Donec non euismod nulla.
-                                                Pellentesque imperdiet leo velit, eu vulputate orci sodales ac.
-                                                In pharetra facilisis odio, eu aliquam sem laoreet eu.
-                                                Praesent massa turpis, convallis ac dapibus id, euismod ut massa.
-                                                Sed elementum et eros ut porta. Fusce consectetur aliquam sapien ac semper.
-                                            </p>
-                                        </div>
-                                        <div class="row no-gutters">
-                                            <div class="col">
-                                                <p class="autor">
-                                                    Hecho Por Daniel - 18 / 10 / 2020
-                                                </p>
-                                            </div>
-                                        </div>
+                        <?php
+                        $noticias->buscar($keyword, NULL, NULL, 3) ;
+                        ?>
 
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="carousel-item">
-                            <div class="nota" onclick="noticia(01)">
-                                <div class="row no-gutters">
-                                    <div class="col-12">
-                                        <h2>Individuo pierde en un Buscaminas</h2>
-                                    </div>
-                                </div>
-                                <div class="row no-gutters">
-                                    <div class="col-lg-5">
-                                        <img src="https://pbs.twimg.com/media/EgvGhYbXYAA2Ean?format=png&name=small" class="notaIMG"/>
-                                    </div>
-                                    <div class="col-lg-7 p-2">
-                                        <div class="row no-gutters" style="height: 90%;">
-                                            <p>
-                                                Donec aliquam, mauris mollis pharetra consequat, lectus dui pulvinar turpis, ut imperdiet elit erat vel elit.
-                                                Praesent at libero facilisis, efficitur sem ac, porttitor arcu.
-                                                Duis porta libero augue, a lobortis libero tempus a.
-                                                Aenean purus enim, pulvinar dictum pharetra sit amet, malesuada vel arcu.
-                                                Curabitur molestie urna nisl, vitae sollicitudin odio tempor a. In hac habitasse platea dictumst.
-                                                Etiam quis turpis vel urna ultricies pretium. Donec non euismod nulla.
-                                                Pellentesque imperdiet leo velit, eu vulputate orci sodales ac.
-                                                In pharetra facilisis odio, eu aliquam sem laoreet eu.
-                                                Praesent massa turpis, convallis ac dapibus id, euismod ut massa.
-                                                Sed elementum et eros ut porta. Fusce consectetur aliquam sapien ac semper.
-                                            </p>
-                                        </div>
-                                        <div class="row no-gutters">
-                                            <div class="col">
-                                                <p class="autor">
-                                                    Hecho Por Daniel - 18 / 10 / 2020
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="carousel-item">
-                            <div class="nota" onclick="noticia(01)">
-                                <div class="row no-gutters">
-                                    <div class="col-12">
-                                        <h2>Individuo pierde en un Buscaminas</h2>
-                                    </div>
-                                </div>
-                                <div class="row no-gutters">
-                                    <div class="col-lg-5">
-                                        <img src="https://pbs.twimg.com/media/EgvGhYbXYAA2Ean?format=png&name=small" class="notaIMG"/>
-                                    </div>
-                                    <div class="col-lg-7 p-2">
-                                        <div class="row no-gutters" style="height: 90%;">
-                                            <p>
-                                                Donec aliquam, mauris mollis pharetra consequat, lectus dui pulvinar turpis, ut imperdiet elit erat vel elit.
-                                                Praesent at libero facilisis, efficitur sem ac, porttitor arcu.
-                                                Duis porta libero augue, a lobortis libero tempus a.
-                                                Aenean purus enim, pulvinar dictum pharetra sit amet, malesuada vel arcu.
-                                                Curabitur molestie urna nisl, vitae sollicitudin odio tempor a. In hac habitasse platea dictumst.
-                                                Etiam quis turpis vel urna ultricies pretium. Donec non euismod nulla.
-                                                Pellentesque imperdiet leo velit, eu vulputate orci sodales ac.
-                                                In pharetra facilisis odio, eu aliquam sem laoreet eu.
-                                                Praesent massa turpis, convallis ac dapibus id, euismod ut massa.
-                                                Sed elementum et eros ut porta. Fusce consectetur aliquam sapien ac semper.
-                                            </p>
-                                        </div>
-                                        <div class="row no-gutters">
-                                            <div class="col">
-                                                <p class="autor">
-                                                    Hecho Por Daniel - 18 / 10 / 2020
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
                     </div>
                     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>

@@ -83,29 +83,40 @@ and open the template in the editor.
         }
 
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
-            if (isset($_GET["variable1"])) {
-                $seccion = $_GET["variable1"];
-                $opc = "C";
-            } else {
-                $opc = "T";
+            if (isset($_GET["opcFecha"])) {
+                $opcFecha = $_GET["opcFecha"];
             }
+            else
+                $opcFecha = 0;
+            if (isset($_GET["opcTitulo"])) {
+                $opcTitulo = $_GET["opcTitulo"];
+            }
+            else
+                $opcTitulo = 0;
             
-            if (isset($_GET["busqueda"])){
-                $busqueda= $_GET["busqueda"];    
+            if (isset($_GET["opcPalabra"])) {
+                $opcPalabra = $_GET["opcPalabra"];
             }
-            else{
-            $busqueda = "";}
-                
-            if (isset($_GET["inicio"])){
-                $inicio= $_GET["inicio"];
-            }
-
-                
-            if (isset($_GET["final"])){
-                $fin= $_GET["final"];
+            else
+                $opcPalabra = 0;
+            
+            
+            if (isset($_GET["busqueda"])) {
+                $busqueda = $_GET["busqueda"];
+            } else {
+                $busqueda = "";
             }
 
-                
+            if (isset($_GET["inicio"])) {
+                $inicio = $_GET["inicio"];
+            } else
+                $inicio = NULL;
+
+
+            if (isset($_GET["final"])) {
+                $fin = $_GET["final"];
+            } else
+                $fin = NULL;
         }
         ?>
 
@@ -114,6 +125,13 @@ and open the template in the editor.
             <div class="mainContent">
 
                 <form action="buscar.php" method="get" class="" >
+                    <p>Buscar por</p>
+                    <input type="checkbox" id="opcFecha" name="opcFecha" value="1"<?php if($opcFecha == 1) echo "checked"  ?>>
+                    <label for="opcFecha"> por fecha</label>
+                    <input type="checkbox" id="opcTitulo" name="opcTitulo" value="1"<?php if($opcTitulo == 1) echo "checked"  ?>>
+                    <label for="opcTitulo"> titulo o descripcion de la noticia</label>
+                    <input type="checkbox" id="opcPalabra" name="opcPalabra" value="1"<?php if($opcPalabra == 1) echo "checked"  ?>>
+                    <label for="opcPalabra"> palabras clave</label>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control form-control-lg" name="busqueda" id="busqueda" placeholder="busqueda" value="<?php echo $busqueda ?>">
                         <div class="input-group-append">
@@ -121,17 +139,17 @@ and open the template in the editor.
                         </div>
                     </div>
                     <label  for="inicio" class="user-select-none">Inicio de busqueda</label>
-                    <input type="date" id="inicio" class="campoConfig" name="inicio" min="1900-01-01" max="<?php echo date("Y-m-d") ?>" value="<?php echo $inicio ?>">
+                    <input type="date" id="inicio" class="campoConfig" name="inicio" min="1900-01-01" max="<?php echo date("Y-m-d") ?>" placeholder="<?php echo date("Y-m-d") ?>" value="<?php echo $inicio ?>">
                     <label  for="final" class="user-select-none">Final de busqueda</label>
-                    <input type="date" id="final" class="campoConfig" name="final" min="1900-01-01" max="<?php echo date("Y-m-d") ?>" value="<?php echo $fin ?>">
-                    
+                    <input type="date" id="final" class="campoConfig" name="final" min="1900-01-01" max="<?php echo date("Y-m-d") ?>" placeholder="<?php echo date("Y-m-d") ?>" value="<?php echo $fin ?>">
+
                 </form>
 
                 <div class="separador"></div>
 
 
                 <?php
-                $noticias->enHome(null, $opc, $seccion);
+                $noticias->buscar2($busqueda, $inicio, $fin, $opcFecha,$opcTitulo,$opcPalabra);
                 ?>
 
             </div>
@@ -140,10 +158,10 @@ and open the template in the editor.
             <div class="barra overflow-auto">
 
                 <div class="separador user-select-none">CATEGORÍAS</div>
-                <?php
-                $barra = new category();
-                $barra->llenaLaBarra();
-                ?>
+<?php
+$barra = new category();
+$barra->llenaLaBarra();
+?>
             </div>
 
             <footer>
