@@ -113,6 +113,14 @@ class mySQLphpClass extends configSQLphp {
         return $result;
     }
     
+    function get_seccionesEX() {
+        $this->connect();
+        $sql = "call proc_seccionesEX();";
+        $result = $this->connectionString->query($sql);
+        $this->byebye();
+        return $result;
+    }
+    
     function Crear_secciones($orden,$color,$nombre,$estado,$nuevoNombre,$Seleccion) {
         $this->connect();
         $sql = "call proc_dml_seccion(" . $orden . ", '$color', '$nombre', '$estado', '$nuevoNombre', '$Seleccion');";

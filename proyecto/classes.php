@@ -91,7 +91,7 @@ class category {
 
     function dropdown() {
         $conn = new mySQLphpClass();
-        $result = $conn->get_secciones();
+        $result = $conn->get_seccionesEX();
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 echo '<input type="submit" class="dropdown-item" value="' . $row["Nombre"] . '" name="categorei">';

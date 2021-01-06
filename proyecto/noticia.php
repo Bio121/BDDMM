@@ -185,11 +185,15 @@ and open the template in the editor.
 
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
             
-            if(isset($_GET["like"])){
+            if(isset($_GET["like"]) && isset($_SESSION["usuario"])){
                 $con = new mySQLphpClass();
                 $con->newsInteractions('L', $_GET["newX"], $_SESSION["usuario"]);
                 header('Location: noticia.php?new=' . $_GET["newX"]);
             }
+            if(isset($_GET["like"]) && !isset($_SESSION["usuario"])){
+                header('Location: noticia.php?new=' . $_GET["newX"]);
+            }
+            
             
             if (isset($_GET["new"])) {
                 $codigo = $_GET["new"];
@@ -211,6 +215,7 @@ and open the template in the editor.
                     $seccion = $row["secciónFK"];
                     $keyword = $row["palabras_clave"];
                     $likes = $row["likes"];
+                    $repIMG = $row["userIMG"];
                     if(empty($likes)){
                         $likes = 0;
                     }
@@ -262,7 +267,13 @@ and open the template in the editor.
                         <div class="autor">
                             <div class="row no-gutters">
                                 <div class="col-3">
-                                    <img src="data:image/jpg;base64,<?php echo base64_encode($userIMG); ?>" alt="Avatar">
+                                    <?php
+                                    $img = "https://pbs.twimg.com/media/EiNYM5CWAAAh9PV?format=png&name=240x240";
+                                    if (!empty($repIMG)) {
+                                        $img = "data:image/jpg;base64," . base64_encode($repIMG);
+                                    }
+                                    ?>
+                                    <img src="<?php echo $img; ?>" alt="Avatar">
                                 </div>
                                 <div class="col-9 text-center m-auto text-wrap">
                                     <?php echo $nombreRep ?>
